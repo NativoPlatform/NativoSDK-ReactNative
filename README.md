@@ -34,15 +34,6 @@
       compile project(':react-native-nativo-sdk-react-native')
   	```
 
-#### Windows
-[Read it! :D](https://github.com/ReactWindows/react-native)
-
-1. In Visual Studio add the `RNNativoSdkReactNative.sln` in `node_modules/react-native-nativo-sdk-react-native/windows/RNNativoSdkReactNative.sln` folder to their solution, reference from their app.
-2. Open up your `MainPage.cs` app
-  - Add `using Nativo.Sdk.React.Native.RNNativoSdkReactNative;` to the usings at the top of the file
-  - Add `new RNNativoSdkReactNativePackage()` to the `List<IReactPackage>` returned by the `Packages` method
-
-
 ## Usage
 ```javascript
 import RNNativoSdkReactNative from 'react-native-nativo-sdk-react-native';
