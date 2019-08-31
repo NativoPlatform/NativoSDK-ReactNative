@@ -1,5 +1,5 @@
 
-# react-native-nativo-sdk-react-native
+# NativoSDK-ReactNative
 
 ## Getting started
 
