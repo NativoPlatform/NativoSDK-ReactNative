@@ -15,8 +15,6 @@ import net.nativo.sdk.ntvcore.NtvSectionAdapter;
 
 import java.util.Date;
 
-//import static com.nativo.nativo_android_unifiedsample.util.AppConstants.SECTION_URL;
-
 public class NativeLandingPage implements NtvLandingPageInterface, NtvSectionAdapter {
 
     private WebView webView;
@@ -87,8 +85,6 @@ public class NativeLandingPage implements NtvLandingPageInterface, NtvSectionAda
     public void bindViews(View v) {
         adContainerView = v;
         webView = (WebView) ReactFindViewUtil.findView(v, "nativoAdWebView");
-//        titleLabel = v.findViewById(R.id.title_label);
-//        authorNameLabel = v.findViewById(R.id.author_label);
     }
 
     @Override
@@ -123,17 +119,11 @@ public class NativeLandingPage implements NtvLandingPageInterface, NtvSectionAda
 
     @Override
     public void onReceiveAd(String s, int i, NtvAdData ntvAdData) {
-        tryPlaceAd(i);
-    }
 
-    private void tryPlaceAd(int i) {
-//        View view = adContainerView.findViewById(R.id.article_layout);
-//        ViewGroup viewGroup = adContainerView.findViewById(R.id.landing_boap_container);
-//        NativoSDK.getInstance().placeAdInView(view, viewGroup, SECTION_URL, i, this, null);
     }
 
     @Override
     public void onFail(String s, int i) {
-        tryPlaceAd(i);
+
     }
 }

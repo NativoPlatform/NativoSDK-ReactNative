@@ -11,7 +11,6 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.facebook.react.uimanager.util.ReactFindViewUtil;
-import com.facebook.react.views.text.ReactTextView;
 
 import net.nativo.sdk.ntvadtype.video.NtvVideoAdInterface;
 import net.nativo.sdk.ntvadtype.video.VideoPlaybackError;
@@ -33,6 +32,7 @@ public class NativeVideoAd implements NtvVideoAdInterface {
     private ImageView sponsoredIndicator;
     private ProgressBar progressBar;
     private View adContainerView;
+    private ImageView articleAuthorImage;
 
 
     @Override
@@ -47,9 +47,8 @@ public class NativeVideoAd implements NtvVideoAdInterface {
 
     @Override
     public void bindViews(View v) {
-        ReactTextView reactTextView = (ReactTextView) ReactFindViewUtil.findView(v, "articleTitle");
         adContainerView = v;
-        layout = (View) ReactFindViewUtil.findView(v, "nativoAdView");
+        layout = (View) ReactFindViewUtil.findView(v, "nativoVideoAdView");
         textureView = (TextureView) ReactFindViewUtil.findView(v, "videoView");
         previewImage = (ImageView) ReactFindViewUtil.findView(v, "articleImage");
         playButton = (ImageView) ReactFindViewUtil.findView(v, "videoPlay");
@@ -61,6 +60,7 @@ public class NativeVideoAd implements NtvVideoAdInterface {
         ViewGroup videoProgress = (ViewGroup) ReactFindViewUtil.findView(v, "videoProgress");
         progressBar = (ProgressBar) videoProgress.getChildAt(0);
         muteIndicator = (ImageView) ReactFindViewUtil.findView(v, "videoMuteIndicator");
+        articleAuthorImage = (ImageView) ReactFindViewUtil.findView(v, "authorImage");
     }
 
     @Override
@@ -105,7 +105,7 @@ public class NativeVideoAd implements NtvVideoAdInterface {
 
     @Override
     public ImageView getAuthorImageView() {
-        return null;
+        return articleAuthorImage;
     }
 
     @Override

@@ -12,9 +12,11 @@
   "author": "",
   "license": "",
   "devDependencies": {
+    "react": "16.8.6",
     "react-native": "0.60.5"
   },
   "peerDependencies": {
+    "react": "16.8.6",
     "react-native": "0.60.5"
   }
 }

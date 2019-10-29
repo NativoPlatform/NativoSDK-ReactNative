@@ -2,11 +2,14 @@ package net.nativo.reactsdk;
 
 import android.app.Activity;
 import android.util.Log;
-import android.view.Choreographer;
 import android.view.View;
 import android.widget.RelativeLayout;
 
+import androidx.annotation.Nullable;
+
+import com.facebook.react.bridge.ReadableArray;
 import com.facebook.react.bridge.ReadableMap;
+import com.facebook.react.common.MapBuilder;
 import com.facebook.react.uimanager.ThemedReactContext;
 import com.facebook.react.uimanager.ViewGroupManager;
 import com.facebook.react.uimanager.annotations.ReactProp;
@@ -14,7 +17,7 @@ import com.facebook.react.uimanager.util.ReactFindViewUtil;
 
 import net.nativo.sdk.NativoSDK;
 
-import java.util.WeakHashMap;
+import java.util.Map;
 
 import javax.annotation.Nonnull;
 
@@ -22,7 +25,10 @@ public class RNLandingPageContainerManager extends ViewGroupManager<RelativeLayo
 
     public static Activity currentactivity;
     private ThemedReactContext themedReactContext;
-    private WeakHashMap<Integer, View> viewWeakHashMap = new WeakHashMap<>();
+    public static final int COMMAND_INJECT_AD = 3;
+    String sectionUrl;
+    int containerHash;
+    int adId;
 
     @Nonnull
     @Override
@@ -40,23 +46,31 @@ public class RNLandingPageContainerManager extends ViewGroupManager<RelativeLayo
 
     @ReactProp(name = "injectLandingPage")
     public void setInjectLandingPage(View view, ReadableMap map) {
-        String sectionUrl = map.getString("url");
-        int containerHash = map.getInt("containerHash");
-        int adId = map.getInt("adId");
+        sectionUrl = map.getString("url");
+        containerHash = map.getInt("containerHash");
+        adId = map.getInt("adId");
         Log.d(RNLandingPageContainerManager.class.getName(), " with containerHash " + containerHash);
-        viewWeakHashMap.put(containerHash, view);
-        makeAdRequest(containerHash, adId, sectionUrl);
     }
 
-    private void makeAdRequest(final int containerhash, final int adId, final String sectionUrl) {
-        Choreographer.getInstance().postFrameCallback(new Choreographer.FrameCallback() {
-            @Override
-            public void doFrame(long frameTimeNanos) {
-                View webViewContainer = ReactFindViewUtil.findView((View)viewWeakHashMap.get(containerhash), "nativoAdWebViewContainer");
-                Log.d(RNLandingPageContainerManager.class.getName(), "makeAdRequest: req " + containerhash);
-                NativoSDK.getInstance().initLandingPage(webViewContainer, sectionUrl, containerhash, adId, NativeLandingPage.class);
-
-            }
-        });
+    @Nullable
+    @Override
+    public Map<String, Integer> getCommandsMap() {
+        return MapBuilder.of(
+                "injectAd",
+                COMMAND_INJECT_AD
+        );
     }
+
+    @Override
+    public void receiveCommand(final RelativeLayout root, int commandId, @Nullable ReadableArray args) {
+        // This will be called whenever a command is sent from react-native.
+        switch (commandId) {
+            case COMMAND_INJECT_AD:
+                View webViewContainer = ReactFindViewUtil.findView(root, "nativoAdWebViewContainer");
+                Log.d(RNLandingPageContainerManager.class.getName(), "makeAdRequest: req " + containerHash);
+                NativoSDK.getInstance().initLandingPage(webViewContainer, sectionUrl, containerHash, adId, NativeLandingPage.class);
+                break;
+        }
+    }
+
 }
