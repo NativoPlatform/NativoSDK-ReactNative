@@ -3,7 +3,7 @@ import {findNodeHandle, NativeEventEmitter, requireNativeComponent, StyleSheet, 
 
 const NativoAdContainer = requireNativeComponent("NativoContainer");
 
-export default class NativoAdComponent extends Component<Props> {
+export default class NativoAdComponentInternal extends Component<Props> {
 
     constructor(props) {
         super(props);
@@ -31,7 +31,7 @@ export default class NativoAdComponent extends Component<Props> {
     componentDidMount(): void {
         const eventEmitter = new NativeEventEmitter(NativoAdContainer);
         eventEmitter.addListener('EventReminder', (event) => {
-            this.props.navigation.navigate('LandingScreen', {
+            this.props.navigation.navigate('NativoLandingScreen', {
                 sectionUrl: event.sectionUrl,
                 adId: event.adId,
                 containerHash: event.containerHash,
@@ -107,11 +107,13 @@ export default class NativoAdComponent extends Component<Props> {
             <View style={styles.container}>
                 <NativoAdContainer ref={(el) => (this._adContainer = el)}
                                    sectionUrl={{'url': this.props.sectionUrl, 'index': this.props.index}}
-                                   onAdLoaded={this.handleAdLoaded} onAdFailed={this.handleAdLoadFailed} style={{ alignItems: 'center'}}>
-                    {this.state.nativeFlag && <NativeAdTemplate adDate={this.state.adDate} adTitle={this.state.adTitle}
-                                                                adDescription={this.state.adDescription}
-                                                                adAuthorName={this.state.adAuthorName}
-                                                                adLoaded={this.state.adLoaded}/>}
+                                   onAdLoaded={this.handleAdLoaded} onAdFailed={this.handleAdLoadFailed}
+                                   style={{alignItems: 'center'}}>
+                    {this.state.nativeFlag &&
+                    <NativeAdTemplate adDate={this.state.adDate} adTitle={this.state.adTitle}
+                                      adDescription={this.state.adDescription}
+                                      adAuthorName={this.state.adAuthorName}
+                                      adLoaded={this.state.adLoaded}/>}
                     {this.state.videoFlag &&
                     <NativeVideoAdTemplate adDate={this.state.adDate} adTitle={this.state.adTitle}
                                            adDescription={this.state.adDescription}

@@ -3,7 +3,7 @@ import {findNodeHandle, requireNativeComponent, StyleSheet, UIManager, View} fro
 
 const NativoLandingPageContainer = requireNativeComponent("NativoLandingPageContainer")
 
-export class NativoLandingPageComponent extends Component {
+export class NativoLandingPageComponentInternal extends Component {
 
     componentDidMount() {
         UIManager.dispatchViewManagerCommand(
@@ -16,14 +16,13 @@ export class NativoLandingPageComponent extends Component {
     };
 
     render() {
-        const {navigation} = this.props;
-        const LandingPageAdTemplate = navigation.getParam('landingPageAdTemplate', 'NO-ID');
+        const LandingPageAdTemplate = this.props.landingPageAdTemplate;
         return (
             <View style={styles.container}>
                 <NativoLandingPageContainer ref={(el) => (this._landingContainer = el)} injectLandingPage={{
-                    'url': navigation.getParam('sectionUrl', 'NO-ID'),
-                    'containerHash': navigation.getParam('containerHash'),
-                    'adId': navigation.getParam('adId')
+                    'url': this.props.url,
+                    'containerHash': this.props.containerHash,
+                    'adId': this.props.adId
                 }} style={{width: '100%', height: '100%'}}>
                     <LandingPageAdTemplate/>
                 </NativoLandingPageContainer>
@@ -39,4 +38,4 @@ const styles = StyleSheet.create({
     },
 });
 
-export default NativoLandingPageComponent;
+export default NativoLandingPageComponentInternal;
