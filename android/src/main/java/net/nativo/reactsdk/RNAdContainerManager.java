@@ -49,7 +49,7 @@ class NativoAdView extends ReactViewGroup {
 public class RNAdContainerManager extends ViewGroupManager<NativoAdView> implements NtvSectionAdapter {
 
     public static final String EVENT_AD_LOADED = "onAdLoaded";
-    public static final String EVENT_AD_FAILED_TO_LOAD = "onAdFailedToLoad";
+    public static final String EVENT_AD_FAILED_TO_LOAD = "onAdFailed";
 
     public static final int COMMAND_PLACE_AD_IN_VIEW = 5;
     public static final int COMMAND_PREFETCH_AD = 10;
@@ -133,7 +133,6 @@ public class RNAdContainerManager extends ViewGroupManager<NativoAdView> impleme
         event.putString("adDate", ntvAdData.getDate().toString());
         sendEvent(EVENT_AD_LOADED, (NativoAdView) view, event);
 
-
         Log.d(getClass().getName(), "onReceiveAd: done");
 
     }
@@ -141,6 +140,9 @@ public class RNAdContainerManager extends ViewGroupManager<NativoAdView> impleme
     @Override
     public void onFail(String s, int i) {
         Log.d(getClass().getName(), "onFail: ");
+        View view = viewMap.get(i);
+        WritableMap event = Arguments.createMap();
+        sendEvent(EVENT_AD_FAILED_TO_LOAD, (NativoAdView) view, event);
     }
 
     private void sendEvent(ReactContext reactContext,
@@ -200,6 +202,8 @@ public class RNAdContainerManager extends ViewGroupManager<NativoAdView> impleme
                     adView = videoContainer;
                 } else if (sdContainer != null) {
                     adView = sdContainer;
+                } else {
+                    adView = root;
                 }
 
 
