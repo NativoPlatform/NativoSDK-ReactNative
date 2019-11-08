@@ -14,9 +14,11 @@ export default class NativoAdComponent extends Component<Props> {
             adDescription: '',
             adTitle: '',
             adAuthorName: '',
-            adDate: ''
+            adDate: '',
+            adLoaded: false
         };
         this.handleAdLoaded = this.handleAdLoaded.bind(this);
+        this.handleAdLoadFailed = this.handleAdLoadFailed.bind(this);
     }
 
     prefetchAd() {
@@ -44,6 +46,19 @@ export default class NativoAdComponent extends Component<Props> {
             UIManager.getViewManagerConfig('NativoContainer').Commands.placeAdInView, [this.props.index]);
     }
 
+    handleAdLoadFailed(event) {
+        this.setState({
+            videoFlag: false,
+            nativeFlag: false,
+            standardDisplayFlag: false,
+            adDescription: '',
+            adTitle: '',
+            adAuthorName: '',
+            adDate: '',
+            adLoaded: false
+        });
+    }
+
     handleAdLoaded(event) {
         if (event.nativeEvent.adType === 'NtvStandardDisplayInterface') {
             this.setState({
@@ -53,7 +68,8 @@ export default class NativoAdComponent extends Component<Props> {
                 adDescription: '',
                 adTitle: '',
                 adAuthorName: '',
-                adDate: ''
+                adDate: '',
+                adLoaded: true
 
             });
         } else if (event.nativeEvent.adType === 'NtvAdtypeClickout' || event.nativeEvent.adType === 'NtvAdTypeNative') {
@@ -64,7 +80,8 @@ export default class NativoAdComponent extends Component<Props> {
                 adDescription: event.nativeEvent.adDescription,
                 adTitle: event.nativeEvent.adTitle,
                 adAuthorName: event.nativeEvent.adAuthorName,
-                adDate: event.nativeEvent.adDate
+                adDate: event.nativeEvent.adDate,
+                adLoaded: true
 
             });
         } else {
@@ -75,7 +92,8 @@ export default class NativoAdComponent extends Component<Props> {
                 adDescription: event.nativeEvent.adDescription,
                 adTitle: event.nativeEvent.adTitle,
                 adAuthorName: event.nativeEvent.adAuthorName,
-                adDate: event.nativeEvent.adDate
+                adDate: event.nativeEvent.adDate,
+                adLoaded: true
             });
         }
     }
@@ -89,15 +107,18 @@ export default class NativoAdComponent extends Component<Props> {
             <View style={styles.container}>
                 <NativoAdContainer ref={(el) => (this._adContainer = el)}
                                    sectionUrl={{'url': this.props.sectionUrl, 'index': this.props.index}}
-                                   onAdLoaded={this.handleAdLoaded}>
-                    {this.state.nativeFlag &&
-                    <NativeAdTemplate adDate={this.state.adDate} adTitle={this.state.adTitle}
-                                      adDescription={this.state.adDescription} adAuthorName={this.state.adAuthorName}/>}
+                                   onAdLoaded={this.handleAdLoaded} onAdFailed={this.handleAdLoadFailed} style={{ alignItems: 'center'}}>
+                    {this.state.nativeFlag && <NativeAdTemplate adDate={this.state.adDate} adTitle={this.state.adTitle}
+                                                                adDescription={this.state.adDescription}
+                                                                adAuthorName={this.state.adAuthorName}
+                                                                adLoaded={this.state.adLoaded}/>}
                     {this.state.videoFlag &&
                     <NativeVideoAdTemplate adDate={this.state.adDate} adTitle={this.state.adTitle}
                                            adDescription={this.state.adDescription}
-                                           adAuthorName={this.state.adAuthorName}/>}
-                    {this.state.standardDisplayFlag && <StandardDisplayAdTemplate/>}
+                                           adAuthorName={this.state.adAuthorName}
+                                           adLoaded={this.state.adLoaded}/>}
+                    {this.state.standardDisplayFlag && <StandardDisplayAdTemplate adLoaded={this.state.adLoaded}/>}
+                    {!this.state.adLoaded && <View style={{width:1,height:1}}/>}
                 </NativoAdContainer>
             </View>
         )
