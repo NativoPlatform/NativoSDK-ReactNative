@@ -64,7 +64,7 @@ public class NativeLandingPage implements NtvLandingPageInterface, NtvSectionAda
 
     @Override
     public boolean contentWebViewShouldScroll() {
-        return false;
+        return true;
     }
 
     @Override
