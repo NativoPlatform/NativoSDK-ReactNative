@@ -104,12 +104,16 @@ public class RNAdContainerManager extends ViewGroupManager<NativoAdView> impleme
         params.putString("sectionUrl", s);
         params.putInt("adId", i);
         params.putInt("containerHash", containerAdIdmap.get(i));
-        sendEvent(themedReactContext, "EventReminder", params);
+        sendEvent(themedReactContext, "needsDisplayLandingPage", params);
     }
 
     @Override
     public void needsDisplayClickOutURL(String s, String s1) {
+        WritableMap params = Arguments.createMap();
+        params.putString("url", s1);
+        sendEvent(themedReactContext, "needsDisplayClickOutURL", params);
 
+        Log.d(getClass().getName(), "needsDisplayClickOutURL: done");
     }
 
     @Override

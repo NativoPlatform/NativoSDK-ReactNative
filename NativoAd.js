@@ -20,6 +20,13 @@ class NativoAd extends Component<props> {
         }
     }
 
+    needsDisplayClickOutURL = (url) => {
+        try {
+            this.props.clickOutUrlCallback(url)
+        } catch (e) {
+        }
+    }
+
     render() {
         return (
             <ErrorBoundary>
@@ -28,7 +35,8 @@ class NativoAd extends Component<props> {
                                            index={this.props.index} nativeAdTemplate={this.props.nativeAdTemplate}
                                            nativeVideoAdTemplate={this.props.nativeVideoAdTemplate}
                                            standardDisplayAdTemplate={this.props.standardDisplayAdTemplate}
-                                           landingPageAdTemplate={this.props.landingPageAdTemplate}/>
+                                           landingPageAdTemplate={this.props.landingPageAdTemplate}
+                                           clickOutUrlCallback={this.needsDisplayClickOutURL}/>
             </ErrorBoundary>
         )
     }

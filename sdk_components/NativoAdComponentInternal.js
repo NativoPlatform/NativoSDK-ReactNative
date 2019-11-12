@@ -35,7 +35,7 @@ export default class NativoAdComponentInternal extends Component<Props> {
     componentDidMount(): void {
         try {
             const eventEmitter = new NativeEventEmitter(NativoAdContainer);
-            eventEmitter.addListener('EventReminder', (event) => {
+            eventEmitter.addListener('needsDisplayLandingPage', (event) => {
                 this.props.navigation.navigate('NativoLandingScreen', {
                     sectionUrl: event.sectionUrl,
                     adId: event.adId,
@@ -46,6 +46,9 @@ export default class NativoAdComponentInternal extends Component<Props> {
                     adAuthorName: this.state.adAuthorName,
                     adDate: this.state.adDate,
                 })
+            });
+            eventEmitter.addListener('needsDisplayClickOutURL', (event) => {
+                this.props.clickOutUrlCallback(event.url);
             });
         } catch (e) {
             this.setDefaultState()
