@@ -20,6 +20,10 @@ public class NativeLandingPage implements NtvLandingPageInterface, NtvSectionAda
     private WebView webView;
     private TextView titleLabel;
     private TextView authorNameLabel;
+    private ImageView authorImage;
+    private ImageView previewImage;
+    private TextView descriptionLabel;
+    private TextView dateLabel;
     private View adContainerView;
 
     @Override
@@ -39,22 +43,22 @@ public class NativeLandingPage implements NtvLandingPageInterface, NtvSectionAda
 
     @Override
     public ImageView getAuthorImageView() {
-        return null;
+        return authorImage;
     }
 
     @Override
     public ImageView getPreviewImageView() {
-        return null;
+        return previewImage;
     }
 
     @Override
     public TextView getPreviewTextLabel() {
-        return null;
+        return descriptionLabel;
     }
 
     @Override
     public TextView getDateLabel() {
-        return null;
+        return dateLabel;
     }
 
     @Override
@@ -85,6 +89,12 @@ public class NativeLandingPage implements NtvLandingPageInterface, NtvSectionAda
     public void bindViews(View v) {
         adContainerView = v;
         webView = (WebView) ReactFindViewUtil.findView(v, "nativoAdWebView");
+        titleLabel = (TextView) ReactFindViewUtil.findView(v, "articleTitle");
+        authorNameLabel = (TextView) ReactFindViewUtil.findView(v, "authorName");
+        authorImage = (ImageView) ReactFindViewUtil.findView(v, "authorImage");
+        previewImage = (ImageView) ReactFindViewUtil.findView(v, "articleImage");
+        descriptionLabel = (TextView) ReactFindViewUtil.findView(v, "articleDescription");
+        dateLabel = (TextView) ReactFindViewUtil.findView(v, "articleDate");
     }
 
     @Override

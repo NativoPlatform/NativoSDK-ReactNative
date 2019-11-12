@@ -20,7 +20,8 @@ class NativoLandingPage extends Component<props> {
                                                     adId={adId}
                                                     containerHash={containerHash}
                                                     url={url}
-                                                    landingPageAdTemplate={LandingPageAdTemplate}/>
+                                                    landingPageAdTemplate={LandingPageAdTemplate}
+                                                    {...this.props}/>
             </ErrorBoundary>
         )
     }

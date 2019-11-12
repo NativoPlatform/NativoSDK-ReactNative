@@ -6,9 +6,12 @@ const NativoLandingPageContainer = requireNativeComponent("NativoLandingPageCont
 export class NativoLandingPageComponentInternal extends Component {
 
     componentDidMount() {
-        UIManager.dispatchViewManagerCommand(
-            findNodeHandle(this._landingContainer),
-            UIManager.getViewManagerConfig('NativoLandingPageContainer').Commands.injectAd, []);
+        try {
+            UIManager.dispatchViewManagerCommand(
+                findNodeHandle(this._landingContainer),
+                UIManager.getViewManagerConfig('NativoLandingPageContainer').Commands.injectAd, []);
+        } catch (e) {
+        }
     }
 
     static navigationOptions = {
@@ -24,7 +27,7 @@ export class NativoLandingPageComponentInternal extends Component {
                     'containerHash': this.props.containerHash,
                     'adId': this.props.adId
                 }} style={{width: '100%', height: '100%'}}>
-                    <LandingPageAdTemplate/>
+                    <LandingPageAdTemplate {...this.props}/>
                 </NativoLandingPageContainer>
             </View>
         )
