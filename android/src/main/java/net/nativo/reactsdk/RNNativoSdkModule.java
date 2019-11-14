@@ -34,10 +34,35 @@ public class RNNativoSdkModule extends ReactContextBaseJavaModule {
     }
 
     @ReactMethod
-    public void show(String text) {
-        Context context = getReactApplicationContext();
-        Toast.makeText(context, text, Toast.LENGTH_LONG).show();
+    public void registerTemplates() {
+        NativoSDK.getInstance().registerNativeAd(new NativeAd());
+        NativoSDK.getInstance().registerVideoAd(new NativeVideoAd());
+        NativoSDK.getInstance().registerLandingPage(new NativeLandingPage());
+        NativoSDK.getInstance().registerStandardDisplayAd(new StandardDisplayAd());
+    }
 
+    @ReactMethod
+    public void enableDebugLogs() {
+        NativoSDK.getInstance().enableDevLogs();
+    }
+
+    @ReactMethod
+    public void enableTestAds(String s) {
+        if (s.equals("native")) {
+            NativoSDK.getInstance().enableTestAdvertisements(NtvAdData.NtvAdType.NATIVE);
+        } else if (s.equals("click_out")) {
+            NativoSDK.getInstance().enableTestAdvertisements(NtvAdData.NtvAdType.CLICK_OUT);
+        } else if (s.equals("in_feed_video")) {
+            NativoSDK.getInstance().enableTestAdvertisements(NtvAdData.NtvAdType.IN_FEED_VIDEO);
+        } else if (s.equals("in_feed_auto_play_video")) {
+            NativoSDK.getInstance().enableTestAdvertisements(NtvAdData.NtvAdType.IN_FEED_AUTO_PLAY_VIDEO);
+        } else if (s.equals("standard_display")) {
+            NativoSDK.getInstance().enableTestAdvertisements(NtvAdData.NtvAdType.STANDARD_DISPLAY);
+        } else if (s.equals("no_fill")) {
+            NativoSDK.getInstance().enableTestAdvertisements(NtvAdData.NtvAdType.NO_FILL);
+        } else {
+            NativoSDK.getInstance().enableTestAdvertisements();
+        }
     }
 
     @ReactMethod
