@@ -16,6 +16,7 @@ import com.facebook.react.bridge.ReactMethod;
 import com.facebook.react.uimanager.util.ReactFindViewUtil;
 
 import net.nativo.sdk.NativoSDK;
+import net.nativo.sdk.ntvcore.NtvAdData;
 
 public class RNNativoSdkModule extends ReactContextBaseJavaModule {
 
