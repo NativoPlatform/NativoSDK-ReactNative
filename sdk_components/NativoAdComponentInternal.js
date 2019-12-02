@@ -36,19 +36,14 @@ export default class NativoAdComponentInternal extends Component<Props> {
         try {
             const eventEmitter = new NativeEventEmitter(NativoAdContainer);
             eventEmitter.addListener('needsDisplayLandingPage', (event) => {
-                this.props.navigation.navigate('NativoLandingScreen', {
-                    sectionUrl: event.sectionUrl,
-                    adId: event.adId,
-                    containerHash: event.containerHash,
-                    landingPageAdTemplate: this.props.landingPageAdTemplate,
-                    adDescription: this.state.adDescription,
-                    adTitle: this.state.adTitle,
-                    adAuthorName: this.state.adAuthorName,
-                    adDate: this.state.adDate,
-                })
+                event.adDescription = this.state.adDescription;
+                event.adTitle = this.state.adTitle
+                event.adAuthorName = this.state.adAuthorName
+                event.adDate = this.state.adDate
+                this.props.onNativeAdClick(event)
             });
             eventEmitter.addListener('needsDisplayClickOutURL', (event) => {
-                this.props.clickOutUrlCallback(event.url);
+                this.props.onDisplayAdClick(event.url);
             });
         } catch (e) {
             this.setDefaultState()

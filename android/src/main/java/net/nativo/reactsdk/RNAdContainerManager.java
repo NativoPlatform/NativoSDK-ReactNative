@@ -55,6 +55,7 @@ public class RNAdContainerManager extends ViewGroupManager<NativoAdView> impleme
     public static final int COMMAND_PREFETCH_AD = 10;
 
     public static Activity currentactivity;
+    public static ReactContext containerReactContext;
     private ThemedReactContext themedReactContext;
     public static final String SECTION_URL = "http://www.nativo.net/test/";
     View RNContainer;
@@ -75,6 +76,7 @@ public class RNAdContainerManager extends ViewGroupManager<NativoAdView> impleme
     protected NativoAdView createViewInstance(@Nonnull ThemedReactContext reactContext) {
         currentactivity = reactContext.getCurrentActivity();
         themedReactContext = reactContext;
+        containerReactContext = reactContext;
         NativoAdView nativoAdView = new NativoAdView(reactContext);
         return nativoAdView;
     }

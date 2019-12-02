@@ -7,6 +7,7 @@ import android.widget.RelativeLayout;
 
 import androidx.annotation.Nullable;
 
+import com.facebook.react.bridge.ReactContext;
 import com.facebook.react.bridge.ReadableArray;
 import com.facebook.react.bridge.ReadableMap;
 import com.facebook.react.common.MapBuilder;
@@ -24,6 +25,7 @@ import javax.annotation.Nonnull;
 public class RNLandingPageContainerManager extends ViewGroupManager<RelativeLayout> {
 
     public static Activity currentactivity;
+    public static ReactContext landingContext;
     private ThemedReactContext themedReactContext;
     public static final int COMMAND_INJECT_AD = 3;
     String sectionUrl;
@@ -41,6 +43,7 @@ public class RNLandingPageContainerManager extends ViewGroupManager<RelativeLayo
     protected RelativeLayout createViewInstance(@Nonnull ThemedReactContext reactContext) {
         currentactivity = reactContext.getCurrentActivity();
         themedReactContext = reactContext;
+        landingContext = reactContext;
         return new RelativeLayout(reactContext);
     }
 

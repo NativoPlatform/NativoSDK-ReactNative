@@ -2,13 +2,8 @@
 package net.nativo.reactsdk;
 
 import android.app.Activity;
-import android.content.Context;
-import android.os.Handler;
-import android.os.Looper;
-import android.util.Log;
 import android.view.View;
 import android.webkit.WebView;
-import android.widget.Toast;
 
 import com.facebook.react.bridge.ReactApplicationContext;
 import com.facebook.react.bridge.ReactContextBaseJavaModule;
@@ -36,6 +31,7 @@ public class RNNativoSdkModule extends ReactContextBaseJavaModule {
 
     @ReactMethod
     public void registerTemplates() {
+
         NativoSDK.getInstance().registerNativeAd(new NativeAd());
         NativoSDK.getInstance().registerVideoAd(new NativeVideoAd());
         NativoSDK.getInstance().registerLandingPage(new NativeLandingPage());
@@ -68,7 +64,6 @@ public class RNNativoSdkModule extends ReactContextBaseJavaModule {
 
     @ReactMethod
     public void placeAdInWebView(final String sectionUrl) {
-        Log.d("RNNativoSdkModule", "placeAdInWebView:  for " + sectionUrl);
         View view = getCurrentActivity().getWindow().getDecorView().findViewById(android.R.id.content);
         final WebView webView = (WebView) ReactFindViewUtil.findView(view, "nativoMoapAdView");
         webView.post(new Runnable() {

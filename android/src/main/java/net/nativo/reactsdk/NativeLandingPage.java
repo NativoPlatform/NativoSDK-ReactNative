@@ -6,17 +6,20 @@ import android.webkit.WebView;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.facebook.react.bridge.Arguments;
+import com.facebook.react.bridge.ReactContext;
+import com.facebook.react.bridge.WritableMap;
+import com.facebook.react.modules.core.DeviceEventManagerModule;
 import com.facebook.react.uimanager.util.ReactFindViewUtil;
 
-import net.nativo.sdk.ntvadtype.NtvBaseInterface;
 import net.nativo.sdk.ntvadtype.landing.NtvLandingPageInterface;
-import net.nativo.sdk.ntvcore.NtvAdData;
-import net.nativo.sdk.ntvcore.NtvSectionAdapter;
 
 import java.util.Date;
 
-public class NativeLandingPage implements NtvLandingPageInterface, NtvSectionAdapter {
+public class NativeLandingPage implements NtvLandingPageInterface {
 
+    private static final String ON_PAGE_FINISHED = "onPageFinished";
+    private static final String ON_RECEIVED_ERROR = "onReceivedError";
     private WebView webView;
     private TextView titleLabel;
     private TextView authorNameLabel;
@@ -73,11 +76,16 @@ public class NativeLandingPage implements NtvLandingPageInterface, NtvSectionAda
 
     @Override
     public void contentWebViewOnPageFinished() {
+        WritableMap event = Arguments.createMap();
+        event.putInt("webviewContentHeight", webView.getContentHeight());
+        sendEvent(RNLandingPageContainerManager.landingContext,ON_PAGE_FINISHED, event);
     }
 
     @Override
     public void contentWebViewOnReceivedError(String s) {
-
+        WritableMap event = Arguments.createMap();
+        event.putString("webviewError", s);
+        sendEvent(RNLandingPageContainerManager.landingContext,ON_RECEIVED_ERROR, event);
     }
 
     @Override
@@ -102,38 +110,11 @@ public class NativeLandingPage implements NtvLandingPageInterface, NtvSectionAda
         return adContainerView;
     }
 
-    @Override
-    public boolean shouldPlaceAdAtIndex(String s, int i) {
-        return true;
+    private void sendEvent(ReactContext reactContext,
+                           String eventName,
+                           @javax.annotation.Nullable WritableMap params) {
+        reactContext.getJSModule(DeviceEventManagerModule.RCTDeviceEventEmitter.class)
+                .emit(eventName, params);
     }
 
-    @Override
-    public Class<?> registerLayoutClassForIndex(int i, NtvAdData.NtvAdTemplateType ntvAdTemplateType) {
-        return null;
-    }
-
-    @Override
-    public void needsDisplayLandingPage(String s, int i) {
-
-    }
-
-    @Override
-    public void needsDisplayClickOutURL(String s, String s1) {
-
-    }
-
-    @Override
-    public void hasbuiltView(View view, NtvBaseInterface ntvBaseInterface, NtvAdData ntvAdData) {
-
-    }
-
-    @Override
-    public void onReceiveAd(String s, int i, NtvAdData ntvAdData) {
-
-    }
-
-    @Override
-    public void onFail(String s, int i) {
-
-    }
 }
