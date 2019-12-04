@@ -3,6 +3,7 @@ package net.nativo.reactsdk;
 import android.app.Activity;
 import android.content.Context;
 import android.util.Log;
+import android.view.Choreographer;
 import android.view.View;
 import android.view.ViewGroup;
 
@@ -216,6 +217,7 @@ public class RNAdContainerManager extends ViewGroupManager<NativoAdView> impleme
                 index = args.getInt(0);
                 Log.d(RNAdContainerManager.class.getName(), "receiveCommand: for index " + index);
                 NativoSDK.getInstance().placeAdInView(adView, (ViewGroup) nativeContainerParent, sectionUrl, index, this, null);
+                forceAdTracking();
                 break;
             case COMMAND_PREFETCH_AD:
                 index = args.getInt(0);
@@ -228,6 +230,21 @@ public class RNAdContainerManager extends ViewGroupManager<NativoAdView> impleme
         View view = currentactivity.getWindow().getDecorView().findViewById(android.R.id.content);
         nativeContainerParent = ReactFindViewUtil.findView(view, "publisherNativoAdContainer");
         return nativeContainerParent;
+    }
+
+    private void forceAdTracking() {
+        Choreographer.getInstance().postFrameCallback(new Choreographer.FrameCallback() {
+            @Override
+            public void doFrame(long frameTimeNanos) {
+                View nativeContainerParent = findPublisherAdContainer();
+                if (nativeContainerParent != null) {
+                    if (nativeContainerParent.getOnFocusChangeListener() != null) {
+                        nativeContainerParent.getOnFocusChangeListener().onFocusChange(null, true);
+                    }
+                }
+
+            }
+        });
     }
 
 }
