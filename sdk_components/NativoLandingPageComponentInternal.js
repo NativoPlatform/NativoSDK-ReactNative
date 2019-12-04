@@ -14,10 +14,6 @@ export class NativoLandingPageComponentInternal extends Component {
         }
     }
 
-    static navigationOptions = {
-        title: 'Landing Page',
-    };
-
     render() {
         const LandingPageAdTemplate = this.props.landingPageAdTemplate;
         return (
