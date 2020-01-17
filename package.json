@@ -1,22 +1,32 @@
 {
-  "name": "react-native-nativo-sdk-alpha.1",
-  "version": "1.0.3-SNAPSHOT.32",
-  "description": "",
-  "main": "index.js",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
-  "keywords": [
-    "react-native"
-  ],
-  "author": "",
-  "license": "",
-  "devDependencies": {
-    "react": "16.8.6",
-    "react-native": "0.60.5"
-  },
-  "peerDependencies": {
-    "react": "16.8.6",
-    "react-native": "0.60.5"
-  }
+    "name": "react-native-nativo-ads",
+    "title": "React Native Nativo Ads",
+    "version": "1.0.3-SNAPSHOT.33",
+    "description": "This will allow you to monetize your app using Nativo's native, display, and video ads.",
+    "main": "index.js",
+    "scripts": {
+        "test": "echo \"Error: no test specified\" && exit 1"
+    },
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/github_account/react-native-nativo-ads.git",
+        "baseUrl": "https://github.com/github_account/react-native-nativo-ads"
+    },
+    "keywords": [
+        "react-native"
+    ],
+    "author": {
+        "name": "Nativo",
+        "email": "sdksupport@nativo.com"
+    },
+    "license": "MIT",
+    "readmeFilename": "README.md",
+    "devDependencies": {
+        "react": "16.8.6",
+        "react-native": "0.60.5"
+    },
+    "peerDependencies": {
+        "react": "16.8.6",
+        "react-native": "0.60.5"
+    }
 }

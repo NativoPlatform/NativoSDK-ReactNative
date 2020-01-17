@@ -26,7 +26,7 @@ public class RNNativoSdkModule extends ReactContextBaseJavaModule {
 
     @Override
     public String getName() {
-        return "NativoRNSdk";
+        return "NativoSDK";
     }
 
     @ReactMethod

@@ -1,6 +1,8 @@
 
 import { NativeModules } from 'react-native';
+import NativoAd from './NativoAd';
+import NativoWebContent from './NativoWebContent';
 
-const { RNNativoSdkReactNative } = NativeModules;
+const { NativoSDK } = NativeModules;
 
-export default RNNativoSdkReactNative;
+export default { NativoSDK, NativoAd, NativoWebContent }
