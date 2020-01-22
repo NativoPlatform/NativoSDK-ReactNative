@@ -8,10 +8,11 @@
 
 #import <Foundation/Foundation.h>
 #import <React/RCTBridgeModule.h>
+#import <React/RCTEventEmitter.h>
 
 NS_ASSUME_NONNULL_BEGIN
 
-@interface RCTNativoSDK : NSObject <RCTBridgeModule>
+@interface RCTNativoSDK : RCTEventEmitter <RCTBridgeModule>
 
 @end
 

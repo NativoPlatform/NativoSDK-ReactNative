@@ -9,6 +9,7 @@
 #import "RCTNativoSDK.h"
 #import "NtvSharedSectionDelegate.h"
 #import "LandingPageTemplate.h"
+#import "NativoAdsUtils.h"
 #import <React/RCTLog.h>
 #import <React/UIView+React.h>
 #import <React/RCTUIManager.h>
@@ -31,7 +32,7 @@ RCT_EXPORT_METHOD(enableTestAdvertisements)
     [NativoSDK enableTestAdvertisements];
 }
 
-RCT_EXPORT_METHOD(enableTestAdvertisementsWithType:(nonnull NSNumber *)adType)
+RCT_EXPORT_METHOD(enableTestAdvertisements:(nonnull NSNumber *)adType)
 {
     [NativoSDK enableTestAdvertisementsWithAdType:[adType intValue]];
 }
@@ -42,15 +43,30 @@ RCT_EXPORT_METHOD(prefetchAdForSection:(NSString *)section atLocationIdentifier:
     [NativoSDK prefetchAdForSection:section atLocationIdentifier:identifier options:nil];
 }
 
+RCT_EXPORT_METHOD(placeAdInWebView:(NSString *)section)
+{
+    //UIView *root = [RCTUIManager JSResponder];
+    if (self.bridge) {
+        RCTExecuteOnMainQueue(^{
+            UIView *window = [[UIApplication sharedApplication].delegate window];
+            UIView *root = [NativoAdsUtils findClass:[RCTRootView class] inView:window];
+            UIView *rootWebView = [self.bridge.uiManager viewForNativeID:@"nativoMoapAdView" withRootTag:root.reactTag];
+            WKWebView *webview = (WKWebView *)[NativoAdsUtils findClass:[WKWebView class] inView:rootWebView];
+            [NativoSDK placeAdInWebView:webview forSection:section];
+        });
+    }
+}
+
+- (NSArray<NSString *> *)supportedEvents
+{
+  return @[];
+}
+
 + (BOOL)requiresMainQueueSetup
 {
     return YES;
 }
 
-- (NSArray<NSString *> *)supportedEvents
-{
-  return @[@"landingPageHandleExternalLink", @"landingPageDidFinishLoading"];
-}
 
 - (NSDictionary *)constantsToExport
 {
