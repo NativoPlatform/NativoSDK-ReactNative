@@ -27,4 +27,12 @@
     return nil;
 }
 
+- (UILabel *)titleLabel {
+    return nil;
+}
+
+- (UILabel *)authorNameLabel {
+    return nil;
+}
+
 @end

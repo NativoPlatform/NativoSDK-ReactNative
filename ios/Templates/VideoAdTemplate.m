@@ -25,6 +25,14 @@
     return nil;
 }
 
+- (UILabel *)titleLabel {
+    return nil;
+}
+
+- (UILabel *)authorNameLabel {
+    return nil;
+}
+
 - (nonnull NSString *)videoFillMode {
     return AVLayerVideoGravityResizeAspectFill;
 }
