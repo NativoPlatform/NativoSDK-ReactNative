@@ -74,13 +74,20 @@
 }
 
 - (void)section:(NSString *)sectionUrl needsReloadDatasourceAtLocationIdentifier:(id)identifier forReason:(NSString *)reason {
-    NSLog(@"%@ %@", sectionUrl, reason);
-    // TODO: call needsRemoveAd()
+    if ([reason isEqualToString:NtvSectionReloadReasonRemoveView]) {
+        NSMutableDictionary *sectionMap = [NtvSharedSectionDelegate sharedInstance].viewMap;
+        NSDictionary *viewMap = sectionMap[sectionUrl];
+        if (viewMap) {
+            NativoAd *adView = viewMap[identifier];
+            if (adView) {
+                adView.onNeedsRemoveAd(@{ @"index": identifier, @"sectionUrl": sectionUrl });
+            }
+        }
+    }
 }
 
 - (void)section:(NSString *)sectionUrl needsDisplayLandingPage:(nullable UIViewController<NtvLandingPageInterface> *)sponsoredLandingPageViewController {
     
-    NSLog(@"%@ Attempting to display Nativo Landing Page", sectionUrl);
     NativoAd *adView = [self getFirstViewInSection:sectionUrl];
     NativoLandingPageTemplate *template = (NativoLandingPageTemplate *)sponsoredLandingPageViewController;
     NtvAdData *adData = template.adData;
@@ -97,7 +104,6 @@
 }
 
 - (void)section:(NSString *)sectionUrl needsDisplayClickoutURL:(NSURL *)url {
-    NSLog(@"%@ Attempting to display Nativo Clickout URL: %@", sectionUrl, url);
     NativoAd *adView = [self getFirstViewInSection:sectionUrl];
     if (adView && adView.onDisplayAdClick) {
         adView.onDisplayAdClick(@{ @"url" : url.absoluteString });
@@ -121,7 +127,10 @@
 }
 
 - (void)section:(NSString *)sectionUrl requestDidFailWithError:(nullable NSError *)error {
-    NSLog(@"%@ Ad did fail with error: %@", sectionUrl, error);
+    NativoAd *adView = [self getFirstViewInSection:sectionUrl];
+    if (adView) {
+        adView.onNeedsRemoveAd(@{ @"index": @(-1), @"sectionUrl": sectionUrl });
+    }
 }
 
 @end
