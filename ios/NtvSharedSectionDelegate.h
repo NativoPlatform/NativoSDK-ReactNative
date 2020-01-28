@@ -8,6 +8,7 @@
 
 #import <Foundation/Foundation.h>
 #import <NativoSDK/NativoSDK.h>
+#import <React/RCTBridgeModule.h>
 #import "NativoAds.h"
 
 NS_ASSUME_NONNULL_BEGIN
@@ -16,6 +17,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 + (instancetype)sharedInstance;
 + (void)setAdView:(NativoAd *)nativoAdView forSectionUrl:(NSString *)sectionUrl atLocationIdentifier:(id)locationId;
++ (void)setPrefetchCallback:(RCTResponseSenderBlock)senderBlock forSectionUrl:(NSString *)sectionUrl atLocationIdentifier:(NSNumber *)locationId;
 
 @end
 

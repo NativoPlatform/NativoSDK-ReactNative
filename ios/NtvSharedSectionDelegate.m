@@ -13,6 +13,7 @@
 
 @interface NtvSharedSectionDelegate ()
 @property (nonatomic) NSMutableDictionary<NSString *, NSMutableDictionary<id, NativoAd*>*> *viewMap;
+@property (nonatomic) NSMutableDictionary<NSString *, RCTResponseSenderBlock> *prefetchCallbackMap;
 @end
 
 @implementation NtvSharedSectionDelegate
@@ -23,8 +24,17 @@
     dispatch_once(&once, ^{
         sharedDelegate = [[NtvSharedSectionDelegate alloc] init];
         sharedDelegate.viewMap = [NSMutableDictionary dictionary];
+        sharedDelegate.prefetchCallbackMap = [NSMutableDictionary dictionary];
     });
     return sharedDelegate;
+}
+
++ (void)setPrefetchCallback:(RCTResponseSenderBlock)senderBlock forSectionUrl:(NSString *)sectionUrl atLocationIdentifier:(NSNumber *)locationId {
+    if (senderBlock && sectionUrl && locationId) {
+        NSMutableDictionary *callbackMap = [NtvSharedSectionDelegate sharedInstance].prefetchCallbackMap;
+        NSString *sectionLocationStr = [NSString stringWithFormat:@"%@:%@", sectionUrl, locationId];
+        callbackMap[sectionLocationStr] = senderBlock;
+    }
 }
 
 // Get NativoAd View
@@ -95,10 +105,18 @@
 }
 
 - (void)section:(NSString *)sectionUrl didReceiveAd:(NtvAdData *)adData {
-    NSLog(@"%@ Did recieve Ad!", sectionUrl);
     NativoAd *adView = [self getViewForAdData:adData inSection:sectionUrl];
     if (adView) {
         [adView injectWithAdData:adData];
+    }
+    
+    // Prefetch callback
+    NSMutableDictionary *callbackMap = [NtvSharedSectionDelegate sharedInstance].prefetchCallbackMap;
+    NSString *sectionLocationStr = [NSString stringWithFormat:@"%@:%@", sectionUrl, adData.locationIdentifier];
+    RCTResponseSenderBlock callback = callbackMap[sectionLocationStr];
+    if (callback) {
+        callback(@[[NSNull null], @(adData.isAdContentAvailable), sectionUrl, adData.locationIdentifier]);
+        [callbackMap removeObjectForKey:sectionLocationStr];
     }
 }
 
