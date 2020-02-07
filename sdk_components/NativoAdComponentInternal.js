@@ -3,7 +3,7 @@ import {findNodeHandle, NativeEventEmitter, requireNativeComponent, StyleSheet, 
 
 const NativoAdContainer = requireNativeComponent("NativoContainer");
 
-export default class NativoAdComponentInternal extends Component<Props> {
+class NativoAdComponentInternal extends Component<Props> {
 
     constructor(props) {
         super(props);
@@ -124,7 +124,7 @@ export default class NativoAdComponentInternal extends Component<Props> {
 
     render() {
         const NativeAdTemplate = this.props.nativeAdTemplate;
-        const NativeVideoAdTemplate = this.props.nativeVideoAdTemplate;
+        const NativeVideoAdTemplate = this.props.videoAdTemplate;
         const StandardDisplayAdTemplate = this.props.standardDisplayAdTemplate;
         return (
             <View style={styles.container}>
@@ -157,3 +157,5 @@ const styles = StyleSheet.create({
         alignItems: 'center'
     },
 });
+
+export default NativoAdComponentInternal;
