@@ -48,6 +48,7 @@ export default class NativoAdComponentInternal extends Component<Props> {
         } catch (e) {
             this.setDefaultState()
         }
+        this.prefetchAd();
     }
 
     componentDidUpdate(prevProps: Readonly<P>, prevState: Readonly<S>, snapshot: SS): void {

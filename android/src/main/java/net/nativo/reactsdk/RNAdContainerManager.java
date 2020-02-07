@@ -23,11 +23,14 @@ import com.facebook.react.views.view.ReactViewGroup;
 
 import net.nativo.sdk.NativoSDK;
 import net.nativo.sdk.ntvadtype.NtvBaseInterface;
+import net.nativo.sdk.ntvconstant.NativoAdType;
 import net.nativo.sdk.ntvcore.NtvAdData;
 import net.nativo.sdk.ntvcore.NtvSectionAdapter;
 
 import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.Map;
+import java.util.Queue;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -45,6 +48,11 @@ class NativoAdView extends ReactViewGroup {
                 name,
                 event);
     }
+
+    @Override
+    protected void onAttachedToWindow() {
+        super.onAttachedToWindow();
+    }
 }
 
 public class RNAdContainerManager extends ViewGroupManager<NativoAdView> implements NtvSectionAdapter {
@@ -60,7 +68,7 @@ public class RNAdContainerManager extends ViewGroupManager<NativoAdView> impleme
     private ThemedReactContext themedReactContext;
     public static final String SECTION_URL = "http://www.nativo.net/test/";
     View RNContainer;
-    Map<Integer, View> viewMap = new HashMap<>();
+    Queue<View> viewMap = new LinkedList<>();
     Map<Integer, Integer> containerAdIdmap = new HashMap<>();
 
     String sectionUrl;
@@ -88,7 +96,7 @@ public class RNAdContainerManager extends ViewGroupManager<NativoAdView> impleme
         sectionUrl = map.getString("url");
         index = map.getInt("index");
         RNContainer = container;
-        viewMap.put(index, container);
+        viewMap.add(container);
     }
 
     @Override
@@ -115,8 +123,6 @@ public class RNAdContainerManager extends ViewGroupManager<NativoAdView> impleme
         WritableMap params = Arguments.createMap();
         params.putString("url", s1);
         sendEvent(themedReactContext, "needsDisplayClickOutURL", params);
-
-        Log.d(getClass().getName(), "needsDisplayClickOutURL: done");
     }
 
     @Override
@@ -127,9 +133,14 @@ public class RNAdContainerManager extends ViewGroupManager<NativoAdView> impleme
     }
 
     @Override
-    public void onReceiveAd(String s, int i, NtvAdData ntvAdData) {
-        Log.d(getClass().getName(), "onReceiveAd: for index " + i);
-        View view = viewMap.get(i);
+    public void onReceiveAd(String s, NtvAdData ntvAdData) {
+        View view = viewMap.poll();
+
+        if (view == null){
+            Log.e(getClass().getName(), "onReceiveAd: view is null");
+            return;
+        }
+
 
         // callback to js
         WritableMap event = Arguments.createMap();
@@ -140,14 +151,14 @@ public class RNAdContainerManager extends ViewGroupManager<NativoAdView> impleme
         event.putString("adDate", ntvAdData.getDate().toString());
         sendEvent(EVENT_AD_LOADED, (NativoAdView) view, event);
 
-        Log.d(getClass().getName(), "onReceiveAd: done");
-
     }
 
     @Override
-    public void onFail(String s, int i) {
-        Log.d(getClass().getName(), "onFail: ");
-        View view = viewMap.get(i);
+    public void onFail(String s) {
+        View view = viewMap.poll();
+        if (view == null){
+            return;
+        }
         WritableMap event = Arguments.createMap();
         sendEvent(EVENT_AD_FAILED_TO_LOAD, (NativoAdView) view, event);
     }
@@ -221,7 +232,9 @@ public class RNAdContainerManager extends ViewGroupManager<NativoAdView> impleme
                 break;
             case COMMAND_PREFETCH_AD:
                 index = args.getInt(0);
-                NativoSDK.getInstance().prefetchAdForSection(SECTION_URL, (ViewGroup) nativeContainerParent, index, this, null);
+                if (NativoSDK.getInstance().getAdTypeForIndex(SECTION_URL, (ViewGroup) nativeContainerParent, index).equals(NativoAdType.AD_TYPE_NONE)) {
+                    NativoSDK.getInstance().prefetchAdForSection(SECTION_URL, (ViewGroup) nativeContainerParent, index, this, null);
+                }
         }
     }
 

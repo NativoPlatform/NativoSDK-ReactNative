@@ -77,15 +77,15 @@ public class NativeLandingPage implements NtvLandingPageInterface {
     @Override
     public void contentWebViewOnPageFinished() {
         WritableMap event = Arguments.createMap();
-        event.putInt("webviewContentHeight", webView.getContentHeight());
+        event.putInt("contentHeight", webView.getContentHeight());
         sendEvent(RNLandingPageContainerManager.landingContext,ON_PAGE_FINISHED, event);
     }
 
     @Override
     public void contentWebViewOnReceivedError(String s) {
         WritableMap event = Arguments.createMap();
-        event.putString("webviewError", s);
-        sendEvent(RNLandingPageContainerManager.landingContext,ON_RECEIVED_ERROR, event);
+        event.putString("error", s);
+        sendEvent(RNLandingPageContainerManager.landingContext,ON_PAGE_FINISHED, event);
     }
 
     @Override
