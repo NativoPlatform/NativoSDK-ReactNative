@@ -25,7 +25,7 @@ class NativoAdComponentInternal extends Component<Props> {
         try {
             UIManager.dispatchViewManagerCommand(
                 findNodeHandle(this._adContainer),
-                UIManager.getViewManagerConfig('NativoContainer').Commands.prefetchAd, [this.props.index]);
+                UIManager.getViewManagerConfig('NativoContainer').Commands.prefetchAd, [this.props.index, this.props.sectionUrl]);
         } catch (e) {
             this.setDefaultState()
         }
@@ -55,7 +55,7 @@ class NativoAdComponentInternal extends Component<Props> {
         try {
             UIManager.dispatchViewManagerCommand(
                 findNodeHandle(this._adContainer),
-                UIManager.getViewManagerConfig('NativoContainer').Commands.placeAdInView, [this.props.index]);
+                UIManager.getViewManagerConfig('NativoContainer').Commands.placeAdInView, [this.props.index, this.props.sectionUrl]);
         } catch (e) {
             this.setDefaultState()
         }
@@ -88,7 +88,9 @@ class NativoAdComponentInternal extends Component<Props> {
                     adDescription: '',
                     adTitle: '',
                     adAuthorName: '',
-                    adDate: '',
+                    adDate: event.nativeEvent.adDate,
+                    displayWidth: event.nativeEvent.adDisplayWidth,
+                    displayHeight: event.nativeEvent.adDisplayHeight,
                     adLoaded: true
 
                 });
@@ -142,7 +144,7 @@ class NativoAdComponentInternal extends Component<Props> {
                                            adDescription={this.state.adDescription}
                                            adAuthorName={this.state.adAuthorName}
                                            adLoaded={this.state.adLoaded}/>}
-                    {this.state.standardDisplayFlag && <StandardDisplayAdTemplate adLoaded={this.state.adLoaded}/>}
+                    {this.state.standardDisplayFlag && <StandardDisplayAdTemplate adLoaded={this.state.adLoaded} webViewForSD={true} displayWidth={this.state.displayWidth} displayHeight={this.state.displayHeight}/>}
                     {!this.state.adLoaded && <View style={{width: 1, height: 1}}/>}
                 </NativoAdContainer>
             </View>

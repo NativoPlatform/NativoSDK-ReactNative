@@ -14,7 +14,7 @@ export class NativoLandingPageComponentInternal extends Component<props> {
         try {
             UIManager.dispatchViewManagerCommand(
                 findNodeHandle(this._landingContainer),
-                UIManager.getViewManagerConfig('NativoLandingPageContainer').Commands.injectAd, []);
+                UIManager.getViewManagerConfig('NativoLandingPageContainer').Commands.injectAd, [this.props.adId, this.props.url, this.props.containerHash]);
         } catch (e) {
         }
 

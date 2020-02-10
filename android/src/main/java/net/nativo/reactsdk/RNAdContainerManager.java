@@ -49,10 +49,6 @@ class NativoAdView extends ReactViewGroup {
                 event);
     }
 
-    @Override
-    protected void onAttachedToWindow() {
-        super.onAttachedToWindow();
-    }
 }
 
 public class RNAdContainerManager extends ViewGroupManager<NativoAdView> implements NtvSectionAdapter {
@@ -149,10 +145,12 @@ public class RNAdContainerManager extends ViewGroupManager<NativoAdView> impleme
         event.putString("adTitle", ntvAdData.getTitle());
         event.putString("adAuthorName", ntvAdData.getAuthorName());
         event.putString("adDate", ntvAdData.getDate().toString());
+
         if (ntvAdData.getAdType() == NtvAdData.NtvAdType.STANDARD_DISPLAY) {
             event.putInt("adDisplayWidth", ntvAdData.getStandardDisplayWidth());
             event.putInt("adDisplayHeight", ntvAdData.getStandardDisplayHeight());
         }
+
         sendEvent(EVENT_AD_LOADED, (NativoAdView) view, event);
 
     }
@@ -228,16 +226,12 @@ public class RNAdContainerManager extends ViewGroupManager<NativoAdView> impleme
                     adView = root;
                 }
 
-
-                index = args.getInt(0);
-                Log.d(RNAdContainerManager.class.getName(), "receiveCommand: for index " + index);
-                NativoSDK.getInstance().placeAdInView(adView, (ViewGroup) nativeContainerParent, sectionUrl, index, this, null);
+                NativoSDK.getInstance().placeAdInView(adView, (ViewGroup) nativeContainerParent, args.getString(1), args.getInt(0), this, null);
                 forceAdTracking();
                 break;
             case COMMAND_PREFETCH_AD:
-                index = args.getInt(0);
-                if (NativoSDK.getInstance().getAdTypeForIndex(SECTION_URL, (ViewGroup) nativeContainerParent, index).equals(NativoAdType.AD_TYPE_NONE)) {
-                    NativoSDK.getInstance().prefetchAdForSection(SECTION_URL, (ViewGroup) nativeContainerParent, index, this, null);
+                if (NativoSDK.getInstance().getAdTypeForIndex(args.getString(1), (ViewGroup) nativeContainerParent, args.getInt(0)).equals(NativoAdType.AD_TYPE_NONE)) {
+                    NativoSDK.getInstance().prefetchAdForSection(args.getString(1), this, null);
                 }
         }
     }

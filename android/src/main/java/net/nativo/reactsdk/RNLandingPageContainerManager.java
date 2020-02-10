@@ -66,12 +66,13 @@ public class RNLandingPageContainerManager extends ViewGroupManager<RelativeLayo
 
     @Override
     public void receiveCommand(final RelativeLayout root, int commandId, @Nullable ReadableArray args) {
-        // This will be called whenever a command is sent from react-native.
         switch (commandId) {
             case COMMAND_INJECT_AD:
                 View webViewContainer = ReactFindViewUtil.findView(root, "nativoAdWebViewContainer");
-                Log.d(RNLandingPageContainerManager.class.getName(), "makeAdRequest: req " + containerHash);
-                NativoSDK.getInstance().initLandingPage(webViewContainer, sectionUrl, containerHash, adId, NativeLandingPage.class);
+                int adid = args.getInt(0);
+                String sectionUrl = args.getString(1);
+                int containerHash = args.getInt(2);
+                NativoSDK.getInstance().initLandingPage(webViewContainer, sectionUrl, containerHash, adid, NativeLandingPage.class);
                 break;
         }
     }
