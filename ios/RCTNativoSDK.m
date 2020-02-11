@@ -37,11 +37,11 @@ RCT_EXPORT_METHOD(enableTestAdvertisements:(nonnull NSNumber *)adType)
     [NativoSDK enableTestAdvertisementsWithAdType:[adType intValue]];
 }
 
-RCT_EXPORT_METHOD(prefetchAdForSection:(NSString *)section atLocationIdentifier:(NSString *)identifier callback:(RCTResponseSenderBlock)senderBlock)
+RCT_EXPORT_METHOD(prefetchAdForSection:(NSString *)section callback:(RCTResponseSenderBlock)senderBlock)
 {
     [NativoSDK setSectionDelegate:[NtvSharedSectionDelegate sharedInstance] forSection:section];
-    [NtvSharedSectionDelegate setPrefetchCallback:senderBlock forSectionUrl:section atLocationIdentifier:identifier];
-    [NativoSDK prefetchAdForSection:section atLocationIdentifier:identifier options:nil];
+    [NtvSharedSectionDelegate setPrefetchCallback:senderBlock forSectionUrl:section];
+    [NativoSDK prefetchAdForSection:section options:nil];
 }
 
 RCT_EXPORT_METHOD(placeAdInWebView:(NSString *)section)
