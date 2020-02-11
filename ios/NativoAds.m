@@ -78,16 +78,14 @@ RCT_EXPORT_VIEW_PROPERTY(onNeedsRemoveAd, RCTBubblingEventBlock)
 }
 
 - (void)didMoveToSuperview {
-    if (self.sectionUrl && self.index) {
-        // Set ad view with shared section delegate
-        [NtvSharedSectionDelegate setAdView:self forSectionUrl:self.sectionUrl atLocationIdentifier:self.index];
-        
-        // If we have ad data, inject ad view, otherwise prefetch ad
-        NtvAdData *adData = [NativoSDK getCachedAdAtLocationIdentifier:self.index forSection:self.sectionUrl];
-        if (adData) {
-            [self injectWithAdData:adData];
-        } else {
+    if (self.sectionUrl && self.index) {  
+        @try {
+            // prefetch ad using index path to dequeue from ads array if available
+            // injectWithAdData will be called in sectionDelegate method 'didReceiveAd'
+            [NtvSharedSectionDelegate setAdView:self forSectionUrl:self.sectionUrl atLocationIdentifier:self.index];
             [NativoSDK prefetchAdForSection:self.sectionUrl atLocationIdentifier:self.index options:nil];
+        } @catch (NSException *exception) {
+            NSLog(@"Failed to inject NativoAd: %@", exception);
         }
     }
 }

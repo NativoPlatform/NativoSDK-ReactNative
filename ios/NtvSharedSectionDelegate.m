@@ -13,7 +13,7 @@
 
 @interface NtvSharedSectionDelegate ()
 @property (nonatomic) NSMutableDictionary<NSString *, NSMutableDictionary<id, NativoAd*>*> *viewMap;
-@property (nonatomic) NSMutableDictionary<NSString *, RCTResponseSenderBlock> *prefetchCallbackMap;
+@property (nonatomic) NSMutableDictionary<NSString *, NSMutableArray<RCTResponseSenderBlock>*> *prefetchCallbackMap;
 @end
 
 @implementation NtvSharedSectionDelegate
@@ -29,11 +29,14 @@
     return sharedDelegate;
 }
 
-+ (void)setPrefetchCallback:(RCTResponseSenderBlock)senderBlock forSectionUrl:(NSString *)sectionUrl atLocationIdentifier:(NSNumber *)locationId {
-    if (senderBlock && sectionUrl && locationId) {
-        NSMutableDictionary *callbackMap = [NtvSharedSectionDelegate sharedInstance].prefetchCallbackMap;
-        NSString *sectionLocationStr = [NSString stringWithFormat:@"%@:%@", sectionUrl, locationId];
-        callbackMap[sectionLocationStr] = senderBlock;
++ (void)setPrefetchCallback:(RCTResponseSenderBlock)senderBlock forSectionUrl:(NSString *)sectionUrl {
+    if (senderBlock && sectionUrl) {
+        NSMutableArray *sectionCallbacks = [NtvSharedSectionDelegate sharedInstance].prefetchCallbackMap[sectionUrl];
+        if (!sectionCallbacks) {
+            sectionCallbacks = [NSMutableArray array];
+            [NtvSharedSectionDelegate sharedInstance].prefetchCallbackMap[sectionUrl] = sectionCallbacks;
+        }
+        [sectionCallbacks addObject:senderBlock];
     }
 }
 
@@ -117,12 +120,13 @@
     }
     
     // Prefetch callback
-    NSMutableDictionary *callbackMap = [NtvSharedSectionDelegate sharedInstance].prefetchCallbackMap;
-    NSString *sectionLocationStr = [NSString stringWithFormat:@"%@:%@", sectionUrl, adData.locationIdentifier];
-    RCTResponseSenderBlock callback = callbackMap[sectionLocationStr];
-    if (callback) {
-        callback(@[[NSNull null], @(adData.isAdContentAvailable), sectionUrl, adData.locationIdentifier]);
-        [callbackMap removeObjectForKey:sectionLocationStr];
+    NSMutableArray *sectionCallbacks = [NtvSharedSectionDelegate sharedInstance].prefetchCallbackMap[sectionUrl];
+    if (sectionCallbacks && sectionCallbacks.count > 0) {
+        RCTResponseSenderBlock callback = sectionCallbacks[0];
+        if (callback) {
+            callback(@[[NSNull null], @(adData.isAdContentAvailable), sectionUrl]);
+        }
+        [sectionCallbacks removeObjectAtIndex:0];
     }
 }
 
