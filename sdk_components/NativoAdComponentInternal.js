@@ -1,5 +1,13 @@
 import React, {Component} from 'react';
-import {findNodeHandle, NativeEventEmitter, requireNativeComponent, StyleSheet, UIManager, View} from 'react-native';
+import {
+    findNodeHandle,
+    NativeEventEmitter,
+    requireNativeComponent,
+    StyleSheet,
+    UIManager,
+    View,
+    NativeModules
+} from 'react-native';
 
 const NativoAdContainer = requireNativeComponent("NativoContainer");
 
@@ -15,10 +23,12 @@ class NativoAdComponentInternal extends Component<Props> {
             adTitle: '',
             adAuthorName: '',
             adDate: '',
-            adLoaded: false
+            adLoaded: false,
+            adAuthorUrl:''
         };
         this.handleAdLoaded = this.handleAdLoaded.bind(this);
         this.handleAdLoadFailed = this.handleAdLoadFailed.bind(this);
+        NativeModules.NativoSDK.registerTemplates();
     }
 
     prefetchAd() {
@@ -40,6 +50,7 @@ class NativoAdComponentInternal extends Component<Props> {
                 event.adTitle = this.state.adTitle
                 event.adAuthorName = this.state.adAuthorName
                 event.adDate = this.state.adDate
+                event.adAuthorUrl = this.state.adAuthorUrl
                 this.props.onNativeAdClick(event)
             });
             eventEmitter.addListener('needsDisplayClickOutURL', (event) => {
@@ -74,7 +85,8 @@ class NativoAdComponentInternal extends Component<Props> {
             adTitle: '',
             adAuthorName: '',
             adDate: '',
-            adLoaded: false
+            adLoaded: false,
+            adAuthorUrl:''
         });
     }
 
@@ -88,6 +100,7 @@ class NativoAdComponentInternal extends Component<Props> {
                     adDescription: '',
                     adTitle: '',
                     adAuthorName: '',
+                    adAuthorUrl: event.nativeEvent.adAuthorUrl,
                     adDate: event.nativeEvent.adDate,
                     displayWidth: event.nativeEvent.adDisplayWidth,
                     displayHeight: event.nativeEvent.adDisplayHeight,
@@ -102,6 +115,7 @@ class NativoAdComponentInternal extends Component<Props> {
                     adDescription: event.nativeEvent.adDescription,
                     adTitle: event.nativeEvent.adTitle,
                     adAuthorName: event.nativeEvent.adAuthorName,
+                    adAuthorUrl: event.nativeEvent.adAuthorUrl,
                     adDate: event.nativeEvent.adDate,
                     adLoaded: true
 
@@ -114,6 +128,7 @@ class NativoAdComponentInternal extends Component<Props> {
                     adDescription: event.nativeEvent.adDescription,
                     adTitle: event.nativeEvent.adTitle,
                     adAuthorName: event.nativeEvent.adAuthorName,
+                    adAuthorUrl: event.nativeEvent.adAuthorUrl,
                     adDate: event.nativeEvent.adDate,
                     adLoaded: true
                 });

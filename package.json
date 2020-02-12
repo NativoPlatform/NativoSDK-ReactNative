@@ -1,7 +1,7 @@
 {
     "name": "react-native-nativo-ads",
     "title": "React Native Nativo Ads",
-    "version": "1.0.0-SNAPSHOT.ANDROID.5",
+    "version": "1.0.0-SNAPSHOT.ANDROID.8",
     "description": "This will allow you to monetize your app using Nativo's native, display, and video ads.",
     "main": "index.js",
     "scripts": {

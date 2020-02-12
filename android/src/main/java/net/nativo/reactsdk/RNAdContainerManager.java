@@ -145,6 +145,7 @@ public class RNAdContainerManager extends ViewGroupManager<NativoAdView> impleme
         event.putString("adTitle", ntvAdData.getTitle());
         event.putString("adAuthorName", ntvAdData.getAuthorName());
         event.putString("adDate", ntvAdData.getDate().toString());
+        event.putString("adAuthorUrl", ntvAdData.getAuthorImageURL());
 
         if (ntvAdData.getAdType() == NtvAdData.NtvAdType.STANDARD_DISPLAY) {
             event.putInt("adDisplayWidth", ntvAdData.getStandardDisplayWidth());
