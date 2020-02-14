@@ -1,9 +1,17 @@
 import React, {Component} from 'react';
-import {findNodeHandle, NativeEventEmitter, requireNativeComponent, StyleSheet, UIManager, View} from 'react-native';
+import {
+    findNodeHandle,
+    NativeEventEmitter,
+    requireNativeComponent,
+    StyleSheet,
+    UIManager,
+    View,
+    NativeModules
+} from 'react-native';
 
 const NativoAdContainer = requireNativeComponent("NativoContainer");
 
-export default class NativoAdComponentInternal extends Component<Props> {
+class NativoAdComponentInternal extends Component<Props> {
 
     constructor(props) {
         super(props);
@@ -15,17 +23,19 @@ export default class NativoAdComponentInternal extends Component<Props> {
             adTitle: '',
             adAuthorName: '',
             adDate: '',
-            adLoaded: false
+            adLoaded: false,
+            adAuthorUrl:''
         };
         this.handleAdLoaded = this.handleAdLoaded.bind(this);
         this.handleAdLoadFailed = this.handleAdLoadFailed.bind(this);
+        NativeModules.NativoSDK.registerTemplates();
     }
 
     prefetchAd() {
         try {
             UIManager.dispatchViewManagerCommand(
                 findNodeHandle(this._adContainer),
-                UIManager.getViewManagerConfig('NativoContainer').Commands.prefetchAd, [this.props.index]);
+                UIManager.getViewManagerConfig('NativoContainer').Commands.prefetchAd, [this.props.index, this.props.sectionUrl]);
         } catch (e) {
             this.setDefaultState()
         }
@@ -40,6 +50,7 @@ export default class NativoAdComponentInternal extends Component<Props> {
                 event.adTitle = this.state.adTitle
                 event.adAuthorName = this.state.adAuthorName
                 event.adDate = this.state.adDate
+                event.adAuthorUrl = this.state.adAuthorUrl
                 this.props.onNativeAdClick(event)
             });
             eventEmitter.addListener('needsDisplayClickOutURL', (event) => {
@@ -48,13 +59,14 @@ export default class NativoAdComponentInternal extends Component<Props> {
         } catch (e) {
             this.setDefaultState()
         }
+        this.prefetchAd();
     }
 
     componentDidUpdate(prevProps: Readonly<P>, prevState: Readonly<S>, snapshot: SS): void {
         try {
             UIManager.dispatchViewManagerCommand(
                 findNodeHandle(this._adContainer),
-                UIManager.getViewManagerConfig('NativoContainer').Commands.placeAdInView, [this.props.index]);
+                UIManager.getViewManagerConfig('NativoContainer').Commands.placeAdInView, [this.props.index, this.props.sectionUrl]);
         } catch (e) {
             this.setDefaultState()
         }
@@ -73,7 +85,8 @@ export default class NativoAdComponentInternal extends Component<Props> {
             adTitle: '',
             adAuthorName: '',
             adDate: '',
-            adLoaded: false
+            adLoaded: false,
+            adAuthorUrl:''
         });
     }
 
@@ -87,7 +100,10 @@ export default class NativoAdComponentInternal extends Component<Props> {
                     adDescription: '',
                     adTitle: '',
                     adAuthorName: '',
-                    adDate: '',
+                    adAuthorUrl: event.nativeEvent.adAuthorUrl,
+                    adDate: event.nativeEvent.adDate,
+                    displayWidth: event.nativeEvent.adDisplayWidth,
+                    displayHeight: event.nativeEvent.adDisplayHeight,
                     adLoaded: true
 
                 });
@@ -99,6 +115,7 @@ export default class NativoAdComponentInternal extends Component<Props> {
                     adDescription: event.nativeEvent.adDescription,
                     adTitle: event.nativeEvent.adTitle,
                     adAuthorName: event.nativeEvent.adAuthorName,
+                    adAuthorUrl: event.nativeEvent.adAuthorUrl,
                     adDate: event.nativeEvent.adDate,
                     adLoaded: true
 
@@ -111,6 +128,7 @@ export default class NativoAdComponentInternal extends Component<Props> {
                     adDescription: event.nativeEvent.adDescription,
                     adTitle: event.nativeEvent.adTitle,
                     adAuthorName: event.nativeEvent.adAuthorName,
+                    adAuthorUrl: event.nativeEvent.adAuthorUrl,
                     adDate: event.nativeEvent.adDate,
                     adLoaded: true
                 });
@@ -123,7 +141,7 @@ export default class NativoAdComponentInternal extends Component<Props> {
 
     render() {
         const NativeAdTemplate = this.props.nativeAdTemplate;
-        const NativeVideoAdTemplate = this.props.nativeVideoAdTemplate;
+        const NativeVideoAdTemplate = this.props.videoAdTemplate;
         const StandardDisplayAdTemplate = this.props.standardDisplayAdTemplate;
         return (
             <View style={styles.container}>
@@ -141,7 +159,7 @@ export default class NativoAdComponentInternal extends Component<Props> {
                                            adDescription={this.state.adDescription}
                                            adAuthorName={this.state.adAuthorName}
                                            adLoaded={this.state.adLoaded}/>}
-                    {this.state.standardDisplayFlag && <StandardDisplayAdTemplate adLoaded={this.state.adLoaded}/>}
+                    {this.state.standardDisplayFlag && <StandardDisplayAdTemplate adLoaded={this.state.adLoaded} webViewForSD={true} displayWidth={this.state.displayWidth} displayHeight={this.state.displayHeight}/>}
                     {!this.state.adLoaded && <View style={{width: 1, height: 1}}/>}
                 </NativoAdContainer>
             </View>
@@ -156,3 +174,5 @@ const styles = StyleSheet.create({
         alignItems: 'center'
     },
 });
+
+export default NativoAdComponentInternal;

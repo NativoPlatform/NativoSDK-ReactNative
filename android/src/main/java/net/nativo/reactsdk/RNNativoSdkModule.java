@@ -1,7 +1,6 @@
 
 package net.nativo.reactsdk;
 
-import android.app.Activity;
 import android.view.View;
 import android.webkit.WebView;
 
@@ -13,15 +12,15 @@ import com.facebook.react.uimanager.util.ReactFindViewUtil;
 import net.nativo.sdk.NativoSDK;
 import net.nativo.sdk.ntvcore.NtvAdData;
 
+import java.util.HashMap;
+import java.util.Map;
+
 public class RNNativoSdkModule extends ReactContextBaseJavaModule {
 
-    private final ReactApplicationContext reactContext;
-    public static Activity currentactivity;
+    boolean isTemplateRegistred = false;
 
     public RNNativoSdkModule(ReactApplicationContext reactContext) {
         super(reactContext);
-        this.reactContext = reactContext;
-        currentactivity = getCurrentActivity();
     }
 
     @Override
@@ -31,12 +30,15 @@ public class RNNativoSdkModule extends ReactContextBaseJavaModule {
 
     @ReactMethod
     public void registerTemplates() {
-
-        NativoSDK.getInstance().registerNativeAd(new NativeAd());
-        NativoSDK.getInstance().registerVideoAd(new NativeVideoAd());
-        NativoSDK.getInstance().registerLandingPage(new NativeLandingPage());
-        NativoSDK.getInstance().registerStandardDisplayAd(new StandardDisplayAd());
+        if (!isTemplateRegistred) {
+            NativoSDK.getInstance().registerNativeAd(new NativeAd());
+            NativoSDK.getInstance().registerVideoAd(new NativeVideoAd());
+            NativoSDK.getInstance().registerLandingPage(new NativeLandingPage());
+            NativoSDK.getInstance().registerStandardDisplayAd(new StandardDisplayAd());
+            isTemplateRegistred = true;
+        }
     }
+
 
     @ReactMethod
     public void enableDebugLogs() {
@@ -44,18 +46,18 @@ public class RNNativoSdkModule extends ReactContextBaseJavaModule {
     }
 
     @ReactMethod
-    public void enableTestAds(String s) {
-        if (s.equals("native")) {
+    public void enableTestAdvertisements(String s) {
+        if (s.equals("NATIVE")) {
             NativoSDK.getInstance().enableTestAdvertisements(NtvAdData.NtvAdType.NATIVE);
-        } else if (s.equals("click_out")) {
+        } else if (s.equals("DISPLAY")) {
             NativoSDK.getInstance().enableTestAdvertisements(NtvAdData.NtvAdType.CLICK_OUT);
-        } else if (s.equals("in_feed_video")) {
+        } else if (s.equals("CLICK_VIDEO")) {
             NativoSDK.getInstance().enableTestAdvertisements(NtvAdData.NtvAdType.IN_FEED_VIDEO);
-        } else if (s.equals("in_feed_auto_play_video")) {
+        } else if (s.equals("SCROLL_VIDEO")) {
             NativoSDK.getInstance().enableTestAdvertisements(NtvAdData.NtvAdType.IN_FEED_AUTO_PLAY_VIDEO);
-        } else if (s.equals("standard_display")) {
+        } else if (s.equals("STANDARD_DISPLAY")) {
             NativoSDK.getInstance().enableTestAdvertisements(NtvAdData.NtvAdType.STANDARD_DISPLAY);
-        } else if (s.equals("no_fill")) {
+        } else if (s.equals("NO_FILL")) {
             NativoSDK.getInstance().enableTestAdvertisements(NtvAdData.NtvAdType.NO_FILL);
         } else {
             NativoSDK.getInstance().enableTestAdvertisements();
@@ -72,6 +74,20 @@ public class RNNativoSdkModule extends ReactContextBaseJavaModule {
                 NativoSDK.getInstance().placeAdInWebView(webView, sectionUrl);
             }
         });
+    }
+
+    @Override
+    public Map<String, Object> getConstants() {
+        final Map<String, Object> constants = new HashMap<>();
+        constants.put("NATIVE","NATIVE" );
+        constants.put("DISPLAY", "DISPLAY");
+        constants.put("CLICK_VIDEO", "CLICK_VIDEO");
+        constants.put("SCROLL_VIDEO", "SCROLL_VIDEO");
+        constants.put("NO_FILL", "NO_FILL");
+        constants.put("STANDARD_DISPLAY", "STANDARD_DISPLAY");
+        final Map<String, Object> objectMap = new HashMap<>();
+        objectMap.put("AdTypes", constants);
+        return objectMap;
     }
 
 }
