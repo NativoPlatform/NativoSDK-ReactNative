@@ -78,7 +78,7 @@ RCT_EXPORT_VIEW_PROPERTY(onNeedsRemoveAd, RCTBubblingEventBlock)
 }
 
 - (void)didMoveToSuperview {
-    if (self.sectionUrl && self.index) {  
+    if (self.sectionUrl && self.index && self.superview != nil) {
         @try {
             // prefetch ad using index path to dequeue from ads array if available
             // injectWithAdData will be called in sectionDelegate method 'didReceiveAd'
@@ -154,6 +154,8 @@ RCT_EXPORT_VIEW_PROPERTY(onNeedsRemoveAd, RCTBubblingEventBlock)
                 self.onNeedsRemoveAd(@{ @"index": self.index, @"sectionUrl": self.sectionUrl });
             }
         });
+
+        
     });
 }
 

@@ -2,6 +2,8 @@ import PropTypes from 'prop-types';
 import React from 'react';
 import {requireNativeComponent, AppRegistry } from 'react-native';
 
+const _registeredTemplates = [];
+
 function NativoAdComponent(props) {
     const { nativeAdTemplate, videoAdTemplate, standardDisplayAdTemplate, ...other } = props;
 
@@ -27,39 +29,35 @@ function NativoAdComponent(props) {
         props.onNeedsRemoveAd(event.nativeEvent);
     }
     
-    const allTemplates = {...nativeAdTemplate, ...videoAdTemplate, ...standardDisplayAdTemplate};
-    for (const templateName in allTemplates) {
-        AppRegistry.registerComponent(templateName, () => allTemplates[templateName]);
-    }
-    const nativeTemplateName = getFirstKey(nativeAdTemplate);
-    const videoTemplateName = getFirstKey(videoAdTemplate);
-    const stdDisplayTemplateName = getFirstKey(standardDisplayAdTemplate);
+    // Register templates with app registry root views
+    const allTemplates = [nativeAdTemplate, videoAdTemplate, standardDisplayAdTemplate];
+    allTemplates.forEach((template) => {
+        if (template != null) {
+            if ( !_registeredTemplates.includes(template.name) ) {
+                AppRegistry.registerComponent(template.name, () => template);
+                _registeredTemplates.push(template.name);
+            }
+        }
+    });
 
     return (
         <NativoAd {...other} 
             onNativeAdClick={_onNativeAdClick} 
             onDisplayAdClick={_onDisplayAdClick} 
             onNeedsRemoveAd={_onNeedsRemoveAd} 
-            nativeAdTemplate={nativeTemplateName} 
-            videoAdTemplate={videoTemplateName} 
-            stdDisplayAdTemplate={stdDisplayTemplateName} />
+            nativeAdTemplate={nativeAdTemplate.name} 
+            videoAdTemplate={videoAdTemplate.name} 
+            stdDisplayAdTemplate={standardDisplayAdTemplate.name}>
+        </NativoAd>
     );
-}
-
-function getFirstKey(obj) {
-    const keys = Object.keys(obj);
-    if (keys && keys.length > 0) {
-        return keys[0];
-    }
-    return null;
 }
 
 NativoAdComponent.propTypes = {
     sectionUrl: PropTypes.string,
     index: PropTypes.number,
-    nativeAdTemplate: PropTypes.object,
-    videoAdTemplate: PropTypes.object,
-    standardDisplayAdTemplate: PropTypes.object,
+    nativeAdTemplate: PropTypes.func,
+    videoAdTemplate: PropTypes.func,
+    standardDisplayAdTemplate: PropTypes.func,
     onNativeAdClick: PropTypes.func,
     onDisplayAdClick: PropTypes.func,
     onNeedsRemoveAd: PropTypes.func
