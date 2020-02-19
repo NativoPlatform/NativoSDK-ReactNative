@@ -8,7 +8,6 @@
 
 #import "RCTNativoSDK.h"
 #import "NtvSharedSectionDelegate.h"
-#import "LandingPageTemplate.h"
 #import "NativoAdsUtils.h"
 #import <React/RCTLog.h>
 #import <React/UIView+React.h>
