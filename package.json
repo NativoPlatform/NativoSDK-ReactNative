@@ -9,8 +9,8 @@
     },
     "repository": {
         "type": "git",
-        "url": "git+https://github.com/github_account/react-native-nativo-ads.git",
-        "baseUrl": "https://github.com/github_account/react-native-nativo-ads"
+        "url": "git+https://github.com/NativoPlatform/NativoSDK-ReactNative.git",
+        "baseUrl": "https://github.com/NativoPlatform/NativoSDK-ReactNative"
     },
     "keywords": [
         "react-native"
