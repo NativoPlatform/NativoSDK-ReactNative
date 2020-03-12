@@ -1,6 +1,7 @@
 import React, {Component} from 'react';
 import ErrorBoundary from "./ErrorBoundary";
 import NativoAdComponentInternal from "./sdk_components/NativoAdComponentInternal";
+import PropTypes from 'prop-types';
 
 class NativoAd extends Component<props> {
 
@@ -22,5 +23,16 @@ class NativoAd extends Component<props> {
         )
     }
 }
+
+NativoAd.propTypes = {
+    sectionUrl: PropTypes.string,
+    index: PropTypes.number,
+    nativeAdTemplate: PropTypes.func,
+    videoAdTemplate: PropTypes.func,
+    standardDisplayAdTemplate: PropTypes.func,
+    onNativeAdClick: PropTypes.func,
+    onDisplayAdClick: PropTypes.func,
+    onNeedsRemoveAd: PropTypes.func
+};
 
 export default NativoAd;

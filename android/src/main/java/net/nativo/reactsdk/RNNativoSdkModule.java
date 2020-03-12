@@ -1,23 +1,28 @@
 
 package net.nativo.reactsdk;
 
+import android.util.Log;
 import android.view.View;
 import android.webkit.WebView;
 
+import com.facebook.react.bridge.Callback;
 import com.facebook.react.bridge.ReactApplicationContext;
 import com.facebook.react.bridge.ReactContextBaseJavaModule;
 import com.facebook.react.bridge.ReactMethod;
 import com.facebook.react.uimanager.util.ReactFindViewUtil;
 
 import net.nativo.sdk.NativoSDK;
+import net.nativo.sdk.ntvadtype.NtvBaseInterface;
 import net.nativo.sdk.ntvcore.NtvAdData;
+import net.nativo.sdk.ntvcore.NtvSectionAdapter;
 
 import java.util.HashMap;
 import java.util.Map;
 
-public class RNNativoSdkModule extends ReactContextBaseJavaModule {
+public class RNNativoSdkModule extends ReactContextBaseJavaModule implements NtvSectionAdapter {
 
     boolean isTemplateRegistred = false;
+    Callback prefetchCallback;
 
     public RNNativoSdkModule(ReactApplicationContext reactContext) {
         super(reactContext);
@@ -90,4 +95,44 @@ public class RNNativoSdkModule extends ReactContextBaseJavaModule {
         return objectMap;
     }
 
+    @ReactMethod
+    public void prefetchAdForSection(String sectionUrl, Callback cb){
+        prefetchCallback = cb;
+        NativoSDK.getInstance().prefetchAdForSection(sectionUrl, this, null);
+    }
+
+    @Override
+    public boolean shouldPlaceAdAtIndex(String s, int i) {
+        return false;
+    }
+
+    @Override
+    public Class<?> registerLayoutClassForIndex(int i, NtvAdData.NtvAdTemplateType ntvAdTemplateType) {
+        return null;
+    }
+
+    @Override
+    public void needsDisplayLandingPage(String s, int i) {
+
+    }
+
+    @Override
+    public void needsDisplayClickOutURL(String s, String s1) {
+
+    }
+
+    @Override
+    public void hasbuiltView(View view, NtvBaseInterface ntvBaseInterface, NtvAdData ntvAdData) {
+
+    }
+
+    @Override
+    public void onReceiveAd(String s, NtvAdData ntvAdData) {
+        prefetchCallback.invoke("", true, s);
+    }
+
+    @Override
+    public void onFail(String s) {
+        prefetchCallback.invoke("", false, s);
+    }
 }
