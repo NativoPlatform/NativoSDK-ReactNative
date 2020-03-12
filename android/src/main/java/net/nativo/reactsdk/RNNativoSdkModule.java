@@ -1,7 +1,6 @@
 
 package net.nativo.reactsdk;
 
-import android.util.Log;
 import android.view.View;
 import android.webkit.WebView;
 
