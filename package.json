@@ -1,19 +1,20 @@
 {
     "name": "react-native-nativo-ads",
     "title": "React Native Nativo Ads",
-    "version": "1.0.0-SNAPSHOT.ANDROID.10",
+    "version": "0.1.2",
     "description": "This will allow you to monetize your app using Nativo's native, display, and video ads.",
     "main": "index.js",
-    "scripts": {
-        "test": "echo \"Error: no test specified\" && exit 1"
-    },
     "repository": {
         "type": "git",
         "url": "git+https://github.com/NativoPlatform/NativoSDK-ReactNative.git",
         "baseUrl": "https://github.com/NativoPlatform/NativoSDK-ReactNative"
     },
     "keywords": [
-        "react-native"
+        "react-native",
+        "nativo",
+        "native",
+        "ads",
+        "video"
     ],
     "author": {
         "name": "Nativo",
