@@ -45,7 +45,7 @@ public class RNNativoSdkModule extends ReactContextBaseJavaModule implements Ntv
 
 
     @ReactMethod
-    public void enableDebugLogs() {
+    public void enableDevLogs() {
         NativoSDK.getInstance().enableDevLogs();
     }
 
