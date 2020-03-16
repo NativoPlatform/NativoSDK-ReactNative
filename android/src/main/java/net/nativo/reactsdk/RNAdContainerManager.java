@@ -25,7 +25,9 @@ import net.nativo.sdk.NativoSDK;
 import net.nativo.sdk.ntvadtype.NtvBaseInterface;
 import net.nativo.sdk.ntvconstant.NativoAdType;
 import net.nativo.sdk.ntvcore.NtvAdData;
+import net.nativo.sdk.ntvcore.NtvCache;
 import net.nativo.sdk.ntvcore.NtvSectionAdapter;
+import net.nativo.sdk.ntvcore.NtvSectionConfig;
 
 import java.util.HashMap;
 import java.util.LinkedList;
@@ -231,8 +233,19 @@ public class RNAdContainerManager extends ViewGroupManager<NativoAdView> impleme
                 forceAdTracking();
                 break;
             case COMMAND_PREFETCH_AD:
-                if (NativoSDK.getInstance().getAdTypeForIndex(args.getString(1), (ViewGroup) nativeContainerParent, args.getInt(0)).equals(NativoAdType.AD_TYPE_NONE)) {
-                    NativoSDK.getInstance().prefetchAdForSection(args.getString(1), this, null);
+                String prefetchSectionUrl = args != null ? args.getString(1) : "";
+                int prefetchIndex = args.getInt(0);
+                if (NativoSDK.getInstance().getAdTypeForIndex(prefetchSectionUrl, (ViewGroup) nativeContainerParent, prefetchIndex).equals(NativoAdType.AD_TYPE_NONE)) {
+                    NativoSDK.getInstance().prefetchAdForSection(prefetchSectionUrl, this, null);
+                } else {
+                    NtvSectionConfig ntvSectionConfig = NtvCache.getInstance().getSectionForUrl(prefetchSectionUrl);
+                    NtvAdData adData = NtvCache.getInstance().getMappedAdData(ntvSectionConfig, (ViewGroup) nativeContainerParent, prefetchIndex);
+                    if (adData.isAdContentAvailable()) {
+                        onReceiveAd(prefetchSectionUrl, adData);
+                    } else {
+                        onFail(prefetchSectionUrl);
+                    }
+
                 }
         }
     }
