@@ -1,7 +1,6 @@
 package net.nativo.reactsdk;
 
 import android.app.Activity;
-import android.util.Log;
 import android.view.View;
 import android.widget.RelativeLayout;
 
@@ -17,6 +16,8 @@ import com.facebook.react.uimanager.annotations.ReactProp;
 import com.facebook.react.uimanager.util.ReactFindViewUtil;
 
 import net.nativo.sdk.NativoSDK;
+import net.nativo.sdk.ntvlog.Logger;
+import net.nativo.sdk.ntvlog.LoggerFactory;
 
 import java.util.Map;
 
@@ -24,13 +25,11 @@ import javax.annotation.Nonnull;
 
 public class RNLandingPageContainerManager extends ViewGroupManager<RelativeLayout> {
 
+    private static final String TAG = RNLandingPageContainerManager.class.getName();
+    private static final Logger LOG = LoggerFactory.getLogger(TAG);
     public static Activity currentactivity;
     public static ReactContext landingContext;
-    private ThemedReactContext themedReactContext;
     public static final int COMMAND_INJECT_AD = 3;
-    String sectionUrl;
-    int containerHash;
-    int adId;
 
     @Nonnull
     @Override
@@ -42,17 +41,12 @@ public class RNLandingPageContainerManager extends ViewGroupManager<RelativeLayo
     @Override
     protected RelativeLayout createViewInstance(@Nonnull ThemedReactContext reactContext) {
         currentactivity = reactContext.getCurrentActivity();
-        themedReactContext = reactContext;
         landingContext = reactContext;
         return new RelativeLayout(reactContext);
     }
 
     @ReactProp(name = "injectLandingPage")
     public void setInjectLandingPage(View view, ReadableMap map) {
-        sectionUrl = map.getString("url");
-        containerHash = map.getInt("containerHash");
-        adId = map.getInt("adId");
-        Log.d(RNLandingPageContainerManager.class.getName(), " with containerHash " + containerHash);
     }
 
     @Nullable
@@ -68,6 +62,7 @@ public class RNLandingPageContainerManager extends ViewGroupManager<RelativeLayo
     public void receiveCommand(final RelativeLayout root, int commandId, @Nullable ReadableArray args) {
         switch (commandId) {
             case COMMAND_INJECT_AD:
+                LOG.debug("Injecting landing page");
                 View webViewContainer = ReactFindViewUtil.findView(root, "nativoAdWebViewContainer");
                 int adid = args.getInt(0);
                 String sectionUrl = args.getString(1);

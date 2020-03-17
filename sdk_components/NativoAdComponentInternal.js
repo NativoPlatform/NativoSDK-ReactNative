@@ -11,7 +11,7 @@ import {
 
 const NativoAdContainer = requireNativeComponent("NativoContainer");
 
-class NativoAdComponentInternal extends Component<Props> {
+class NativoAdComponentInternal extends Component<props> {
 
     constructor(props) {
         super(props);
