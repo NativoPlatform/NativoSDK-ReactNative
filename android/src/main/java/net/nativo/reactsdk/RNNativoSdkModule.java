@@ -18,14 +18,17 @@ import net.nativo.sdk.ntvlog.Logger;
 import net.nativo.sdk.ntvlog.LoggerFactory;
 
 import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.Map;
+import java.util.Queue;
 
 public class RNNativoSdkModule extends ReactContextBaseJavaModule implements NtvSectionAdapter {
 
     private static final String TAG = RNNativoSdkModule.class.getName();
     private static final Logger LOG = LoggerFactory.getLogger(TAG);
+    private Object defaultError = null;
+    private Queue<Callback> callbacks = new LinkedList<>();
     boolean isTemplateRegistred = false;
-    Callback prefetchCallback;
 
     public RNNativoSdkModule(ReactApplicationContext reactContext) {
         super(reactContext);
@@ -101,7 +104,7 @@ public class RNNativoSdkModule extends ReactContextBaseJavaModule implements Ntv
 
     @ReactMethod
     public void prefetchAdForSection(String sectionUrl, Callback cb) {
-        prefetchCallback = cb;
+        callbacks.add(cb);
         NativoSDK.getInstance().prefetchAdForSection(sectionUrl, this, null);
     }
 
@@ -132,15 +135,17 @@ public class RNNativoSdkModule extends ReactContextBaseJavaModule implements Ntv
 
     @Override
     public void onReceiveAd(String s, NtvAdData ntvAdData) {
+        Callback prefetchCallback = callbacks.poll();
         if (prefetchCallback != null) {
-            prefetchCallback.invoke("", true, s);
+            prefetchCallback.invoke(defaultError, true, s);
         }
     }
 
     @Override
     public void onFail(String s) {
+        Callback prefetchCallback = callbacks.poll();
         if (prefetchCallback != null) {
-            prefetchCallback.invoke("", false, s);
+            prefetchCallback.invoke(defaultError, false, s);
         }
     }
 }
