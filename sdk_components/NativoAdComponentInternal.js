@@ -73,7 +73,10 @@ class NativoAdComponentInternal extends Component<props> {
     }
 
     handleAdLoadFailed(event) {
+        event.sectionUrl = this.props.sectionUrl;
+        event.index = this.props.index;
         this.setDefaultState()
+        this.props.onAdRemoved(event)
     }
 
     setDefaultState() {

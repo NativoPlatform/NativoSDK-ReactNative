@@ -32,7 +32,7 @@ NativoAd.propTypes = {
     standardDisplayAdTemplate: PropTypes.func,
     onNativeAdClick: PropTypes.func,
     onDisplayAdClick: PropTypes.func,
-    onNeedsRemoveAd: PropTypes.func
+    onAdRemoved: PropTypes.func
 };
 
 export default NativoAd;
