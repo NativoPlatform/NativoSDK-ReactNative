@@ -83,7 +83,8 @@
         if (viewMap) {
             NativoAd *adView = viewMap[identifier];
             if (adView) {
-                adView.onNeedsRemoveAd(@{ @"index": identifier, @"sectionUrl": sectionUrl });
+                [adView collapseView];
+                adView.onAdRemoved(@{ @"index": identifier, @"sectionUrl": sectionUrl });
             }
         }
     }
@@ -133,7 +134,8 @@
 - (void)section:(NSString *)sectionUrl requestDidFailWithError:(nullable NSError *)error {
     NativoAd *adView = [self getFirstViewInSection:sectionUrl];
     if (adView) {
-        adView.onNeedsRemoveAd(@{ @"index": @(-1), @"sectionUrl": sectionUrl });
+        [adView collapseView];
+        adView.onAdRemoved(@{ @"index": @(-1), @"sectionUrl": sectionUrl });
     }
 }
 

@@ -1,7 +1,7 @@
 {
     "name": "react-native-nativo-ads",
     "title": "React Native Nativo Ads",
-    "version": "0.1.2",
+    "version": "0.1.3",
     "description": "This will allow you to monetize your app using Nativo's native, display, and video ads.",
     "main": "index.js",
     "repository": {
@@ -29,7 +29,7 @@
         "react-native-webview": "8.0.6"
     },
     "peerDependencies": {
-        "react": "16.8.6",
-        "react-native": "0.60.5"
+        "react": "^16.8.6",
+        "react-native": "^0.60.5"
     }
 }

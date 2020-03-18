@@ -26,7 +26,7 @@ RCT_EXPORT_VIEW_PROPERTY(videoAdTemplate, NSString)
 RCT_EXPORT_VIEW_PROPERTY(stdDisplayAdTemplate, NSString)
 RCT_EXPORT_VIEW_PROPERTY(onNativeAdClick, RCTBubblingEventBlock)
 RCT_EXPORT_VIEW_PROPERTY(onDisplayAdClick, RCTBubblingEventBlock)
-RCT_EXPORT_VIEW_PROPERTY(onNeedsRemoveAd, RCTBubblingEventBlock)
+RCT_EXPORT_VIEW_PROPERTY(onAdRemoved, RCTBubblingEventBlock)
 
 
 - (instancetype)init {
@@ -151,12 +151,19 @@ RCT_EXPORT_VIEW_PROPERTY(onNeedsRemoveAd, RCTBubblingEventBlock)
                 NSLog(@"NativoSDK: Error - Could not find container for NativoAd");
             }
             if (!adData.isAdContentAvailable) {
-                self.onNeedsRemoveAd(@{ @"index": self.index, @"sectionUrl": self.sectionUrl });
+                [self collapseView];
+                self.onAdRemoved(@{ @"index": self.index, @"sectionUrl": self.sectionUrl });
             }
         });
-
-        
     });
+}
+
+- (void)collapseView {
+    if (self.bridge) {
+        RCTExecuteOnMainQueue(^{
+            [self.bridge.uiManager setSize:CGSizeZero forView:self];
+        });
+    }
 }
 
 #pragma mark - RCTRootViewDelegate
