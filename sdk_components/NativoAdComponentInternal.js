@@ -11,7 +11,7 @@ import {
 
 const NativoAdContainer = requireNativeComponent("NativoContainer");
 
-class NativoAdComponentInternal extends Component<Props> {
+class NativoAdComponentInternal extends Component<props> {
 
     constructor(props) {
         super(props);
@@ -73,7 +73,10 @@ class NativoAdComponentInternal extends Component<Props> {
     }
 
     handleAdLoadFailed(event) {
+        event.sectionUrl = this.props.sectionUrl;
+        event.index = this.props.index;
         this.setDefaultState()
+        this.props.onAdRemoved(event)
     }
 
     setDefaultState() {

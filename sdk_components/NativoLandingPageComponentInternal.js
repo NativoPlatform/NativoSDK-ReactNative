@@ -35,8 +35,8 @@ export class NativoLandingPageComponentInternal extends Component<props> {
     }
 
 
-    componentWillUnmount(): void {
-        console.log("NativoLandingPageComponentInternal will unmount" );
+    componentWillUnmount() {
+        console.log("NativoLandingPageComponentInternal will unmount");
     }
 
     render() {

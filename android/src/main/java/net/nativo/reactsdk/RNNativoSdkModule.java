@@ -14,14 +14,21 @@ import net.nativo.sdk.NativoSDK;
 import net.nativo.sdk.ntvadtype.NtvBaseInterface;
 import net.nativo.sdk.ntvcore.NtvAdData;
 import net.nativo.sdk.ntvcore.NtvSectionAdapter;
+import net.nativo.sdk.ntvlog.Logger;
+import net.nativo.sdk.ntvlog.LoggerFactory;
 
 import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.Map;
+import java.util.Queue;
 
 public class RNNativoSdkModule extends ReactContextBaseJavaModule implements NtvSectionAdapter {
 
+    private static final String TAG = RNNativoSdkModule.class.getName();
+    private static final Logger LOG = LoggerFactory.getLogger(TAG);
+    private Object defaultError = null;
+    private Queue<Callback> callbacks = new LinkedList<>();
     boolean isTemplateRegistred = false;
-    Callback prefetchCallback;
 
     public RNNativoSdkModule(ReactApplicationContext reactContext) {
         super(reactContext);
@@ -70,6 +77,7 @@ public class RNNativoSdkModule extends ReactContextBaseJavaModule implements Ntv
 
     @ReactMethod
     public void placeAdInWebView(final String sectionUrl) {
+        LOG.debug("placeAdInWebView called for section " + sectionUrl);
         View view = getCurrentActivity().getWindow().getDecorView().findViewById(android.R.id.content);
         final WebView webView = (WebView) ReactFindViewUtil.findView(view, "nativoMoapAdView");
         webView.post(new Runnable() {
@@ -83,7 +91,7 @@ public class RNNativoSdkModule extends ReactContextBaseJavaModule implements Ntv
     @Override
     public Map<String, Object> getConstants() {
         final Map<String, Object> constants = new HashMap<>();
-        constants.put("NATIVE","NATIVE" );
+        constants.put("NATIVE", "NATIVE");
         constants.put("DISPLAY", "DISPLAY");
         constants.put("CLICK_VIDEO", "CLICK_VIDEO");
         constants.put("SCROLL_VIDEO", "SCROLL_VIDEO");
@@ -95,8 +103,8 @@ public class RNNativoSdkModule extends ReactContextBaseJavaModule implements Ntv
     }
 
     @ReactMethod
-    public void prefetchAdForSection(String sectionUrl, Callback cb){
-        prefetchCallback = cb;
+    public void prefetchAdForSection(String sectionUrl, Callback cb) {
+        callbacks.add(cb);
         NativoSDK.getInstance().prefetchAdForSection(sectionUrl, this, null);
     }
 
@@ -127,11 +135,17 @@ public class RNNativoSdkModule extends ReactContextBaseJavaModule implements Ntv
 
     @Override
     public void onReceiveAd(String s, NtvAdData ntvAdData) {
-        prefetchCallback.invoke("", true, s);
+        Callback prefetchCallback = callbacks.poll();
+        if (prefetchCallback != null) {
+            prefetchCallback.invoke(defaultError, true, s);
+        }
     }
 
     @Override
     public void onFail(String s) {
-        prefetchCallback.invoke("", false, s);
+        Callback prefetchCallback = callbacks.poll();
+        if (prefetchCallback != null) {
+            prefetchCallback.invoke(defaultError, false, s);
+        }
     }
 }

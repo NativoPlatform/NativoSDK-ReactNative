@@ -2,7 +2,6 @@ package net.nativo.reactsdk;
 
 import android.app.Activity;
 import android.content.Context;
-import android.util.Log;
 import android.view.Choreographer;
 import android.view.View;
 import android.view.ViewGroup;
@@ -25,7 +24,12 @@ import net.nativo.sdk.NativoSDK;
 import net.nativo.sdk.ntvadtype.NtvBaseInterface;
 import net.nativo.sdk.ntvconstant.NativoAdType;
 import net.nativo.sdk.ntvcore.NtvAdData;
+import net.nativo.sdk.ntvcore.NtvCache;
 import net.nativo.sdk.ntvcore.NtvSectionAdapter;
+import net.nativo.sdk.ntvcore.NtvSectionConfig;
+import net.nativo.sdk.ntvlog.Logger;
+import net.nativo.sdk.ntvlog.LoggerFactory;
+import net.nativo.sdk.ntvmanager.NtvManagerInternalImpl;
 
 import java.util.HashMap;
 import java.util.LinkedList;
@@ -53,6 +57,9 @@ class NativoAdView extends ReactViewGroup {
 
 public class RNAdContainerManager extends ViewGroupManager<NativoAdView> implements NtvSectionAdapter {
 
+    private static final String TAG = RNAdContainerManager.class.getName();
+    private static final Logger LOG = LoggerFactory.getLogger(TAG);
+
     public static final String EVENT_AD_LOADED = "onAdLoaded";
     public static final String EVENT_AD_FAILED_TO_LOAD = "onAdFailed";
 
@@ -62,13 +69,8 @@ public class RNAdContainerManager extends ViewGroupManager<NativoAdView> impleme
     public static Activity currentactivity;
     public static ReactContext containerReactContext;
     private ThemedReactContext themedReactContext;
-    public static final String SECTION_URL = "http://www.nativo.net/test/";
-    View RNContainer;
     Queue<View> viewMap = new LinkedList<>();
     Map<Integer, Integer> containerAdIdmap = new HashMap<>();
-
-    String sectionUrl;
-    int index;
 
     @Nonnull
     @Override
@@ -82,16 +84,11 @@ public class RNAdContainerManager extends ViewGroupManager<NativoAdView> impleme
         currentactivity = reactContext.getCurrentActivity();
         themedReactContext = reactContext;
         containerReactContext = reactContext;
-        NativoAdView nativoAdView = new NativoAdView(reactContext);
-        return nativoAdView;
+        return new NativoAdView(reactContext);
     }
 
     @ReactProp(name = "sectionUrl")
     public void setSectionUrl(View container, ReadableMap map) {
-        Log.d(RNAdContainerManager.class.getName(), "sectionURL: " + map.getString("url") + " with index " + map.getInt("index"));
-        sectionUrl = map.getString("url");
-        index = map.getInt("index");
-        RNContainer = container;
         viewMap.add(container);
     }
 
@@ -125,18 +122,16 @@ public class RNAdContainerManager extends ViewGroupManager<NativoAdView> impleme
     public void hasbuiltView(View view, NtvBaseInterface ntvBaseInterface, NtvAdData ntvAdData) {
         View nativeContainerParent = findPublisherAdContainer();
         containerAdIdmap.put(ntvAdData.getAdID(), nativeContainerParent.hashCode());
-
     }
 
     @Override
     public void onReceiveAd(String s, NtvAdData ntvAdData) {
         View view = viewMap.poll();
 
-        if (view == null){
-            Log.e(getClass().getName(), "onReceiveAd: view is null");
+        if (view == null) {
+            LOG.error("onReceiveAd: view is null");
             return;
         }
-
 
         // callback to js
         WritableMap event = Arguments.createMap();
@@ -159,7 +154,7 @@ public class RNAdContainerManager extends ViewGroupManager<NativoAdView> impleme
     @Override
     public void onFail(String s) {
         View view = viewMap.poll();
-        if (view == null){
+        if (view == null) {
             return;
         }
         WritableMap event = Arguments.createMap();
@@ -207,12 +202,15 @@ public class RNAdContainerManager extends ViewGroupManager<NativoAdView> impleme
         View nativeContainerParent = findPublisherAdContainer();
 
         if (nativeContainerParent == null) {
-            Log.e(getClass().getName(), "publisherNativoAdContainer view not found. Looked upto 4 parents");
+            LOG.error("publisherNativoAdContainer view not found. Looked upto 4 parents");
             nativeContainerParent = root;
         }
 
         switch (commandId) {
             case COMMAND_PLACE_AD_IN_VIEW:
+                String paivSectionUrl = args != null ? args.getString(1) : "";
+                int paivIndex = args.getInt(0);
+                LOG.debug("placeAdInView called for section: " + paivSectionUrl + " index: " + paivIndex);
                 View adView = null;
                 View nativeContainer = ReactFindViewUtil.findView(root, "nativoAdView");
                 View videoContainer = ReactFindViewUtil.findView(root, "nativoVideoAdView");
@@ -227,12 +225,24 @@ public class RNAdContainerManager extends ViewGroupManager<NativoAdView> impleme
                     adView = root;
                 }
 
-                NativoSDK.getInstance().placeAdInView(adView, (ViewGroup) nativeContainerParent, args.getString(1), args.getInt(0), this, null);
+                NativoSDK.getInstance().placeAdInView(adView, (ViewGroup) nativeContainerParent, paivSectionUrl, paivIndex, this, null);
                 forceAdTracking();
                 break;
             case COMMAND_PREFETCH_AD:
-                if (NativoSDK.getInstance().getAdTypeForIndex(args.getString(1), (ViewGroup) nativeContainerParent, args.getInt(0)).equals(NativoAdType.AD_TYPE_NONE)) {
-                    NativoSDK.getInstance().prefetchAdForSection(args.getString(1), this, null);
+                String prefetchSectionUrl = args != null ? args.getString(1) : "";
+                int prefetchIndex = args.getInt(0);
+                LOG.debug("prefetch called for section: " + prefetchSectionUrl + " index: " + prefetchIndex);
+                if (NativoSDK.getInstance().getAdTypeForIndex(prefetchSectionUrl, (ViewGroup) nativeContainerParent, prefetchIndex).equals(NativoAdType.AD_TYPE_NONE)) {
+                    NativoSDK.getInstance().prefetchAdForSection(prefetchSectionUrl, this, null);
+                } else {
+                    NtvSectionConfig ntvSectionConfig = NtvCache.getInstance().getSectionForUrl(prefetchSectionUrl);
+                    NtvAdData adData = NtvCache.getInstance().getMappedAdData(ntvSectionConfig, (ViewGroup) nativeContainerParent, prefetchIndex);
+                    if (adData.isAdContentAvailable()) {
+                        onReceiveAd(prefetchSectionUrl, adData);
+                    } else {
+                        onFail(prefetchSectionUrl);
+                    }
+
                 }
         }
     }
