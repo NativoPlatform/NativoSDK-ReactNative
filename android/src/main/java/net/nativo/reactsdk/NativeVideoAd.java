@@ -2,7 +2,6 @@ package net.nativo.reactsdk;
 
 import android.content.Context;
 import android.content.res.Resources;
-import android.util.Log;
 import android.view.TextureView;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,12 +13,15 @@ import com.facebook.react.uimanager.util.ReactFindViewUtil;
 
 import net.nativo.sdk.ntvadtype.video.NtvVideoAdInterface;
 import net.nativo.sdk.ntvadtype.video.VideoPlaybackError;
+import net.nativo.sdk.ntvlog.Logger;
+import net.nativo.sdk.ntvlog.LoggerFactory;
 
 import java.util.Date;
 
 public class NativeVideoAd implements NtvVideoAdInterface {
 
     private static String TAG = NativeVideoAd.class.getName();
+    private static final Logger LOG = LoggerFactory.getLogger(TAG);
     private static final String DRAWABLE = "drawable";
     private View layout;
     private TextureView textureView;
@@ -139,32 +141,32 @@ public class NativeVideoAd implements NtvVideoAdInterface {
 
     @Override
     public void onVideoEnteredFullscreen() {
-        Log.d(TAG, "onVideoEnteredFullscreen: ");
+        LOG.debug("onVideoEnteredFullscreen: ");
     }
 
     @Override
     public void onVideoExitedFullscreen() {
-        Log.d(TAG, "onVideoExitedFullscreen: ");
+        LOG.debug("onVideoExitedFullscreen: ");
     }
 
     @Override
     public void onVideoPlay() {
-        Log.d(TAG, "onVideoPlay: ");
+        LOG.debug("onVideoPlay: ");
     }
 
     @Override
     public void onVideoPause() {
-        Log.d(TAG, "onVideoPause: ");
+        LOG.debug("onVideoPause: ");
     }
 
     @Override
     public void onVideoPlaybackCompleted() {
-        Log.d(TAG, "onVideoPlaybackCompleted: ");
+        LOG.debug("onVideoPlaybackCompleted: ");
     }
 
     @Override
     public void onVideoPlaybackError(VideoPlaybackError videoPlaybackError) {
-        Log.d(TAG, "onVideoPlaybackError: ");
+        LOG.debug("onVideoPlaybackError: ");
     }
 
     private int getResourceId(String variableName, String resourceName) {
@@ -172,7 +174,7 @@ public class NativeVideoAd implements NtvVideoAdInterface {
         Resources resources = root.getResources();
         final int resourceId = resources.getIdentifier(variableName, resourceName,
                 root.getPackageName());
-        Log.d(TAG, "getResourceId: " + resourceId);
+        LOG.debug("getResourceId: " + resourceId);
         return resourceId;
     }
 
