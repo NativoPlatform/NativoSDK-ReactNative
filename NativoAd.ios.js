@@ -21,12 +21,9 @@ function NativoAdComponent(props) {
         }
         props.onDisplayAdClick(event.nativeEvent);
     }
-    _onNeedsRemoveAd = (event) => {
-        if (!props.onNeedsRemoveAd) {
-            console.log("Nativo ad at index "+ props.index +" should be removed but 'onNeedsRemoveAd' not implemented");
-            return;
-        }
-        props.onNeedsRemoveAd(event.nativeEvent);
+    _onAdRemoved = (event) => {
+        if (!props.onAdRemoved) { return; }
+        props.onAdRemoved(event.nativeEvent);
     }
     
     // Register templates with app registry root views
@@ -44,7 +41,7 @@ function NativoAdComponent(props) {
         <NativoAd {...other} 
             onNativeAdClick={_onNativeAdClick} 
             onDisplayAdClick={_onDisplayAdClick} 
-            onNeedsRemoveAd={_onNeedsRemoveAd} 
+            onAdRemoved={_onAdRemoved} 
             nativeAdTemplate={nativeAdTemplate.name} 
             videoAdTemplate={videoAdTemplate.name} 
             stdDisplayAdTemplate={standardDisplayAdTemplate.name}>
@@ -60,7 +57,7 @@ NativoAdComponent.propTypes = {
     standardDisplayAdTemplate: PropTypes.func,
     onNativeAdClick: PropTypes.func,
     onDisplayAdClick: PropTypes.func,
-    onNeedsRemoveAd: PropTypes.func
+    onAdRemoved: PropTypes.func
 };
 const NativoAd = requireNativeComponent('NativoAd', NativoAdComponent);
 
