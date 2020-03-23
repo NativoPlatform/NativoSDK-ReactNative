@@ -61,7 +61,7 @@ public class RNNativoSdkModule extends ReactContextBaseJavaModule implements Ntv
     }
 
     @ReactMethod
-    public void enableTestAdvertisements(String s) {
+    public void enableTestAdvertisementsWithType(String s) {
         if (s.equals("NATIVE")) {
             NativoSDK.getInstance().enableTestAdvertisements(NtvAdData.NtvAdType.NATIVE);
         } else if (s.equals("DISPLAY")) {
@@ -77,6 +77,11 @@ public class RNNativoSdkModule extends ReactContextBaseJavaModule implements Ntv
         } else {
             NativoSDK.getInstance().enableTestAdvertisements();
         }
+    }
+
+    @ReactMethod
+    public void enableTestAdvertisements(){
+        NativoSDK.getInstance().enableTestAdvertisements();
     }
 
     @ReactMethod
