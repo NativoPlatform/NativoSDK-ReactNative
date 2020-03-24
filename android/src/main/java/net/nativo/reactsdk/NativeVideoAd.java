@@ -2,6 +2,7 @@ package net.nativo.reactsdk;
 
 import android.content.Context;
 import android.content.res.Resources;
+import android.view.MotionEvent;
 import android.view.TextureView;
 import android.view.View;
 import android.view.ViewGroup;
@@ -35,6 +36,7 @@ public class NativeVideoAd implements NtvVideoAdInterface {
     private ProgressBar progressBar;
     private View adContainerView;
     private ImageView articleAuthorImage;
+    private ViewGroup videoControlsGroup;
 
 
     @Override
@@ -50,13 +52,45 @@ public class NativeVideoAd implements NtvVideoAdInterface {
     @Override
     public void bindViews(View v) {
         adContainerView = v;
+
         layout = (View) ReactFindViewUtil.findView(v, "nativoVideoAdView");
         textureView = (TextureView) ReactFindViewUtil.findView(v, "videoView");
         previewImage = (ImageView) ReactFindViewUtil.findView(v, "articleImage");
+        previewImage.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                adContainerView.callOnClick();
+            }
+        });
+
+        videoControlsGroup = (ViewGroup) previewImage.getParent();
+        videoControlsGroup.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                adContainerView.callOnClick();
+            }
+        });
+
+        videoControlsGroup.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                if (event.getAction() == MotionEvent.ACTION_DOWN) {
+                    adContainerView.callOnClick();
+                }
+                return false;
+            }
+        });
+
         playButton = (ImageView) ReactFindViewUtil.findView(v, "videoPlay");
         playButton.setImageResource(getResourceId("ic_media_play", DRAWABLE));
         restartButton = (ImageView) ReactFindViewUtil.findView(v, "videoRestart");
         restartButton.setImageResource(getResourceId("restart", DRAWABLE));
+        restartButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                adContainerView.callOnClick();
+            }
+        });
         titleLabel = (TextView) ReactFindViewUtil.findView(v, "articleTitle");
         authorLabel = (TextView) ReactFindViewUtil.findView(v, "authorName");
         ViewGroup videoProgress = (ViewGroup) ReactFindViewUtil.findView(v, "videoProgress");

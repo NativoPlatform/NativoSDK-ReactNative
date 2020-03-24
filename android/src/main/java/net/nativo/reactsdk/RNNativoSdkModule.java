@@ -1,8 +1,12 @@
 
 package net.nativo.reactsdk;
 
+import android.app.Activity;
 import android.view.View;
+import android.webkit.WebChromeClient;
 import android.webkit.WebView;
+import android.webkit.WebViewClient;
+import android.widget.FrameLayout;
 
 import com.facebook.react.bridge.Callback;
 import com.facebook.react.bridge.ReactApplicationContext;
@@ -57,7 +61,7 @@ public class RNNativoSdkModule extends ReactContextBaseJavaModule implements Ntv
     }
 
     @ReactMethod
-    public void enableTestAdvertisements(String s) {
+    public void enableTestAdvertisementsWithType(String s) {
         if (s.equals("NATIVE")) {
             NativoSDK.getInstance().enableTestAdvertisements(NtvAdData.NtvAdType.NATIVE);
         } else if (s.equals("DISPLAY")) {
@@ -76,6 +80,11 @@ public class RNNativoSdkModule extends ReactContextBaseJavaModule implements Ntv
     }
 
     @ReactMethod
+    public void enableTestAdvertisements(){
+        NativoSDK.getInstance().enableTestAdvertisements();
+    }
+
+    @ReactMethod
     public void placeAdInWebView(final String sectionUrl) {
         LOG.debug("placeAdInWebView called for section " + sectionUrl);
         View view = getCurrentActivity().getWindow().getDecorView().findViewById(android.R.id.content);
@@ -83,6 +92,9 @@ public class RNNativoSdkModule extends ReactContextBaseJavaModule implements Ntv
         webView.post(new Runnable() {
             @Override
             public void run() {
+                webView.getSettings().setJavaScriptEnabled(true);
+                webView.setWebViewClient(new WebViewClient());
+                webView.setWebChromeClient(new NativoChromeClient(getCurrentActivity()));
                 NativoSDK.getInstance().placeAdInWebView(webView, sectionUrl);
             }
         });
@@ -146,6 +158,43 @@ public class RNNativoSdkModule extends ReactContextBaseJavaModule implements Ntv
         Callback prefetchCallback = callbacks.poll();
         if (prefetchCallback != null) {
             prefetchCallback.invoke(defaultError, false, s);
+        }
+    }
+
+    private class NativoChromeClient extends WebChromeClient {
+
+        private View mCustomView;
+        private WebChromeClient.CustomViewCallback mCustomViewCallback;
+        private int mOriginalOrientation;
+        private int mOriginalSystemUiVisibility;
+        private Activity activity;
+
+        NativoChromeClient(Activity activity) {
+            this.activity = activity;
+        }
+
+        public void onHideCustomView() {
+            ((FrameLayout) activity.getWindow().getDecorView()).removeView(this.mCustomView);
+            this.mCustomView = null;
+            activity.getWindow().getDecorView().setSystemUiVisibility(this.mOriginalSystemUiVisibility);
+            activity.setRequestedOrientation(this.mOriginalOrientation);
+            this.mCustomViewCallback.onCustomViewHidden();
+            this.mCustomViewCallback = null;
+        }
+
+        public void onShowCustomView(View paramView, WebChromeClient.CustomViewCallback paramCustomViewCallback) {
+            if (this.mCustomView != null) {
+                onHideCustomView();
+                return;
+            }
+            this.mCustomView = paramView;
+            this.mOriginalSystemUiVisibility = activity.getWindow().getDecorView().getSystemUiVisibility();
+            this.mOriginalOrientation = activity.getRequestedOrientation();
+            this.mCustomViewCallback = paramCustomViewCallback;
+            ((FrameLayout) activity.getWindow().getDecorView()).addView(this.mCustomView, new FrameLayout.LayoutParams(-1, -1));
+            activity.getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_IMMERSIVE |
+                    View.SYSTEM_UI_FLAG_FULLSCREEN | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION |
+                    View.SYSTEM_UI_FLAG_LAYOUT_STABLE);
         }
     }
 }
