@@ -31,7 +31,7 @@ RCT_EXPORT_METHOD(enableTestAdvertisements)
     [NativoSDK enableTestAdvertisements];
 }
 
-RCT_EXPORT_METHOD(enableTestAdvertisements:(nonnull NSNumber *)adType)
+RCT_EXPORT_METHOD(enableTestAdvertisementsWithType:(nonnull NSNumber *)adType)
 {
     [NativoSDK enableTestAdvertisementsWithAdType:[adType intValue]];
 }
