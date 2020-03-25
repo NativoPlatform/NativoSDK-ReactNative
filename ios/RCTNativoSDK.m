@@ -31,7 +31,7 @@ RCT_EXPORT_METHOD(enableTestAdvertisements)
     [NativoSDK enableTestAdvertisements];
 }
 
-RCT_EXPORT_METHOD(enableTestAdvertisements:(nonnull NSNumber *)adType)
+RCT_EXPORT_METHOD(enableTestAdvertisementsWithType:(nonnull NSNumber *)adType)
 {
     [NativoSDK enableTestAdvertisementsWithAdType:[adType intValue]];
 }
@@ -54,6 +54,11 @@ RCT_EXPORT_METHOD(placeAdInWebView:(NSString *)section)
             [NativoSDK placeAdInWebView:webview forSection:section];
         });
     }
+}
+
+RCT_EXPORT_METHOD(clearAdsInSection:(NSString *)sectionUrl)
+{
+    [NativoSDK clearAdsInSection:sectionUrl];
 }
 
 - (NSArray<NSString *> *)supportedEvents

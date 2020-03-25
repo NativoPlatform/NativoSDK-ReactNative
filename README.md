@@ -15,7 +15,7 @@ pod install
 import { NativoSDK, NativoAd } from 'react-native-nativo-ads';
 
 NativoSDK.enableDevLogs();
-NativoSDK.enableTestAdvertisements(NativoSDK.AdTypes.NATIVE);
+NativoSDK.enableTestAdvertisementsWithType(NativoSDK.AdTypes.NATIVE);
 
 needsDisplayClickOutURL = (event) => {
     this.props.navigation.navigate('ClickOutScreen', {
