@@ -143,13 +143,8 @@ RCT_EXPORT_VIEW_PROPERTY(onAdRemoved, RCTBubblingEventBlock)
         }
         
         dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.1 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-            UIScrollView *container = [NativoAdsUtils getParentScrollViewForView:self];
-            if (container) {
-                // Place ad in view
-                [NativoSDK placeAdInView:templateView atLocationIdentifier:self.index inContainer:container forSection:self.sectionUrl options:nil];
-            } else {
-                NSLog(@"NativoSDK: Error - Could not find container for NativoAd");
-            }
+            // Place ad in view
+            [NativoSDK placeAdInView:templateView atLocationIdentifier:self.index inContainer:self.superview forSection:self.sectionUrl options:@{ @"doNotClearSection" : @"1"}];
             if (!adData.isAdContentAvailable) {
                 [self collapseView];
                 self.onAdRemoved(@{ @"index": self.index, @"sectionUrl": self.sectionUrl });
