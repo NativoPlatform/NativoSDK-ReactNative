@@ -51,6 +51,8 @@ class NativoAdComponentInternal extends Component<props> {
                 event.adAuthorName = this.state.adAuthorName
                 event.adDate = this.state.adDate
                 event.adAuthorUrl = this.state.adAuthorUrl
+                // this mapping is necessary for compatibility with iOS, which uses index for landing page
+                event.index = event.adId
                 this.props.onNativeAdClick(event)
             });
             eventEmitter.addListener('needsDisplayClickOutURL', (event) => {
