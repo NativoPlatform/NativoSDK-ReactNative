@@ -56,6 +56,11 @@ RCT_EXPORT_METHOD(placeAdInWebView:(NSString *)section)
     }
 }
 
+RCT_EXPORT_METHOD(clearAdsInSection:(NSString *)sectionUrl)
+{
+    [NativoSDK clearAdsInSection:sectionUrl];
+}
+
 - (NSArray<NSString *> *)supportedEvents
 {
   return @[];
