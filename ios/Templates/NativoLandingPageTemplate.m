@@ -1,8 +1,8 @@
 //
-//  FakeLandingPage.m
-//  react-native-nativo-ads
+//  NativoLandingPageTemplate.m
+//  ReactNativeNativoAds
 //
-//  Created by Matt Murray on 1/8/20.
+//  Copyright © 2020 Nativo. All rights reserved.
 //
 
 #import "NativoLandingPageTemplate.h"

@@ -1,3 +1,10 @@
+//
+//  NativoAds.m
+//  ReactNativeNativoAds
+//
+//  Copyright © 2020 Nativo. All rights reserved.
+//
+
 #import "NativoAds.h"
 #import "NativoAdsUtils.h"
 #import "NativeAdTemplate.h"
@@ -11,7 +18,6 @@
 #import <React/RCTDevLoadingView.h>
 #import <React/RCTUIManager.h>
 
-//@class FakeLandingPage;
 
 @interface NativoAdManager ()
 @end

@@ -1,3 +1,9 @@
+//
+//  NativoWebContent.h
+//  ReactNativeNativoAds
+//
+//  Copyright © 2020 Nativo. All rights reserved.
+//
 
 #import <React/RCTViewManager.h>
 #import <NativoSDK/NativoSDK.h>

@@ -1,8 +1,8 @@
 //
 //  StandardDisplayAdTemplate.h
-//  react-native-nativo-ads
+//  ReactNativeNativoAds
 //
-//  Created by Matthew Murray on 12/10/19.
+//  Copyright © 2020 Nativo. All rights reserved.
 //
 
 #import "RCTRootView.h"
