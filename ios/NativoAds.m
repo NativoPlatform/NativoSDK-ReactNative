@@ -107,10 +107,11 @@ RCT_EXPORT_VIEW_PROPERTY(onAdRemoved, RCTBubblingEventBlock)
             BOOL isNativeTemplate = adData.adType == Native || adData.adType == Display;
             BOOL isVideoTemplate = adData.adType == ScrollToPlayVideo || adData.adType == ClickToPlayVideo;
             BOOL isStdDisplayTemplate = adData.adType == StandardDisplay;
+            NSString *authorByLine = [NSString stringWithFormat:@"By %@", adData.authorName];
             if (isNativeTemplate && self.nativeAdTemplate) {
                 NSDictionary *appProperties = @{@"adTitle" : adData.title,
                                                 @"adDescription" : adData.previewText,
-                                                @"adAuthorName" : adData.authorName,
+                                                @"adAuthorName" : authorByLine,
                                                 @"adDate" : adData.date };
                 templateView = [[NativeAdTemplate alloc] initWithBridge:self.bridge
                                                              moduleName:self.nativeAdTemplate
@@ -118,7 +119,7 @@ RCT_EXPORT_VIEW_PROPERTY(onAdRemoved, RCTBubblingEventBlock)
             } else if (isVideoTemplate && self.videoAdTemplate) {
                 NSDictionary *appProperties = @{@"adTitle" : adData.title,
                                                 @"adDescription" : adData.previewText,
-                                                @"adAuthorName" : adData.authorName,
+                                                @"adAuthorName" : authorByLine,
                                                 @"adDate" : adData.date };
                 templateView = [[VideoAdTemplate alloc] initWithBridge:self.bridge
                                                              moduleName:self.videoAdTemplate
