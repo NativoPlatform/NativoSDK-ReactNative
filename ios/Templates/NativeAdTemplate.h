@@ -1,8 +1,8 @@
 //
-//  NativoAdTemplate.h
-//  DoubleConversion
+//  NativeAdTemplate.h
+//  ReactNativeNativoAds
 //
-//  Created by Matthew Murray on 11/11/19.
+//  Copyright © 2020 Nativo. All rights reserved.
 //
 
 #import "RCTRootView.h"

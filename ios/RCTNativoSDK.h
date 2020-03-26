@@ -1,9 +1,8 @@
 //
 //  RCTNativoSDK.h
-//  NativoAds
+//  ReactNativeNativoAds
 //
-//  Created by Matthew Murray on 10/22/19.
-//  Copyright © 2019 Facebook. All rights reserved.
+//  Copyright © 2020 Nativo. All rights reserved.
 //
 
 #import <Foundation/Foundation.h>
