@@ -138,7 +138,7 @@ public class RNAdContainerManager extends ViewGroupManager<NativoAdView> impleme
         event.putString("adType", ntvAdData.getAdType().toString());
         event.putString("adDescription", ntvAdData.getPreviewText());
         event.putString("adTitle", ntvAdData.getTitle());
-        event.putString("adAuthorName", ntvAdData.getAuthorName());
+        event.putString("adAuthorName", event.putString("adAuthorName", String.format("%s %s", NTV_BY, ntvAdData.getAuthorName())););
         event.putString("adDate", ntvAdData.getDate().toString());
         event.putString("adAuthorUrl", ntvAdData.getAuthorImageURL());
 
