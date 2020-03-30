@@ -18,7 +18,7 @@
 }
 
 - (UIImageView *)authorImageView {
-    UIView *authorImageView = [self.bridge.uiManager viewForNativeID:@"authorImage" withRootTag:self.reactTag];
+    UIView *authorImageView = [self.bridge.uiManager viewForNativeID:@"adAuthorImage" withRootTag:self.reactTag];
     if (authorImageView) {
         return (UIImageView *)authorImageView;
     }

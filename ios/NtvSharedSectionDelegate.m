@@ -95,11 +95,12 @@
     NativoLandingPageTemplate *template = (NativoLandingPageTemplate *)sponsoredLandingPageViewController;
     NtvAdData *adData = template.adData;
     if (adView && adView.onNativeAdClick) {
-        adView.onNativeAdClick(@{ @"title" : adData.title,
-                                @"description" : adData.previewText,
-                                @"authorName" : adData.authorName,
-                                @"authorImgUrl" : adData.authorImageURL,
-                                @"date" : adData.date,
+        adView.onNativeAdClick(@{ @"adTitle" : adData.title,
+                                @"adDescription" : adData.previewText,
+                                @"adImgUrl" : adData.previewImageURL,
+                                @"adAuthorName" : adData.authorName,
+                                @"adAuthorImgUrl" : adData.authorImageURL,
+                                @"adDate" : adData.date,
                                 @"index" : adData.locationIdentifier,
                                 @"sectionUrl" : sectionUrl
         });
