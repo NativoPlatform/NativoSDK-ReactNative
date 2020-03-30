@@ -100,6 +100,12 @@ public class RNNativoSdkModule extends ReactContextBaseJavaModule implements Ntv
         });
     }
 
+    @ReactMethod
+    public void clearAdsInSection(String sectionUrl) {
+        // noop
+        //todo will implement in next native SDK update. Currently there is an API incompatibility
+    }
+
     @Override
     public Map<String, Object> getConstants() {
         final Map<String, Object> constants = new HashMap<>();
