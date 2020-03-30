@@ -23,9 +23,6 @@ export class NativoLandingPageComponentInternal extends Component<props> {
             eventEmitter.addListener('onPageFinished', (event) => {
                 this.props.onFinishLoading(event);
             });
-            eventEmitter.addListener('onReceivedError', (event) => {
-                this.props.onDisplayAdClick(event.url);
-            });
             eventEmitter.addListener('onClickExternalLink', (event) => {
                 this.props.onClickExternalLink(url)
             });

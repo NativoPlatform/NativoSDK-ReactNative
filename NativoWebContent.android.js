@@ -31,6 +31,7 @@ class NativoWebContent extends Component<props> {
 NativoWebContent.propTypes = {
     sectionUrl: PropTypes.string,
     index: PropTypes.number,
+    containerHash: PropTypes.number,
     shouldScroll: PropTypes.bool,
     onFinishLoading: PropTypes.func,
     onClickExternalLink: PropTypes.func

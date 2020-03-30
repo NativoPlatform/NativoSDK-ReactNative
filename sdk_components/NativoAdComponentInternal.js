@@ -24,7 +24,8 @@ class NativoAdComponentInternal extends Component<props> {
             adAuthorName: '',
             adDate: '',
             adLoaded: false,
-            adAuthorUrl:''
+            adAuthorUrl: '',
+            adImgUrl: ''
         };
         this.handleAdLoaded = this.handleAdLoaded.bind(this);
         this.handleAdLoadFailed = this.handleAdLoadFailed.bind(this);
@@ -50,13 +51,14 @@ class NativoAdComponentInternal extends Component<props> {
                 event.adTitle = this.state.adTitle
                 event.adAuthorName = this.state.adAuthorName
                 event.adDate = this.state.adDate
-                event.adAuthorUrl = this.state.adAuthorUrl
+                event.adAuthorImgUrl = this.state.adAuthorUrl
+                event.adImgUrl = this.state.adImgUrl
                 // this mapping is necessary for compatibility with iOS, which uses index for landing page
                 event.index = event.adId
                 this.props.onNativeAdClick(event)
             });
             eventEmitter.addListener('needsDisplayClickOutURL', (event) => {
-                this.props.onDisplayAdClick(event.url);
+                this.props.onDisplayAdClick(event);
             });
         } catch (e) {
             this.setDefaultState()
@@ -91,7 +93,9 @@ class NativoAdComponentInternal extends Component<props> {
             adAuthorName: '',
             adDate: '',
             adLoaded: false,
-            adAuthorUrl:''
+            adAuthorUrl:'',
+            adImgUrl: ''
+
         });
     }
 
@@ -106,6 +110,7 @@ class NativoAdComponentInternal extends Component<props> {
                     adTitle: '',
                     adAuthorName: '',
                     adAuthorUrl: event.nativeEvent.adAuthorUrl,
+                    adImgUrl: event.nativeEvent.adImgUrl,
                     adDate: event.nativeEvent.adDate,
                     displayWidth: event.nativeEvent.adDisplayWidth,
                     displayHeight: event.nativeEvent.adDisplayHeight,
@@ -121,6 +126,7 @@ class NativoAdComponentInternal extends Component<props> {
                     adTitle: event.nativeEvent.adTitle,
                     adAuthorName: event.nativeEvent.adAuthorName,
                     adAuthorUrl: event.nativeEvent.adAuthorUrl,
+                    adImgUrl: event.nativeEvent.adImgUrl,
                     adDate: event.nativeEvent.adDate,
                     adLoaded: true
 
@@ -134,6 +140,7 @@ class NativoAdComponentInternal extends Component<props> {
                     adTitle: event.nativeEvent.adTitle,
                     adAuthorName: event.nativeEvent.adAuthorName,
                     adAuthorUrl: event.nativeEvent.adAuthorUrl,
+                    adImgUrl: event.nativeEvent.adImgUrl,
                     adDate: event.nativeEvent.adDate,
                     adLoaded: true
                 });
