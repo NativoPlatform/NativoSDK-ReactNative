@@ -39,6 +39,8 @@ import java.util.Queue;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
+import static net.nativo.sdk.ntvconstant.NtvConstants.NTV_BY;
+
 class NativoAdView extends ReactViewGroup {
 
     public NativoAdView(Context context) {
@@ -138,9 +140,10 @@ public class RNAdContainerManager extends ViewGroupManager<NativoAdView> impleme
         event.putString("adType", ntvAdData.getAdType().toString());
         event.putString("adDescription", ntvAdData.getPreviewText());
         event.putString("adTitle", ntvAdData.getTitle());
-        event.putString("adAuthorName", event.putString("adAuthorName", String.format("%s %s", NTV_BY, ntvAdData.getAuthorName())););
+        event.putString("adAuthorName", String.format("%s %s", NTV_BY, ntvAdData.getAuthorName()));
         event.putString("adDate", ntvAdData.getDate().toString());
         event.putString("adAuthorUrl", ntvAdData.getAuthorImageURL());
+        event.putString("adImgUrl", ntvAdData.getPreviewImageURL());
 
         if (ntvAdData.getAdType() == NtvAdData.NtvAdType.STANDARD_DISPLAY) {
             event.putInt("adDisplayWidth", ntvAdData.getStandardDisplayWidth());
