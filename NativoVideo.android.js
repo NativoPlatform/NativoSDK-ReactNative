@@ -6,7 +6,7 @@ import Video from "react-native-video";
 function NativoVideo(props) {
     return (
         <View style={styles.container}>
-            <Video nativeID={'videoView'} useTextureView={true} style={styles.backgroundVideo}/>
+            <Video nativeID={'videoView'} useTextureView={true} style={styles.backgroundVideo} source={{uri: ''}}/>
             <NativoVideoControls/>
         </View>
     );
