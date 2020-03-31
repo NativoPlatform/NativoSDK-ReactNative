@@ -29,7 +29,6 @@ import net.nativo.sdk.ntvcore.NtvSectionAdapter;
 import net.nativo.sdk.ntvcore.NtvSectionConfig;
 import net.nativo.sdk.ntvlog.Logger;
 import net.nativo.sdk.ntvlog.LoggerFactory;
-import net.nativo.sdk.ntvmanager.NtvManagerInternalImpl;
 
 import java.util.HashMap;
 import java.util.LinkedList;
@@ -64,6 +63,8 @@ public class RNAdContainerManager extends ViewGroupManager<NativoAdView> impleme
 
     public static final String EVENT_AD_LOADED = "onAdLoaded";
     public static final String EVENT_AD_FAILED_TO_LOAD = "onAdFailed";
+    public static final String EVENT_AD_DISPLAY_LANDING_PAGE = "onDisplayLandingPage";
+    public static final String EVENT_AD_DISPLAY_CLICKOUT_PAGE= "onDisplayClickOutPage";
 
     public static final int COMMAND_PLACE_AD_IN_VIEW = 5;
     public static final int COMMAND_PREFETCH_AD = 10;
@@ -73,6 +74,7 @@ public class RNAdContainerManager extends ViewGroupManager<NativoAdView> impleme
     private ThemedReactContext themedReactContext;
     Queue<View> viewMap = new LinkedList<>();
     Map<Integer, Integer> containerAdIdmap = new HashMap<>();
+    Map<Integer, NativoAdView> adidAdViewMap = new HashMap<>();
 
     @Nonnull
     @Override
@@ -110,7 +112,7 @@ public class RNAdContainerManager extends ViewGroupManager<NativoAdView> impleme
         params.putString("sectionUrl", s);
         params.putInt("adId", i);
         params.putInt("containerHash", containerAdIdmap.get(i));
-        sendEvent(themedReactContext, "needsDisplayLandingPage", params);
+        sendEvent(EVENT_AD_DISPLAY_LANDING_PAGE, adidAdViewMap.get(i), params);
     }
 
     @Override
@@ -144,6 +146,7 @@ public class RNAdContainerManager extends ViewGroupManager<NativoAdView> impleme
         event.putString("adDate", ntvAdData.getDate().toString());
         event.putString("adAuthorUrl", ntvAdData.getAuthorImageURL());
         event.putString("adImgUrl", ntvAdData.getPreviewImageURL());
+        event.putInt("adAdID", ntvAdData.getAdID());
 
         if (ntvAdData.getAdType() == NtvAdData.NtvAdType.STANDARD_DISPLAY) {
             event.putInt("adDisplayWidth", ntvAdData.getStandardDisplayWidth());
@@ -177,7 +180,9 @@ public class RNAdContainerManager extends ViewGroupManager<NativoAdView> impleme
         MapBuilder.Builder<String, Object> builder = MapBuilder.builder();
         String[] events = {
                 EVENT_AD_LOADED,
-                EVENT_AD_FAILED_TO_LOAD
+                EVENT_AD_FAILED_TO_LOAD,
+                EVENT_AD_DISPLAY_LANDING_PAGE,
+                EVENT_AD_DISPLAY_CLICKOUT_PAGE
         };
         for (int i = 0; i < events.length; i++) {
             builder.put(events[i], MapBuilder.of("registrationName", events[i]));
@@ -213,6 +218,7 @@ public class RNAdContainerManager extends ViewGroupManager<NativoAdView> impleme
             case COMMAND_PLACE_AD_IN_VIEW:
                 String paivSectionUrl = args != null ? args.getString(1) : "";
                 int paivIndex = args.getInt(0);
+                int adId = args.getInt(2);
                 LOG.debug("placeAdInView called for section: " + paivSectionUrl + " index: " + paivIndex);
                 View adView = null;
                 View nativeContainer = ReactFindViewUtil.findView(root, "nativoAdView");
@@ -227,7 +233,7 @@ public class RNAdContainerManager extends ViewGroupManager<NativoAdView> impleme
                 } else {
                     adView = root;
                 }
-
+                adidAdViewMap.put(adId, root);
                 NativoSDK.getInstance().placeAdInView(adView, (ViewGroup) nativeContainerParent, paivSectionUrl, paivIndex, this, null);
                 forceAdTracking();
                 break;

@@ -101,12 +101,12 @@ public class NativeAd implements NtvNativeAdInterface {
     public void bindViews(View v) {
         view = v;
         adContainerView = ReactFindViewUtil.findView(v, "nativoAdView");
-        titleLabel = (TextView) ReactFindViewUtil.findView(v, "articleTitle");
-        authorLabel = (TextView) ReactFindViewUtil.findView(v, "authorName");
-        image = (ImageView) ReactFindViewUtil.findView(v, "articleImage");
-        articleDateLabel = (TextView) ReactFindViewUtil.findView(v, "articleDate");
-        articlePreviewLabel = (TextView) ReactFindViewUtil.findView(v, "articleDescription");
-        articleAuthorImage = (ImageView) ReactFindViewUtil.findView(v, "authorImage");
+        titleLabel = (TextView) ReactFindViewUtil.findView(v, "adTitle");
+        authorLabel = (TextView) ReactFindViewUtil.findView(v, "adAuthorName");
+        image = (ImageView) ReactFindViewUtil.findView(v, "adImage");
+        articleDateLabel = (TextView) ReactFindViewUtil.findView(v, "adDate");
+        articlePreviewLabel = (TextView) ReactFindViewUtil.findView(v, "adDescription");
+        articleAuthorImage = (ImageView) ReactFindViewUtil.findView(v, "adAuthorImage");
     }
 
     @Override

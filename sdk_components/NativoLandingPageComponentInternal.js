@@ -3,6 +3,7 @@ import {findNodeHandle, NativeEventEmitter, requireNativeComponent, StyleSheet, 
 import WebView from "react-native-webview";
 
 const NativoLandingPageContainer = requireNativeComponent("NativoLandingPageContainer")
+const eventEmitter = new NativeEventEmitter(NativoLandingPageContainer);
 
 export class NativoLandingPageComponentInternal extends Component<props> {
 
@@ -19,21 +20,21 @@ export class NativoLandingPageComponentInternal extends Component<props> {
         }
 
         try {
-            const eventEmitter = new NativeEventEmitter(NativoLandingPageContainer);
-            eventEmitter.addListener('onPageFinished', (event) => {
+            this.subscriptionHolderOnFinished = eventEmitter.addListener('onPageFinished', (event) => {
                 this.props.onFinishLoading(event);
             });
-            eventEmitter.addListener('onClickExternalLink', (event) => {
+
+            this.subscriptionHolderOnClick = eventEmitter.addListener('onClickExternalLink', (event) => {
                 this.props.onClickExternalLink(url)
             });
         } catch (e) {
-            this.setDefaultState()
         }
     }
 
 
     componentWillUnmount() {
-        console.log("NativoLandingPageComponentInternal will unmount");
+        this.subscriptionHolderOnFinished.remove();
+        this.subscriptionHolderOnClick.remove();
     }
 
     render() {
