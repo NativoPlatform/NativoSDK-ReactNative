@@ -12,7 +12,7 @@
 @implementation NativeAdTemplate
 
 - (UIImageView *)adImageView {
-    UIView *adImageView = [self.bridge.uiManager viewForNativeID:@"articleImage" withRootTag:self.reactTag];
+    UIView *adImageView = [self.bridge.uiManager viewForNativeID:@"adImage" withRootTag:self.reactTag];
     if (adImageView) {
         return (UIImageView *)adImageView;
     }
@@ -20,7 +20,7 @@
 }
 
 - (UIImageView *)authorImageView {
-    UIView *authorImageView = [self.bridge.uiManager viewForNativeID:@"authorImage" withRootTag:self.reactTag];
+    UIView *authorImageView = [self.bridge.uiManager viewForNativeID:@"adAuthorImage" withRootTag:self.reactTag];
     if (authorImageView) {
         return (UIImageView *)authorImageView;
     }
