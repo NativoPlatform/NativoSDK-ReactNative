@@ -128,7 +128,7 @@ public class RNNativoSdkModule extends ReactContextBaseJavaModule implements Ntv
 
     @Override
     public boolean shouldPlaceAdAtIndex(String s, int i) {
-        return false;
+        return true;
     }
 
     @Override
