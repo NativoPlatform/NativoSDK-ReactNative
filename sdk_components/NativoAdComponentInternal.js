@@ -25,10 +25,12 @@ class NativoAdComponentInternal extends Component<props> {
             adDate: '',
             adLoaded: false,
             adAuthorUrl: '',
-            adImgUrl: ''
+            adImgUrl: '',
+            adAdID: 0
         };
         this.handleAdLoaded = this.handleAdLoaded.bind(this);
         this.handleAdLoadFailed = this.handleAdLoadFailed.bind(this);
+        this.displayLandingPage = this.displayLandingPage.bind(this);
         NativeModules.NativoSDK.registerTemplates();
     }
 
@@ -46,17 +48,6 @@ class NativoAdComponentInternal extends Component<props> {
     componentDidMount(): void {
         try {
             const eventEmitter = new NativeEventEmitter(NativoAdContainer);
-            eventEmitter.addListener('needsDisplayLandingPage', (event) => {
-                event.adDescription = this.state.adDescription;
-                event.adTitle = this.state.adTitle
-                event.adAuthorName = this.state.adAuthorName
-                event.adDate = this.state.adDate
-                event.adAuthorImgUrl = this.state.adAuthorUrl
-                event.adImgUrl = this.state.adImgUrl
-                // this mapping is necessary for compatibility with iOS, which uses index for landing page
-                event.index = event.adId
-                this.props.onNativeAdClick(event)
-            });
             eventEmitter.addListener('needsDisplayClickOutURL', (event) => {
                 this.props.onDisplayAdClick(event);
             });
@@ -70,7 +61,7 @@ class NativoAdComponentInternal extends Component<props> {
         try {
             UIManager.dispatchViewManagerCommand(
                 findNodeHandle(this._adContainer),
-                UIManager.getViewManagerConfig('NativoContainer').Commands.placeAdInView, [this.props.index, this.props.sectionUrl]);
+                UIManager.getViewManagerConfig('NativoContainer').Commands.placeAdInView, [this.props.index, this.props.sectionUrl, this.state.adAdID]);
         } catch (e) {
             this.setDefaultState()
         }
@@ -94,7 +85,8 @@ class NativoAdComponentInternal extends Component<props> {
             adDate: '',
             adLoaded: false,
             adAuthorUrl:'',
-            adImgUrl: ''
+            adImgUrl: '',
+            adAdID: 0
 
         });
     }
@@ -111,6 +103,7 @@ class NativoAdComponentInternal extends Component<props> {
                     adAuthorName: '',
                     adAuthorUrl: event.nativeEvent.adAuthorUrl,
                     adImgUrl: event.nativeEvent.adImgUrl,
+                    adAdID: event.nativeEvent.adAdID,
                     adDate: event.nativeEvent.adDate,
                     displayWidth: event.nativeEvent.adDisplayWidth,
                     displayHeight: event.nativeEvent.adDisplayHeight,
@@ -127,6 +120,7 @@ class NativoAdComponentInternal extends Component<props> {
                     adAuthorName: event.nativeEvent.adAuthorName,
                     adAuthorUrl: event.nativeEvent.adAuthorUrl,
                     adImgUrl: event.nativeEvent.adImgUrl,
+                    adAdID: event.nativeEvent.adAdID,
                     adDate: event.nativeEvent.adDate,
                     adLoaded: true
 
@@ -141,6 +135,7 @@ class NativoAdComponentInternal extends Component<props> {
                     adAuthorName: event.nativeEvent.adAuthorName,
                     adAuthorUrl: event.nativeEvent.adAuthorUrl,
                     adImgUrl: event.nativeEvent.adImgUrl,
+                    adAdID: event.nativeEvent.adAdID,
                     adDate: event.nativeEvent.adDate,
                     adLoaded: true
                 });
@@ -150,6 +145,19 @@ class NativoAdComponentInternal extends Component<props> {
         }
     }
 
+    displayLandingPage(event){
+        event.adDescription = this.state.adDescription;
+        event.adTitle = this.state.adTitle
+        event.adAuthorName = this.state.adAuthorName
+        event.adDate = this.state.adDate
+        event.adAuthorImgUrl = this.state.adAuthorUrl
+        event.adImgUrl = this.state.adImgUrl
+        // this mapping is necessary for compatibility with iOS, which uses index for landing page
+        event.index = event.nativeEvent.adId
+        event.sectionUrl = event.nativeEvent.sectionUrl
+        event.containerHash = event.nativeEvent.containerHash
+        this.props.onNativeAdClick(event)
+    }
 
     render() {
         const NativeAdTemplate = this.props.nativeAdTemplate;
@@ -160,6 +168,7 @@ class NativoAdComponentInternal extends Component<props> {
                 <NativoAdContainer ref={(el) => (this._adContainer = el)}
                                    sectionUrl={{'url': this.props.sectionUrl, 'index': this.props.index}}
                                    onAdLoaded={this.handleAdLoaded} onAdFailed={this.handleAdLoadFailed}
+                                   onDisplayLandingPage={this.displayLandingPage}
                                    style={{alignItems: 'center'}}>
                     {this.state.nativeFlag &&
                     <NativeAdTemplate adDate={this.state.adDate} adTitle={this.state.adTitle}

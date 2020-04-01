@@ -31,6 +31,7 @@ public class NativeVideoAd implements NtvVideoAdInterface {
     private ImageView restartButton;
     private ImageView muteIndicator;
     private TextView titleLabel;
+    private TextView dateLabel;
     private TextView authorLabel;
     private ImageView sponsoredIndicator;
     private ProgressBar progressBar;
@@ -91,12 +92,13 @@ public class NativeVideoAd implements NtvVideoAdInterface {
                 adContainerView.callOnClick();
             }
         });
-        titleLabel = (TextView) ReactFindViewUtil.findView(v, "articleTitle");
-        authorLabel = (TextView) ReactFindViewUtil.findView(v, "authorName");
+        titleLabel = (TextView) ReactFindViewUtil.findView(v, "adTitle");
+        authorLabel = (TextView) ReactFindViewUtil.findView(v, "adAuthorName");
         ViewGroup videoProgress = (ViewGroup) ReactFindViewUtil.findView(v, "videoProgress");
         progressBar = (ProgressBar) videoProgress.getChildAt(0);
         muteIndicator = (ImageView) ReactFindViewUtil.findView(v, "videoMuteIndicator");
-        articleAuthorImage = (ImageView) ReactFindViewUtil.findView(v, "authorImage");
+        articleAuthorImage = (ImageView) ReactFindViewUtil.findView(v, "adAuthorImage");
+        dateLabel = (TextView) ReactFindViewUtil.findView(v, "adDate");
     }
 
     @Override
@@ -146,7 +148,7 @@ public class NativeVideoAd implements NtvVideoAdInterface {
 
     @Override
     public TextView getDateLabel() {
-        return null;
+        return dateLabel;
     }
 
     @Override
