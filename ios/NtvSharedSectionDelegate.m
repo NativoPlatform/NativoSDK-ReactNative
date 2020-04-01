@@ -95,10 +95,11 @@
     NativoLandingPageTemplate *template = (NativoLandingPageTemplate *)sponsoredLandingPageViewController;
     NtvAdData *adData = template.adData;
     if (adView && adView.onNativeAdClick) {
+        NSString *authorByLine = [NSString stringWithFormat:@"By %@", adData.authorName];
         adView.onNativeAdClick(@{ @"adTitle" : adData.title,
                                 @"adDescription" : adData.previewText,
                                 @"adImgUrl" : adData.previewImageURL,
-                                @"adAuthorName" : adData.authorName,
+                                @"adAuthorName" : authorByLine,
                                 @"adAuthorImgUrl" : adData.authorImageURL,
                                 @"adDate" : adData.date,
                                 @"index" : adData.locationIdentifier,
