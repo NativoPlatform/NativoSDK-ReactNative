@@ -42,6 +42,7 @@ public class NativeVideoAd implements NtvVideoAdInterface {
     private View adContainerView;
     private ImageView articleAuthorImage;
     private ViewGroup videoControlsGroup;
+    private ImageView adChoicesIndicator;
 
 
     @Override
@@ -103,6 +104,7 @@ public class NativeVideoAd implements NtvVideoAdInterface {
         muteIndicator = (ImageView) ReactFindViewUtil.findView(v, "videoMuteIndicator");
         articleAuthorImage = (ImageView) ReactFindViewUtil.findView(v, "adAuthorImage");
         dateLabel = (TextView) ReactFindViewUtil.findView(v, "adDate");
+        adChoicesIndicator = (ImageView) ReactFindViewUtil.findView(v, "adChoicesImage");
     }
 
     @Override
@@ -166,7 +168,7 @@ public class NativeVideoAd implements NtvVideoAdInterface {
 
     @Override
     public ImageView getAdChoicesImageView() {
-        return null;
+        return adChoicesIndicator;
     }
 
     @Override
