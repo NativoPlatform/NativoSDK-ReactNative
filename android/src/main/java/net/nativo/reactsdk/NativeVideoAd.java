@@ -10,6 +10,8 @@ import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
+import com.facebook.react.bridge.Arguments;
+import com.facebook.react.bridge.WritableMap;
 import com.facebook.react.uimanager.util.ReactFindViewUtil;
 
 import net.nativo.sdk.ntvadtype.video.NtvVideoAdInterface;
@@ -18,6 +20,8 @@ import net.nativo.sdk.ntvlog.Logger;
 import net.nativo.sdk.ntvlog.LoggerFactory;
 
 import java.util.Date;
+
+import static net.nativo.reactsdk.RNAdContainerManager.EVENT_AD_FAILED_TO_LOAD;
 
 public class NativeVideoAd implements NtvVideoAdInterface {
 
@@ -38,6 +42,7 @@ public class NativeVideoAd implements NtvVideoAdInterface {
     private View adContainerView;
     private ImageView articleAuthorImage;
     private ViewGroup videoControlsGroup;
+    private ImageView adChoicesIndicator;
 
 
     @Override
@@ -99,6 +104,7 @@ public class NativeVideoAd implements NtvVideoAdInterface {
         muteIndicator = (ImageView) ReactFindViewUtil.findView(v, "videoMuteIndicator");
         articleAuthorImage = (ImageView) ReactFindViewUtil.findView(v, "adAuthorImage");
         dateLabel = (TextView) ReactFindViewUtil.findView(v, "adDate");
+        adChoicesIndicator = (ImageView) ReactFindViewUtil.findView(v, "adChoicesImage");
     }
 
     @Override
@@ -162,7 +168,7 @@ public class NativeVideoAd implements NtvVideoAdInterface {
 
     @Override
     public ImageView getAdChoicesImageView() {
-        return null;
+        return adChoicesIndicator;
     }
 
     @Override
@@ -203,6 +209,15 @@ public class NativeVideoAd implements NtvVideoAdInterface {
     @Override
     public void onVideoPlaybackError(VideoPlaybackError videoPlaybackError) {
         LOG.debug("onVideoPlaybackError: ");
+        removeAdOnPlaybackError();
+    }
+
+    private void removeAdOnPlaybackError() {
+        NativoAdView adView = (NativoAdView) adContainerView.getParent();
+        if (adView != null) {
+            WritableMap event = Arguments.createMap();
+            adView.sendEvent(EVENT_AD_FAILED_TO_LOAD, event);
+        }
     }
 
     private int getResourceId(String variableName, String resourceName) {
