@@ -1,7 +1,7 @@
 {
     "name": "react-native-nativo-ads",
     "title": "React Native Nativo Ads",
-    "version": "0.1.10",
+    "version": "0.1.11",
     "description": "Monetize your app using Nativo's native, display, and video ads.",
     "main": "index.js",
     "repository": {

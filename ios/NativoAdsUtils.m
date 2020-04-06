@@ -9,24 +9,6 @@
 
 @implementation NativoAdsUtils
 
-+ (UIScrollView *)getParentScrollViewForView:(UIView *)view
-{
-    // Iterate through superviews until we find an active scrollview or the outermost container
-    UIView *container = view;
-    while ((![container isKindOfClass:[UIScrollView class]] || [container.superview isKindOfClass:[UIScrollView class]]) && container != nil) {
-        container = container.superview;
-    }
-    return (UIScrollView *)container;
-}
-
-+ (UIView *)findTopMostViewBeforeScrollViewForView:(UIView *)view {
-    UIView *container = view;
-    while (container.superview != nil && ![container.superview isKindOfClass:[UIScrollView class]]) {
-        container = container.superview;
-    }
-    return container;
-}
-
 + (UIView *)findClass:(Class)class inView:(UIView *)view {
     //NSLog(@"View: %@ has #%lu subviews", view, (unsigned long)view.subviews.count);
     UIView *viewFound = nil;
@@ -46,14 +28,6 @@
         viewFound = viewFound.superview;
     }
     return viewFound.superview;
-}
-
-+ (BOOL)view:(UIView *)subview isSubviewOfView:(UIView *)parentView {
-    UIView *nextView = subview;
-    while (nextView.superview != nil && nextView != parentView) {
-        nextView = nextView.superview;
-    }
-    return nextView == parentView;
 }
 
 @end

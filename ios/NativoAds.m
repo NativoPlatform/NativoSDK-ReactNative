@@ -6,7 +6,6 @@
 //
 
 #import "NativoAds.h"
-#import "NativoAdsUtils.h"
 #import "NativeAdTemplate.h"
 #import "VideoAdTemplate.h"
 #import "StandardDisplayAdTemplate.h"
@@ -164,6 +163,10 @@ RCT_EXPORT_VIEW_PROPERTY(onAdRemoved, RCTBubblingEventBlock)
 - (void)collapseView {
     if (self.bridge) {
         RCTExecuteOnMainQueue(^{
+            [self setHidden:YES];
+            for (UIView* view in self.subviews) {
+                [view setHidden:YES];
+            }
             [self.bridge.uiManager setSize:CGSizeZero forView:self];
         });
     }
