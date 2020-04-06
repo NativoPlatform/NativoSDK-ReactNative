@@ -6,7 +6,6 @@
 //
 
 #import "NativoAds.h"
-#import "NativoAdsUtils.h"
 #import "NativeAdTemplate.h"
 #import "VideoAdTemplate.h"
 #import "StandardDisplayAdTemplate.h"
