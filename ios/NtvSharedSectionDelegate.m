@@ -135,6 +135,7 @@
 - (void)section:(NSString *)sectionUrl requestDidFailWithError:(nullable NSError *)error {
     NativoAd *adView = [self getFirstViewInSection:sectionUrl];
     if (adView) {
+        RCTLog(@"%@", error);
         [adView collapseView];
         adView.onAdRemoved(@{ @"index": @(-1), @"sectionUrl": sectionUrl });
     }
