@@ -9,6 +9,7 @@ import android.webkit.WebViewClient;
 import android.widget.FrameLayout;
 
 import com.facebook.react.bridge.Callback;
+import com.facebook.react.bridge.LifecycleEventListener;
 import com.facebook.react.bridge.ReactApplicationContext;
 import com.facebook.react.bridge.ReactContextBaseJavaModule;
 import com.facebook.react.bridge.ReactMethod;
@@ -26,7 +27,7 @@ import java.util.LinkedList;
 import java.util.Map;
 import java.util.Queue;
 
-public class RNNativoSdkModule extends ReactContextBaseJavaModule implements NtvSectionAdapter {
+public class RNNativoSdkModule extends ReactContextBaseJavaModule implements NtvSectionAdapter, LifecycleEventListener {
 
     private static final String TAG = RNNativoSdkModule.class.getName();
     private static final Logger LOG = LoggerFactory.getLogger(TAG);
@@ -202,5 +203,22 @@ public class RNNativoSdkModule extends ReactContextBaseJavaModule implements Ntv
                     View.SYSTEM_UI_FLAG_FULLSCREEN | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION |
                     View.SYSTEM_UI_FLAG_LAYOUT_STABLE);
         }
+    }
+
+    @Override
+    public void onHostResume() {
+        LOG.debug("onHostResume() called");
+        NativoSDK.getInstance().onResume();
+    }
+
+    @Override
+    public void onHostPause() {
+        LOG.debug("onHostPause() called");
+        NativoSDK.getInstance().onPause();
+    }
+
+    @Override
+    public void onHostDestroy() {
+
     }
 }

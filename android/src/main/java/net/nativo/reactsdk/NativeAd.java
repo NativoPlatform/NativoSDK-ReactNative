@@ -31,6 +31,7 @@ public class NativeAd implements NtvNativeAdInterface {
     private TextView sponsoredTag;
     private View view;
     private View adContainerView;
+    private ImageView adChoicesIndicator;
 
     @Override
     public TextView getTitleLabel() {
@@ -107,10 +108,11 @@ public class NativeAd implements NtvNativeAdInterface {
         articleDateLabel = (TextView) ReactFindViewUtil.findView(v, "adDate");
         articlePreviewLabel = (TextView) ReactFindViewUtil.findView(v, "adDescription");
         articleAuthorImage = (ImageView) ReactFindViewUtil.findView(v, "adAuthorImage");
+        adChoicesIndicator = (ImageView) ReactFindViewUtil.findView(v, "adChoicesImage");
     }
 
     @Override
     public ImageView getAdChoicesImageView() {
-        return null;
+        return adChoicesIndicator;
     }
 }
