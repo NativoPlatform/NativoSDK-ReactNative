@@ -14,6 +14,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 @property (nonatomic, readonly) UIView *videoView;
 @property (nonatomic, readonly) UIImageView *authorImageView;
+@property (nonatomic, readonly) UIView *adChoicesIconView;
 
 @end
 

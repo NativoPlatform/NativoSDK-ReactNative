@@ -25,6 +25,14 @@
     return nil;
 }
 
+- (UIView *)adChoicesIconView {
+    UIView *adChoicesIconView = [self.bridge.uiManager viewForNativeID:@"adChoicesImage" withRootTag:self.reactTag];
+    if (adChoicesIconView) {
+        return (UIView *)adChoicesIconView;
+    }
+    return nil;
+}
+
 - (UILabel *)titleLabel {
     return nil;
 }
