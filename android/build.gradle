@@ -50,7 +50,7 @@ dependencies {
     implementation 'com.facebook.react:react-native:+'
     implementation 'androidx.cardview:cardview:1.0.0'
     implementation 'androidx.recyclerview:recyclerview:1.0.0'
-    implementation(group: 'net.nativo.sdk', name: 'nativo-sdk', version: '5.1.1', ext: 'aar', changing: true) {
+    api(group: 'net.nativo.sdk', name: 'nativo-sdk', version: '5.1.1', ext: 'aar', changing: true) {
         transitive = true
     }
 }
