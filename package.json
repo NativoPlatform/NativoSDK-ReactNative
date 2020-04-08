@@ -1,18 +1,38 @@
-
 {
-  "name": "react-native-nativo-sdk-alpha.1",
-  "version": "1.0.0",
-  "description": "",
-  "main": "index.js",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
-  "keywords": [
-    "react-native"
-  ],
-  "author": "",
-  "license": "",
-  "peerDependencies": {
-    "react-native": "^0.41.2"
-  }
+    "name": "react-native-nativo-ads",
+    "title": "React Native Nativo Ads",
+    "version": "0.1.11-alpha.1",
+    "description": "Monetize your app using Nativo's native, display, and video ads.",
+    "main": "index.js",
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/NativoPlatform/NativoSDK-ReactNative.git",
+        "baseUrl": "https://github.com/NativoPlatform/NativoSDK-ReactNative"
+    },
+    "publishConfig": {
+        "registry": "https://nativo.jfrog.io/artifactory/api/npm/rn-alpha-local/"
+    },
+    "keywords": [
+        "react-native",
+        "nativo",
+        "native",
+        "ads",
+        "video"
+    ],
+    "author": {
+        "name": "Nativo",
+        "email": "sdksupport@nativo.com"
+    },
+    "license": "MIT",
+    "readmeFilename": "README.md",
+    "devDependencies": {
+        "react": "16.8.6",
+        "react-native": "0.60.5",
+        "react-native-video": "5.0.2",
+        "react-native-webview": "8.0.6"
+    },
+    "peerDependencies": {
+        "react": "^16.8.6",
+        "react-native": "^0.60.5"
+    }
 }

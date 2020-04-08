@@ -6,18 +6,18 @@ buildscript {
     }
 
     dependencies {
-        classpath 'com.android.tools.build:gradle:3.3.1'
+        classpath 'com.android.tools.build:gradle:3.4.2'
     }
 }
 
 apply plugin: 'com.android.library'
 
 android {
-    compileSdkVersion 25
+    compileSdkVersion 26
 
     defaultConfig {
         minSdkVersion 16
-        targetSdkVersion 25
+        targetSdkVersion 26
         versionCode 1
         versionName "1.0"
     }
@@ -27,11 +27,31 @@ android {
 }
 
 repositories {
+    maven {
+        // All of React Native (JS, Obj-C sources, Android binaries) is installed from npm
+        url("$rootDir/../node_modules/react-native/android")
+    }
+    maven {
+        // Android JSC is installed from npm
+        url("$rootDir/../node_modules/jsc-android/dist")
+    }
+
+    maven {
+        url 'https://nativo.jfrog.io/nativo/libs-release'
+    }
+    maven{
+        url 'https://nativo.jfrog.io/nativo/libs-snapshot-local'
+    }
     mavenCentral()
     google()
 }
 
 dependencies {
     implementation 'com.facebook.react:react-native:+'
+    implementation 'androidx.cardview:cardview:1.0.0'
+    implementation 'androidx.recyclerview:recyclerview:1.0.0'
+    api(group: 'net.nativo.sdk', name: 'nativo-sdk', version: '5.1.1', ext: 'aar', changing: true) {
+        transitive = true
+    }
 }
   
