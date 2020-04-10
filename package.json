@@ -1,7 +1,7 @@
 {
     "name": "react-native-nativo-ads",
     "title": "React Native Nativo Ads",
-    "version": "0.1.11-alpha.1",
+    "version": "0.1.1",
     "description": "Monetize your app using Nativo's native, display, and video ads.",
     "main": "index.js",
     "repository": {
@@ -9,9 +9,7 @@
         "url": "git+https://github.com/NativoPlatform/NativoSDK-ReactNative.git",
         "baseUrl": "https://github.com/NativoPlatform/NativoSDK-ReactNative"
     },
-    "publishConfig": {
-        "registry": "https://nativo.jfrog.io/artifactory/api/npm/rn-alpha-local/"
-    },
+    "homepage": "https://sdk.nativo.com/docs/getting-started-with-react-native",
     "keywords": [
         "react-native",
         "nativo",
