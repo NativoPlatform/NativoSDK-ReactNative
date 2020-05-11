@@ -76,9 +76,9 @@
 }
 
 - (void)section:(NSString *)sectionUrl needsReloadDatasourceAtLocationIdentifier:(id)identifier forReason:(NSString *)reason {
-    NSMutableDictionary *sectionMap = [NtvSharedSectionDelegate sharedInstance].viewMap;
-    NSDictionary *viewMap = sectionMap[sectionUrl];
     if ([reason isEqualToString:NtvSectionReloadReasonRemoveView]) {
+        NSMutableDictionary *sectionMap = [NtvSharedSectionDelegate sharedInstance].viewMap;
+        NSDictionary *viewMap = sectionMap[sectionUrl];
         if (viewMap) {
             NativoAd *adView = viewMap[identifier];
             if (adView) {
@@ -86,8 +86,6 @@
                 adView.onAdRemoved(@{ @"index": identifier, @"sectionUrl": sectionUrl });
             }
         }
-    } else {
-        NSLog(@"NativoSDK: Needs Reload!! section: %@ index: %@", sectionUrl, identifier);
     }
 }
 
