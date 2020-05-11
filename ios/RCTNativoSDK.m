@@ -60,6 +60,16 @@ RCT_EXPORT_METHOD(clearAdsInSection:(NSString *)sectionUrl)
     [NativoSDK clearAdsInSection:sectionUrl];
 }
 
+RCT_EXPORT_METHOD(enableDFPRequestsWithVersion:(NSString *)versionStr)
+{
+    [NativoSDK enableDFPRequestsWithVersion:versionStr];
+}
+
+RCT_EXPORT_METHOD(makeDFPRequestWithBannerView:(UIView *)bannerView forSection:(NSString *)sectionUrl atLocationIdentifier:(id)identifier)
+{
+    [NativoSDK makeDFPRequestWithBannerView:bannerView forSection:sectionUrl atLocationIdentifier:identifier];
+}
+
 - (NSArray<NSString *> *)supportedEvents
 {
   return @[];
