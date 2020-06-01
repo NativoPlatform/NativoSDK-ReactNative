@@ -1,4 +1,4 @@
-package net.nativo.reactsdk;
+package net.nativo.reactsdk.ntvadtemplate;
 
 import android.content.Context;
 import android.content.res.Resources;
@@ -14,6 +14,9 @@ import com.facebook.react.bridge.Arguments;
 import com.facebook.react.bridge.WritableMap;
 import com.facebook.react.uimanager.util.ReactFindViewUtil;
 
+import net.nativo.reactsdk.R;
+import net.nativo.reactsdk.ntvsdkmanager.NativoAdView;
+import net.nativo.reactsdk.ntvsdkmanager.RNAdContainerManager;
 import net.nativo.sdk.ntvadtype.video.NtvVideoAdInterface;
 import net.nativo.sdk.ntvadtype.video.VideoPlaybackError;
 import net.nativo.sdk.ntvlog.Logger;
@@ -21,7 +24,8 @@ import net.nativo.sdk.ntvlog.LoggerFactory;
 
 import java.util.Date;
 
-import static net.nativo.reactsdk.RNAdContainerManager.EVENT_AD_FAILED_TO_LOAD;
+import static net.nativo.reactsdk.ntvutil.RNConstants.EVENT_AD_FAILED_TO_LOAD;
+
 
 public class NativeVideoAd implements NtvVideoAdInterface {
 

@@ -15,6 +15,10 @@ import com.facebook.react.bridge.ReactContextBaseJavaModule;
 import com.facebook.react.bridge.ReactMethod;
 import com.facebook.react.uimanager.util.ReactFindViewUtil;
 
+import net.nativo.reactsdk.ntvadtemplate.NativeAd;
+import net.nativo.reactsdk.ntvadtemplate.NativeLandingPage;
+import net.nativo.reactsdk.ntvadtemplate.NativeVideoAd;
+import net.nativo.reactsdk.ntvadtemplate.StandardDisplayAd;
 import net.nativo.sdk.NativoSDK;
 import net.nativo.sdk.ntvadtype.NtvBaseInterface;
 import net.nativo.sdk.ntvcore.NtvAdData;

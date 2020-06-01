@@ -1,4 +1,4 @@
-package net.nativo.reactsdk;
+package net.nativo.reactsdk.ntvsdkmanager;
 
 import android.app.Activity;
 import android.view.View;
@@ -15,6 +15,7 @@ import com.facebook.react.uimanager.ViewGroupManager;
 import com.facebook.react.uimanager.annotations.ReactProp;
 import com.facebook.react.uimanager.util.ReactFindViewUtil;
 
+import net.nativo.reactsdk.ntvadtemplate.NativeLandingPage;
 import net.nativo.sdk.NativoSDK;
 import net.nativo.sdk.ntvlog.Logger;
 import net.nativo.sdk.ntvlog.LoggerFactory;

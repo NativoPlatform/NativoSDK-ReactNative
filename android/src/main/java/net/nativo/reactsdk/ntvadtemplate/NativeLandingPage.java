@@ -1,4 +1,4 @@
-package net.nativo.reactsdk;
+package net.nativo.reactsdk.ntvadtemplate;
 
 import android.content.Context;
 import android.view.View;
@@ -12,6 +12,7 @@ import com.facebook.react.bridge.WritableMap;
 import com.facebook.react.modules.core.DeviceEventManagerModule;
 import com.facebook.react.uimanager.util.ReactFindViewUtil;
 
+import net.nativo.reactsdk.ntvsdkmanager.RNLandingPageContainerManager;
 import net.nativo.sdk.ntvadtype.landing.NtvLandingPageInterface;
 
 import java.util.Date;
