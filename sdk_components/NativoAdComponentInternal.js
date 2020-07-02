@@ -54,7 +54,11 @@ class NativoAdComponentInternal extends Component<props> {
         } catch (e) {
             this.setDefaultState()
         }
-        this.prefetchAd();
+        if (this.props.enableDFPVersion) {
+            NativeModules.NativoSDK.enableDFPRequestsWithVersion(this.props.enableDFPVersion)
+        } else {
+            this.prefetchAd();
+        }
     }
 
     componentDidUpdate(prevProps: Readonly<P>, prevState: Readonly<S>, snapshot: SS): void {

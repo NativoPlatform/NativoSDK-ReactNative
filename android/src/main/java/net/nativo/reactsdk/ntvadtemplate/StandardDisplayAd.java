@@ -1,4 +1,4 @@
-package net.nativo.reactsdk;
+package net.nativo.reactsdk.ntvadtemplate;
 
 import android.content.Context;
 import android.view.View;
@@ -10,6 +10,7 @@ import com.facebook.react.bridge.WritableMap;
 import com.facebook.react.modules.core.DeviceEventManagerModule;
 import com.facebook.react.uimanager.util.ReactFindViewUtil;
 
+import net.nativo.reactsdk.ntvsdkmanager.RNAdContainerManager;
 import net.nativo.sdk.ntvadtype.display.NtvStandardDisplayInterface;
 
 public class StandardDisplayAd implements NtvStandardDisplayInterface {

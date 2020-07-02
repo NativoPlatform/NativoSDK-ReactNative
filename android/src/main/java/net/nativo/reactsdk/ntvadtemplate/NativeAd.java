@@ -1,4 +1,4 @@
-package net.nativo.reactsdk;
+package net.nativo.reactsdk.ntvadtemplate;
 
 import android.content.Context;
 import android.graphics.Color;
@@ -11,6 +11,7 @@ import androidx.cardview.widget.CardView;
 
 import com.facebook.react.uimanager.util.ReactFindViewUtil;
 
+import net.nativo.reactsdk.R;
 import net.nativo.sdk.ntvadtype.nativead.NtvNativeAdInterface;
 
 import java.text.SimpleDateFormat;

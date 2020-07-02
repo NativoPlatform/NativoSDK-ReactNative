@@ -18,7 +18,8 @@ class NativoAd extends Component<props> {
                                            index={this.props.index}
                                            nativeAdTemplate={this.props.nativeAdTemplate}
                                            nativeVideoAdTemplate={this.props.videoAdTemplate}
-                                           standardDisplayAdTemplate={this.props.standardDisplayAdTemplate}/>
+                                           standardDisplayAdTemplate={this.props.standardDisplayAdTemplate}
+                                           enableDFPVersion={this.props.enableDFPVersion}/>
             </ErrorBoundary>
         )
     }
@@ -32,7 +33,8 @@ NativoAd.propTypes = {
     standardDisplayAdTemplate: PropTypes.func,
     onNativeAdClick: PropTypes.func,
     onDisplayAdClick: PropTypes.func,
-    onAdRemoved: PropTypes.func
+    onAdRemoved: PropTypes.func,
+    enableDFPVersion: PropTypes.string
 };
 
 export default NativoAd;
