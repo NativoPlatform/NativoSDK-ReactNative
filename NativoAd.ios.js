@@ -57,7 +57,8 @@ NativoAdComponent.propTypes = {
     standardDisplayAdTemplate: PropTypes.func,
     onNativeAdClick: PropTypes.func,
     onDisplayAdClick: PropTypes.func,
-    onAdRemoved: PropTypes.func
+    onAdRemoved: PropTypes.func,
+    enableDFPVersion: PropTypes.string
 };
 const NativoAd = requireNativeComponent('NativoAd', NativoAdComponent);
 

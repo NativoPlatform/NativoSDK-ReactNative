@@ -70,7 +70,6 @@ RCT_EXPORT_METHOD(clearAdsInSection:(NSString *)sectionUrl)
     return YES;
 }
 
-
 - (NSDictionary *)constantsToExport
 {
     NSDictionary *adTypes = @{ @"NATIVE" : @(NtvTestAdTypeNative),

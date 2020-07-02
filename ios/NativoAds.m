@@ -16,6 +16,7 @@
 #import <React/RCTRootViewDelegate.h>
 #import <React/RCTDevLoadingView.h>
 #import <React/RCTUIManager.h>
+#import <React/RCTLog.h>
 
 
 @interface NativoAdManager ()
@@ -32,6 +33,7 @@ RCT_EXPORT_VIEW_PROPERTY(stdDisplayAdTemplate, NSString)
 RCT_EXPORT_VIEW_PROPERTY(onNativeAdClick, RCTBubblingEventBlock)
 RCT_EXPORT_VIEW_PROPERTY(onDisplayAdClick, RCTBubblingEventBlock)
 RCT_EXPORT_VIEW_PROPERTY(onAdRemoved, RCTBubblingEventBlock)
+RCT_EXPORT_VIEW_PROPERTY(enableDFPVersion, NSString)
 
 
 - (instancetype)init {
@@ -73,6 +75,7 @@ RCT_EXPORT_VIEW_PROPERTY(onAdRemoved, RCTBubblingEventBlock)
 @property (nonatomic) NSString *nativeAdTemplate;
 @property (nonatomic) NSString *videoAdTemplate;
 @property (nonatomic) NSString *stdDisplayAdTemplate;
+@property (nonatomic) NSString *enableDFPVersion;
 @end
 
 @implementation NativoAd
@@ -88,7 +91,11 @@ RCT_EXPORT_VIEW_PROPERTY(onAdRemoved, RCTBubblingEventBlock)
             // prefetch ad using index path to dequeue from ads array if available
             // injectWithAdData will be called in sectionDelegate method 'didReceiveAd'
             [NtvSharedSectionDelegate setAdView:self forSectionUrl:self.sectionUrl atLocationIdentifier:self.index];
-            [NativoSDK prefetchAdForSection:self.sectionUrl atLocationIdentifier:self.index options:nil];
+            if (self.enableDFPVersion) {
+                [NativoSDK enableDFPRequestsWithVersion:self.enableDFPVersion];
+            } else {
+                [NativoSDK prefetchAdForSection:self.sectionUrl atLocationIdentifier:self.index options:nil];
+            }
         } @catch (NSException *exception) {
             NSLog(@"Failed to inject NativoAd: %@", exception);
         }
