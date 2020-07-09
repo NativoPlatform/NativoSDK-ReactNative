@@ -9,6 +9,7 @@
 #import "NativoAds.h"
 #import "NativoLandingPageTemplate.h"
 #import <NativoSDK/NativoSDK.h>
+#import <React/RCTLog.h>
 
 @interface NtvSharedSectionDelegate ()
 @property (nonatomic) NSMutableDictionary<NSString *, NSMutableDictionary<id, NativoAd*>*> *viewMap;
@@ -129,6 +130,8 @@
             callback(@[[NSNull null], @(adData.isAdContentAvailable), sectionUrl]);
         }
         [sectionCallbacks removeObjectAtIndex:0];
+    } else if (!adView) {
+        RCTLogWarn(@"NativoSDK: Failed to map ad data to view. Check the index value used if using DFP functionality.");
     }
 }
 
