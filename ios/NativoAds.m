@@ -14,7 +14,6 @@
 #import <React/UIView+React.h>
 #import <React/RCTRootView.h>
 #import <React/RCTRootViewDelegate.h>
-#import <React/RCTDevLoadingView.h>
 #import <React/RCTUIManager.h>
 #import <React/RCTLog.h>
 
@@ -53,9 +52,6 @@ RCT_EXPORT_VIEW_PROPERTY(enableDFPVersion, NSString)
 }
 
 - (void)setBridge:(RCTBridge *)bridge {
-#if RCT_DEV
-    [bridge moduleForClass:[RCTDevLoadingView class]];
-#endif
     super.bridge = bridge;
 }
 
