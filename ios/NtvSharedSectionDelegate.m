@@ -124,7 +124,7 @@
     
     // Prefetch callback
     NSMutableArray *sectionCallbacks = [NtvSharedSectionDelegate sharedInstance].prefetchCallbackMap[sectionUrl];
-    if (sectionCallbacks && sectionCallbacks.count > 0) {
+    if (!adView && sectionCallbacks && sectionCallbacks.count > 0) {
         RCTResponseSenderBlock callback = sectionCallbacks[0];
         if (callback) {
             callback(@[[NSNull null], @(adData.isAdContentAvailable), sectionUrl]);

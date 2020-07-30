@@ -85,7 +85,51 @@ RCT_EXPORT_VIEW_PROPERTY(enableDFPVersion, NSString)
     return self;
 }
 
+- (void)setIndex:(NSNumber *)index {
+    BOOL shouldUpdate = (BOOL)_index;
+    _index = index;
+    if (shouldUpdate) {
+        [self updateComponent];
+    }
+}
+
+- (void)setSectionUrl:(NSString *)sectionUrl {
+    BOOL shouldUpdate = (BOOL)_sectionUrl;
+    _sectionUrl = sectionUrl;
+    if (shouldUpdate) {
+        [self updateComponent];
+    }
+}
+
+- (void)setNativeAdTemplate:(NSString *)nativeAdTemplate {
+    BOOL shouldUpdate = (BOOL)_nativeAdTemplate;
+    _nativeAdTemplate = nativeAdTemplate;
+    if (shouldUpdate) {
+        [self updateComponent];
+    }
+}
+
+- (void)setVideoAdTemplate:(NSString *)videoAdTemplate {
+    BOOL shouldUpdate = (BOOL)_videoAdTemplate;
+    _videoAdTemplate = videoAdTemplate;
+    if (shouldUpdate) {
+        [self updateComponent];
+    }
+}
+
+- (void)setStdDisplayAdTemplate:(NSString *)stdDisplayAdTemplate {
+    BOOL shouldUpdate = (BOOL)_stdDisplayAdTemplate;
+    _stdDisplayAdTemplate = stdDisplayAdTemplate;
+    if (shouldUpdate) {
+        [self updateComponent];
+    }
+}
+
 - (void)didMoveToSuperview {
+    [self updateComponent];
+}
+
+- (void)updateComponent {
     if (self.sectionUrl && self.index && self.superview != nil) {
         @try {
             // prefetch ad using index path to dequeue from ads array if available
@@ -107,7 +151,6 @@ RCT_EXPORT_VIEW_PROPERTY(enableDFPVersion, NSString)
     
     // Get main thread
     dispatch_async(dispatch_get_main_queue(), ^{
-        
         UIView *templateView;
         if (adData.isAdContentAvailable) {
             BOOL isNativeTemplate = adData.adType == Native || adData.adType == Display;
