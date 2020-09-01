@@ -184,6 +184,9 @@ RCT_EXPORT_VIEW_PROPERTY(enableDFPVersion, NSString)
                                                                initialProperties:appProperties];
             }
             else {
+                NSLog(@"NativoSDK: No template given for ad type: %lu", (unsigned long)adData.adType);
+                [self collapseView];
+                self.onAdRemoved(@{ @"index": self.index, @"sectionUrl": self.sectionUrl });
                 return;
             }
             
