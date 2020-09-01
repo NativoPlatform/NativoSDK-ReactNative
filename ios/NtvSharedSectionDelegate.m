@@ -99,10 +99,9 @@
 }
 
 - (void)section:(NSString *)sectionUrl needsDisplayLandingPage:(nullable UIViewController<NtvLandingPageInterface> *)sponsoredLandingPageViewController {
-    
-    NativoAd *adView = [self getFirstViewInSection:sectionUrl];
     NativoLandingPageTemplate *template = (NativoLandingPageTemplate *)sponsoredLandingPageViewController;
     NtvAdData *adData = template.adData;
+    NativoAd *adView = [self getViewForAdData:adData inSection:sectionUrl];
     if (adView && adView.onNativeAdClick) {
         NSString *authorByLine = [NSString stringWithFormat:@"By %@", adData.authorName];
         adView.onNativeAdClick(@{ @"adTitle" : adData.title,
