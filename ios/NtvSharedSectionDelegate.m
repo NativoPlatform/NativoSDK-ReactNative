@@ -143,11 +143,25 @@
 }
 
 - (void)section:(NSString *)sectionUrl requestDidFailWithError:(nullable NSError *)error {
-    NativoAd *adView = [self getFirstViewInSection:sectionUrl];
+    id location = [error userInfo][@"locationId"];
+    NativoAd *adView;
+    if (location) {
+        NSMutableDictionary *sectionMap = [NtvSharedSectionDelegate sharedInstance].viewMap;
+        NSDictionary *viewMap = sectionMap[sectionUrl];
+        if (viewMap) {
+            adView = viewMap[location];
+        }
+    } else {
+        adView = [self getFirstViewInSection:sectionUrl];
+    }
     if (adView) {
         RCTLog(@"%@", error);
-        [adView collapseView];
-        adView.onAdRemoved(@{ @"index": @(-1), @"sectionUrl": sectionUrl });
+        if ([adView respondsToSelector:@selector(collapseView)]) {
+            [adView collapseView];
+        }
+        if ([adView respondsToSelector:@selector(onAdRemoved)]) {
+            adView.onAdRemoved(@{ @"index": location ? location : @(-1), @"sectionUrl": sectionUrl });
+        }
     }
 }
 
