@@ -76,6 +76,14 @@
     }
 }
 
++ (void)clearAdViewAtLocationIdentifier:(id)locationId forSectionUrl:(NSString *)sectionUrl {
+    NSMutableDictionary *sectionMap = [NtvSharedSectionDelegate sharedInstance].viewMap;
+    if (sectionUrl && locationId) {
+        NSMutableDictionary *viewMap = sectionMap[sectionUrl];
+        [viewMap removeObjectForKey:locationId];
+    }
+}
+
 - (void)section:(NSString *)sectionUrl needsReloadDatasourceAtLocationIdentifier:(id)identifier forReason:(NSString *)reason {
     if ([reason isEqualToString:NtvSectionReloadReasonRemoveView]) {
         NSMutableDictionary *sectionMap = [NtvSharedSectionDelegate sharedInstance].viewMap;
