@@ -42,9 +42,9 @@ function NativoAdComponent(props) {
             onNativeAdClick={_onNativeAdClick} 
             onDisplayAdClick={_onDisplayAdClick} 
             onAdRemoved={_onAdRemoved} 
-            nativeAdTemplate={nativeAdTemplate.name} 
-            videoAdTemplate={videoAdTemplate.name} 
-            stdDisplayAdTemplate={standardDisplayAdTemplate.name}>
+            nativeAdTemplate={nativeAdTemplate ? nativeAdTemplate.name : null} 
+            videoAdTemplate={videoAdTemplate ? videoAdTemplate.name : null} 
+            stdDisplayAdTemplate={standardDisplayAdTemplate ? standardDisplayAdTemplate.name : null}>
         </NativoAd>
     );
 }

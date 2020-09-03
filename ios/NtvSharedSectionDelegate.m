@@ -76,6 +76,14 @@
     }
 }
 
++ (void)clearAdViewAtLocationIdentifier:(id)locationId forSectionUrl:(NSString *)sectionUrl {
+    NSMutableDictionary *sectionMap = [NtvSharedSectionDelegate sharedInstance].viewMap;
+    if (sectionUrl && locationId) {
+        NSMutableDictionary *viewMap = sectionMap[sectionUrl];
+        [viewMap removeObjectForKey:locationId];
+    }
+}
+
 - (void)section:(NSString *)sectionUrl needsReloadDatasourceAtLocationIdentifier:(id)identifier forReason:(NSString *)reason {
     if ([reason isEqualToString:NtvSectionReloadReasonRemoveView]) {
         NSMutableDictionary *sectionMap = [NtvSharedSectionDelegate sharedInstance].viewMap;
@@ -91,10 +99,9 @@
 }
 
 - (void)section:(NSString *)sectionUrl needsDisplayLandingPage:(nullable UIViewController<NtvLandingPageInterface> *)sponsoredLandingPageViewController {
-    
-    NativoAd *adView = [self getFirstViewInSection:sectionUrl];
     NativoLandingPageTemplate *template = (NativoLandingPageTemplate *)sponsoredLandingPageViewController;
     NtvAdData *adData = template.adData;
+    NativoAd *adView = [self getViewForAdData:adData inSection:sectionUrl];
     if (adView && adView.onNativeAdClick) {
         NSString *authorByLine = [NSString stringWithFormat:@"By %@", adData.authorName];
         adView.onNativeAdClick(@{ @"adTitle" : adData.title,
@@ -136,11 +143,25 @@
 }
 
 - (void)section:(NSString *)sectionUrl requestDidFailWithError:(nullable NSError *)error {
-    NativoAd *adView = [self getFirstViewInSection:sectionUrl];
+    id location = [error userInfo][@"locationId"];
+    NativoAd *adView;
+    if (location) {
+        NSMutableDictionary *sectionMap = [NtvSharedSectionDelegate sharedInstance].viewMap;
+        NSDictionary *viewMap = sectionMap[sectionUrl];
+        if (viewMap) {
+            adView = viewMap[location];
+        }
+    } else {
+        adView = [self getFirstViewInSection:sectionUrl];
+    }
     if (adView) {
         RCTLog(@"%@", error);
-        [adView collapseView];
-        adView.onAdRemoved(@{ @"index": @(-1), @"sectionUrl": sectionUrl });
+        if ([adView respondsToSelector:@selector(collapseView)]) {
+            [adView collapseView];
+        }
+        if ([adView respondsToSelector:@selector(onAdRemoved)]) {
+            adView.onAdRemoved(@{ @"index": location ? location : @(-1), @"sectionUrl": sectionUrl });
+        }
     }
 }
 

@@ -125,6 +125,12 @@ RCT_EXPORT_VIEW_PROPERTY(enableDFPVersion, NSString)
     [self updateComponent];
 }
 
+- (void)willMoveToSuperview:(UIView *)newSuperview {
+    if (newSuperview == nil) {
+        [NtvSharedSectionDelegate clearAdViewAtLocationIdentifier:self.index forSectionUrl:self.sectionUrl];
+    }
+}
+
 - (void)updateComponent {
     if (self.sectionUrl && self.index && self.superview != nil) {
         @try {
@@ -178,6 +184,9 @@ RCT_EXPORT_VIEW_PROPERTY(enableDFPVersion, NSString)
                                                                initialProperties:appProperties];
             }
             else {
+                NSLog(@"NativoSDK: No template given for ad type: %lu", (unsigned long)adData.adType);
+                [self collapseView];
+                self.onAdRemoved(@{ @"index": self.index, @"sectionUrl": self.sectionUrl });
                 return;
             }
             
