@@ -34,6 +34,7 @@ RCT_EXPORT_VIEW_PROPERTY(onDisplayAdClick, RCTBubblingEventBlock)
 RCT_EXPORT_VIEW_PROPERTY(onAdRendered, RCTBubblingEventBlock)
 RCT_EXPORT_VIEW_PROPERTY(onAdRemoved, RCTBubblingEventBlock)
 RCT_EXPORT_VIEW_PROPERTY(enableDFPVersion, NSString)
+RCT_EXPORT_VIEW_PROPERTY(extraTemplateProps, NSDictionary)
 
 
 - (instancetype)init {
@@ -73,6 +74,7 @@ RCT_EXPORT_VIEW_PROPERTY(enableDFPVersion, NSString)
 @property (nonatomic) NSString *videoAdTemplate;
 @property (nonatomic) NSString *stdDisplayAdTemplate;
 @property (nonatomic) NSString *enableDFPVersion;
+@property (nonatomic) NSDictionary *extraTemplateProps;
 @end
 
 @implementation NativoAd
@@ -122,6 +124,14 @@ RCT_EXPORT_VIEW_PROPERTY(enableDFPVersion, NSString)
     }
 }
 
+- (void)setExtraTemplateProps:(NSDictionary *)extraTemplateProps {
+    BOOL shouldUpdate = (BOOL)_extraTemplateProps;
+    _extraTemplateProps = extraTemplateProps;
+    if (shouldUpdate) {
+        [self updateComponent];
+    }
+}
+
 - (void)didMoveToSuperview {
     [self updateComponent];
 }
@@ -161,25 +171,34 @@ RCT_EXPORT_VIEW_PROPERTY(enableDFPVersion, NSString)
             BOOL isStdDisplayTemplate = adData.adType == StandardDisplay;
             NSString *authorByLine = [NSString stringWithFormat:@"By %@", adData.authorName];
             if (isNativeTemplate && self.nativeAdTemplate) {
-                NSDictionary *appProperties = @{@"adTitle" : adData.title,
+                NSMutableDictionary *appProperties = [@{@"adTitle" : adData.title,
                                                 @"adDescription" : adData.previewText,
                                                 @"adAuthorName" : authorByLine,
-                                                @"adDate" : adData.date };
+                                                @"adDate" : adData.date } mutableCopy];
+                if (self.extraTemplateProps && self.extraTemplateProps.allKeys.count > 0) {
+                    [appProperties addEntriesFromDictionary:self.extraTemplateProps];
+                }
                 templateView = [[NativeAdTemplate alloc] initWithBridge:self.bridge
                                                              moduleName:self.nativeAdTemplate
                                                       initialProperties:appProperties];
             } else if (isVideoTemplate && self.videoAdTemplate) {
-                NSDictionary *appProperties = @{@"adTitle" : adData.title,
-                                                @"adDescription" : adData.previewText,
-                                                @"adAuthorName" : authorByLine,
-                                                @"adDate" : adData.date };
+                NSMutableDictionary *appProperties = [@{@"adTitle" : adData.title,
+                                                       @"adDescription" : adData.previewText,
+                                                       @"adAuthorName" : authorByLine,
+                                                       @"adDate" : adData.date } mutableCopy];
+                if (self.extraTemplateProps && self.extraTemplateProps.allKeys.count > 0) {
+                    [appProperties addEntriesFromDictionary:self.extraTemplateProps];
+                }
                 templateView = [[VideoAdTemplate alloc] initWithBridge:self.bridge
                                                              moduleName:self.videoAdTemplate
                                                       initialProperties:appProperties];
             }
             else if (isStdDisplayTemplate && self.stdDisplayAdTemplate) {
-                NSDictionary *appProperties = @{@"displayHeight" : @(adData.standardDisplaySize.height),
-                                                @"displayWidth" : @(adData.standardDisplaySize.width)};
+                NSMutableDictionary *appProperties = [@{@"displayHeight" : @(adData.standardDisplaySize.height),
+                                                @"displayWidth" : @(adData.standardDisplaySize.width)} mutableCopy];
+                if (self.extraTemplateProps && self.extraTemplateProps.allKeys.count > 0) {
+                    [appProperties addEntriesFromDictionary:self.extraTemplateProps];
+                }
                 templateView = [[StandardDisplayAdTemplate alloc] initWithBridge:self.bridge
                                                                       moduleName:self.stdDisplayAdTemplate
                                                                initialProperties:appProperties];

@@ -5,7 +5,7 @@ import {requireNativeComponent, AppRegistry } from 'react-native';
 const _registeredTemplates = [];
 
 function NativoAdComponent(props) {
-    const { nativeAdTemplate, videoAdTemplate, standardDisplayAdTemplate, ...other } = props;
+    const { nativeAdTemplate, videoAdTemplate, standardDisplayAdTemplate, extraTemplateProps, ...other } = props;
 
     _onNativeAdClick = (event) => {
         if (!props.onNativeAdClick) {
@@ -49,7 +49,8 @@ function NativoAdComponent(props) {
             onAdRemoved={_onAdRemoved} 
             nativeAdTemplate={nativeAdTemplate ? nativeAdTemplate.name : null} 
             videoAdTemplate={videoAdTemplate ? videoAdTemplate.name : null} 
-            stdDisplayAdTemplate={standardDisplayAdTemplate ? standardDisplayAdTemplate.name : null}>
+            stdDisplayAdTemplate={standardDisplayAdTemplate ? standardDisplayAdTemplate.name : null}
+            extraTemplateProps={extraTemplateProps}>
         </NativoAd>
     );
 }
@@ -64,7 +65,8 @@ NativoAdComponent.propTypes = {
     onDisplayAdClick: PropTypes.func,
     onAdRendered: PropTypes.func, 
     onAdRemoved: PropTypes.func,
-    enableDFPVersion: PropTypes.string
+    enableDFPVersion: PropTypes.string,
+    extraTemplateProps: PropTypes.object
 };
 const NativoAd = requireNativeComponent('NativoAd', NativoAdComponent);
 
