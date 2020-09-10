@@ -31,6 +31,7 @@ RCT_EXPORT_VIEW_PROPERTY(videoAdTemplate, NSString)
 RCT_EXPORT_VIEW_PROPERTY(stdDisplayAdTemplate, NSString)
 RCT_EXPORT_VIEW_PROPERTY(onNativeAdClick, RCTBubblingEventBlock)
 RCT_EXPORT_VIEW_PROPERTY(onDisplayAdClick, RCTBubblingEventBlock)
+RCT_EXPORT_VIEW_PROPERTY(onAdRendered, RCTBubblingEventBlock)
 RCT_EXPORT_VIEW_PROPERTY(onAdRemoved, RCTBubblingEventBlock)
 RCT_EXPORT_VIEW_PROPERTY(enableDFPVersion, NSString)
 
@@ -207,7 +208,9 @@ RCT_EXPORT_VIEW_PROPERTY(enableDFPVersion, NSString)
             // Place ad in view
             if (!self.superview) { return; } // View was removed by owner. Abort.
             [NativoSDK placeAdInView:templateView atLocationIdentifier:self.index inContainer:self.superview forSection:self.sectionUrl options:@{ @"doNotClearSection" : @"1"}];
-            if (!adData.isAdContentAvailable) {
+            if (adData.isAdContentAvailable) {
+                self.onAdRendered(@{ @"index": self.index, @"sectionUrl": self.sectionUrl });
+            } else {
                 [self collapseView];
                 self.onAdRemoved(@{ @"index": self.index, @"sectionUrl": self.sectionUrl });
             }

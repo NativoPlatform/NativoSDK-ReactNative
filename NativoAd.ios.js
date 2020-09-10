@@ -21,6 +21,10 @@ function NativoAdComponent(props) {
         }
         props.onDisplayAdClick(event.nativeEvent);
     }
+    _onAdRendered = (event) => {
+        if (!props.onAdRendered) { return; }
+        props.onAdRendered(event.nativeEvent);
+    }
     _onAdRemoved = (event) => {
         if (!props.onAdRemoved) { return; }
         props.onAdRemoved(event.nativeEvent);
@@ -41,6 +45,7 @@ function NativoAdComponent(props) {
         <NativoAd {...other} 
             onNativeAdClick={_onNativeAdClick} 
             onDisplayAdClick={_onDisplayAdClick} 
+            onAdRendered={_onAdRendered}
             onAdRemoved={_onAdRemoved} 
             nativeAdTemplate={nativeAdTemplate ? nativeAdTemplate.name : null} 
             videoAdTemplate={videoAdTemplate ? videoAdTemplate.name : null} 
@@ -57,6 +62,7 @@ NativoAdComponent.propTypes = {
     standardDisplayAdTemplate: PropTypes.func,
     onNativeAdClick: PropTypes.func,
     onDisplayAdClick: PropTypes.func,
+    onAdRendered: PropTypes.func, 
     onAdRemoved: PropTypes.func,
     enableDFPVersion: PropTypes.string
 };

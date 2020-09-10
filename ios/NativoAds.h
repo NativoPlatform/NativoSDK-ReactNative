@@ -18,6 +18,7 @@
 @property (nonatomic) RCTBridge *bridge;
 @property (nonatomic) RCTBubblingEventBlock onDisplayAdClick;
 @property (nonatomic) RCTBubblingEventBlock onNativeAdClick;
+@property (nonatomic) RCTBubblingEventBlock onAdRendered;
 @property (nonatomic) RCTBubblingEventBlock onAdRemoved;
 - (void)injectWithAdData:(NtvAdData *)adData;
 - (void)collapseView;
