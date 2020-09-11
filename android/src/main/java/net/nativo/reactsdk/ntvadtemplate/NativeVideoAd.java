@@ -66,30 +66,31 @@ public class NativeVideoAd implements NtvVideoAdInterface {
         layout = (View) ReactFindViewUtil.findView(v, "nativoVideoAdView");
         textureView = (TextureView) ReactFindViewUtil.findView(v, "videoView");
         previewImage = (ImageView) ReactFindViewUtil.findView(v, "articleImage");
-        previewImage.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                adContainerView.callOnClick();
-            }
-        });
-
-        videoControlsGroup = (ViewGroup) previewImage.getParent();
-        videoControlsGroup.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                adContainerView.callOnClick();
-            }
-        });
-
-        videoControlsGroup.setOnTouchListener(new View.OnTouchListener() {
-            @Override
-            public boolean onTouch(View v, MotionEvent event) {
-                if (event.getAction() == MotionEvent.ACTION_DOWN) {
+        if (previewImage != null) {
+            previewImage.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
                     adContainerView.callOnClick();
                 }
-                return false;
-            }
-        });
+            });
+            videoControlsGroup = (ViewGroup) previewImage.getParent();
+            videoControlsGroup.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    adContainerView.callOnClick();
+                }
+            });
+
+            videoControlsGroup.setOnTouchListener(new View.OnTouchListener() {
+                @Override
+                public boolean onTouch(View v, MotionEvent event) {
+                    if (event.getAction() == MotionEvent.ACTION_DOWN) {
+                        adContainerView.callOnClick();
+                    }
+                    return false;
+                }
+            });
+        }
 
         playButton = (ImageView) ReactFindViewUtil.findView(v, "videoPlay");
         playButton.setImageResource(getResourceId("ic_media_play", DRAWABLE));
