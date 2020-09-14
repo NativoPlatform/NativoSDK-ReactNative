@@ -50,7 +50,7 @@ public class NativeAd implements NtvNativeAdInterface {
 
     @Override
     public TextView getAuthorLabel() {
-        if (!authorLabel.getText().toString().contains("By")) {
+        if (authorLabel != null && !authorLabel.getText().toString().contains("By")) {
             authorLabel.append("By ", 0, 3);
         }
         return authorLabel;

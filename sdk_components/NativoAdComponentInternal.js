@@ -144,6 +144,9 @@ class NativoAdComponentInternal extends Component<props> {
                     adLoaded: true
                 });
             }
+            let index= this.props.index,
+                sectionUrl= this.props.sectionUrl;
+            this.props.onAdRendered({index, sectionUrl});
         } catch (e) {
             this.setDefaultState()
         }
@@ -175,15 +178,17 @@ class NativoAdComponentInternal extends Component<props> {
                                    onDisplayLandingPage={this.displayLandingPage}
                                    style={{alignItems: 'center'}}>
                     {this.state.nativeFlag &&
-                    <NativeAdTemplate adDate={this.state.adDate} adTitle={this.state.adTitle}
+                    <NativeAdTemplate {...this.props.extraTemplateProps} adDate={this.state.adDate} adTitle={this.state.adTitle}
                                       adDescription={this.state.adDescription}
                                       adAuthorName={this.state.adAuthorName}
-                                      adLoaded={this.state.adLoaded}/>}
+                                      adLoaded={this.state.adLoaded}
+                                      extraTemplateProps={this.props.extraTemplateProps}/>}
                     {this.state.videoFlag &&
-                    <NativeVideoAdTemplate adDate={this.state.adDate} adTitle={this.state.adTitle}
+                    <NativeVideoAdTemplate {...this.props.extraTemplateProps} adDate={this.state.adDate} adTitle={this.state.adTitle}
                                            adDescription={this.state.adDescription}
                                            adAuthorName={this.state.adAuthorName}
-                                           adLoaded={this.state.adLoaded}/>}
+                                           adLoaded={this.state.adLoaded}
+                                           extraTemplateProps={this.props.extraTemplateProps}/>}
                     {this.state.standardDisplayFlag && <StandardDisplayAdTemplate adLoaded={this.state.adLoaded} webViewForSD={true} displayWidth={this.state.displayWidth} displayHeight={this.state.displayHeight}/>}
                     {!this.state.adLoaded && <View style={{width: 1, height: 1}}/>}
                 </NativoAdContainer>
