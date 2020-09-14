@@ -137,10 +137,8 @@ public class RNAdContainerManager extends ViewGroupManager<NativoAdView> {
                 int prefetchIndex = args.getInt(0);
                 ntvSectionAdapter = RNNtvSectionAdapterManager.getInstance().getNtvSectionAdapter(prefetchSectionUrl, prefetchIndex);
                 LOG.debug("prefetch called for section: " + prefetchSectionUrl + " index: " + prefetchIndex);
-                if (nativeContainerParent == null){
-                    NativoSDK.getInstance().prefetchAdForSection(prefetchSectionUrl, ntvSectionAdapter, null);
-                }
-                else if (NativoSDK.getInstance().getAdTypeForIndex(prefetchSectionUrl, (ViewGroup) nativeContainerParent, prefetchIndex).equals(NativoAdType.AD_TYPE_NONE)) {
+                NativoAdType adType = NativoSDK.getInstance().getAdTypeForIndex(prefetchSectionUrl, (ViewGroup) nativeContainerParent, prefetchIndex);
+                if (nativeContainerParent == null || (adType != null && adType.equals(NativoAdType.AD_TYPE_NONE))) {
                     NativoSDK.getInstance().prefetchAdForSection(prefetchSectionUrl, ntvSectionAdapter, null);
                 } else {
                     NtvSectionConfig ntvSectionConfig = NtvCache.getInstance().getSectionForUrl(prefetchSectionUrl);

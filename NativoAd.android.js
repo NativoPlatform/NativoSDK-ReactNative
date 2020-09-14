@@ -34,6 +34,8 @@ NativoAd.propTypes = {
     onNativeAdClick: PropTypes.func,
     onDisplayAdClick: PropTypes.func,
     onAdRemoved: PropTypes.func,
+    onAdRendered: PropTypes.func,
+    extraTemplateProps: PropTypes.object,
     enableDFPVersion: PropTypes.string
 };
 
