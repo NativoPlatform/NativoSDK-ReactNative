@@ -166,7 +166,7 @@ RCT_EXPORT_VIEW_PROPERTY(extraTemplateProps, NSDictionary)
     dispatch_async(dispatch_get_main_queue(), ^{
         UIView *templateView;
         if (adData.isAdContentAvailable) {
-            BOOL isNativeTemplate = adData.adType == Native || adData.adType == Display;
+            BOOL isNativeTemplate = adData.adType == Native || adData.adType == Display || adData.adType == Story;
             BOOL isVideoTemplate = adData.adType == ScrollToPlayVideo || adData.adType == ClickToPlayVideo;
             BOOL isStdDisplayTemplate = adData.adType == StandardDisplay;
             NSString *authorByLine = [NSString stringWithFormat:@"By %@", adData.authorName];
