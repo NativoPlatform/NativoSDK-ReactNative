@@ -74,6 +74,7 @@ RCT_EXPORT_METHOD(clearAdsInSection:(NSString *)sectionUrl)
 {
     NSDictionary *adTypes = @{ @"NATIVE" : @(NtvTestAdTypeNative),
                                @"DISPLAY" : @(NtvTestAdTypeDisplay),
+                               @"STORY" : @(NtvTestAdTypeStory),
                                @"CLICK_VIDEO" : @(NtvTestAdTypeClickToPlayVideo),
                                @"SCROLL_VIDEO" : @(NtvTestAdTypeScrollToPlayVideo),
                                @"STANDARD_DISPLAY" : @(NtvTestAdTypeStandardDisplay),
