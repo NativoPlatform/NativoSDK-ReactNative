@@ -1,25 +1,39 @@
 import PropTypes from 'prop-types';
-import React from 'react';
-import {requireNativeComponent } from 'react-native';
+import React, {Component} from 'react';
+import {requireNativeComponent, UIManager, findNodeHandle } from 'react-native';
 
-function NativoWebComponent(props) {
-    const [sectionUrl, setSectionUrl] = React.useState();
-    const [index, setIndex] = React.useState();
-    const [shouldScroll, setShouldScroll] = React.useState(false);
+class NativoWebComponent extends Component {
+
+    constructor(props) {
+        super(props);
+    }
 
     _onClickExternalLink = (event) => {
-        if (!props.onClickExternalLink) {
+        if (!this.props.onClickExternalLink) {
           return;
         }
-        props.onClickExternalLink(event.nativeEvent);
+        this.props.onClickExternalLink(event.nativeEvent);
     }
     _onFinishLoading = (event) => {
-        if (!props.onFinishLoading) {
+        if (!this.props.onFinishLoading) {
           return;
         }
-        props.onFinishLoading(event.nativeEvent);
+        this.props.onFinishLoading(event.nativeEvent);
     }
-    return (<NativoWebContent {...props} onClickExternalLink={this._onClickExternalLink} onFinishLoading={this._onFinishLoading} />);
+    trackDidShare = () => {
+        UIManager.dispatchViewManagerCommand(
+            findNodeHandle(this),
+            UIManager.getViewManagerConfig('NativoWebContent').Commands.trackDidShare,
+            []
+        );
+    };
+    
+    render () {
+        return (
+            <NativoWebContent {...this.props} 
+                onClickExternalLink={this._onClickExternalLink} 
+                onFinishLoading={this._onFinishLoading} />);
+    } 
 }
 
 NativoWebComponent.propTypes = {

@@ -22,6 +22,8 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic) RCTBubblingEventBlock onFinishLoading;
 @property (nonatomic) RCTBubblingEventBlock onClickExternalLink;
 @property (nonatomic) NtvAdData *adData;
+@property (nonatomic, nullable) NSString *shareUrl;
+@property (nonatomic, nonnull) TrackDidShareBlock trackDidShare;
 
 @end
 

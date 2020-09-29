@@ -36,7 +36,8 @@
     if (self.onFinishLoading) {
         float contentHeight = [self.webView.subviews[0] contentSize].height + 2.0f;
         self.onFinishLoading(@{ @"contentHeight" : @(contentHeight),
-                                @"articleUrl" : self.adData.sponsoredArticleURL });
+                                @"shareUrl" : self.shareUrl
+                             });
     }
 }
 
@@ -47,5 +48,7 @@
                         @"contentHeight" : @(self.webView.frame.size.height) });
     }
 }
+
+
 
 @end
