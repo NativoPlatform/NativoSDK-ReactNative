@@ -25,6 +25,7 @@
         sharedDelegate = [[NtvSharedSectionDelegate alloc] init];
         sharedDelegate.viewMap = [NSMutableDictionary dictionary];
         sharedDelegate.prefetchCallbackMap = [NSMutableDictionary dictionary];
+        sharedDelegate.shareLinkMap = [NSMutableDictionary dictionary];
     });
     return sharedDelegate;
 }
@@ -104,15 +105,22 @@
     NativoAd *adView = [self getViewForAdData:adData inSection:sectionUrl];
     if (adView && adView.onNativeAdClick) {
         NSString *authorByLine = [NSString stringWithFormat:@"By %@", adData.authorName];
-        adView.onNativeAdClick(@{ @"adTitle" : adData.title,
-                                @"adDescription" : adData.previewText,
-                                @"adImgUrl" : adData.previewImageURL,
-                                @"adAuthorName" : authorByLine,
-                                @"adAuthorImgUrl" : adData.authorImageURL,
-                                @"adDate" : adData.date,
-                                @"index" : adData.locationIdentifier,
-                                @"sectionUrl" : sectionUrl
-        });
+        NSMutableDictionary *props = [@{ @"adTitle" : adData.title,
+                                         @"adDescription" : adData.previewText,
+                                         @"adImgUrl" : adData.previewImageURL,
+                                         @"adAuthorName" : authorByLine,
+                                         @"adAuthorImgUrl" : adData.authorImageURL,
+                                         @"adDate" : adData.date,
+                                         @"index" : adData.locationIdentifier,
+                                         @"sectionUrl" : sectionUrl } mutableCopy];
+        NSString *shareUrl = nil;
+        @try {
+            shareUrl = [adData valueForKey:@"shareLink"];
+        } @catch (NSException *exception) {}
+        if (shareUrl) {
+            props[@"adShareUrl"] = shareUrl;
+        }
+        adView.onNativeAdClick(props);
     }
 }
 

@@ -55,6 +55,20 @@ RCT_EXPORT_METHOD(placeAdInWebView:(NSString *)section)
     }
 }
 
+RCT_EXPORT_METHOD(trackShareAction:(NSString *)shareUrl)
+{
+    if (shareUrl) {
+        NtvAdData *adData = [NtvSharedSectionDelegate sharedInstance].shareLinkMap[shareUrl];
+        TrackDidShareBlock trackBlock = nil;
+        @try {
+            trackBlock = [adData valueForKey:@"trackDidShareBlock"];
+        } @catch (NSException *exception) {}
+        if (trackBlock) {
+            trackBlock(NtvSharePlatformOther);
+        }
+    }
+}
+
 RCT_EXPORT_METHOD(clearAdsInSection:(NSString *)sectionUrl)
 {
     [NativoSDK clearAdsInSection:sectionUrl];

@@ -1,6 +1,6 @@
 import PropTypes from 'prop-types';
 import React, {Component} from 'react';
-import {requireNativeComponent, UIManager, findNodeHandle } from 'react-native';
+import {requireNativeComponent} from 'react-native';
 
 class NativoWebComponent extends Component {
 
@@ -20,13 +20,6 @@ class NativoWebComponent extends Component {
         }
         this.props.onFinishLoading(event.nativeEvent);
     }
-    trackDidShare = () => {
-        UIManager.dispatchViewManagerCommand(
-            findNodeHandle(this),
-            UIManager.getViewManagerConfig('NativoWebContent').Commands.trackDidShare,
-            []
-        );
-    };
     
     render () {
         return (

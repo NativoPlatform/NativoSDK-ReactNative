@@ -8,8 +8,6 @@
 #import "NativoWebContent.h"
 #import <NativoSDK/NativoSDK.h>
 #import <React/RCTLog.h>
-#import <React/RCTUIManager.h>
-#import <React/RCTUIManagerUtils.h>
 
 @implementation NativoWebContentManager
 
@@ -19,19 +17,6 @@ RCT_EXPORT_VIEW_PROPERTY(index, NSNumber)
 RCT_EXPORT_VIEW_PROPERTY(shouldScroll, BOOL)
 RCT_EXPORT_VIEW_PROPERTY(onFinishLoading, RCTBubblingEventBlock)
 RCT_EXPORT_VIEW_PROPERTY(onClickExternalLink, RCTBubblingEventBlock)
-
-RCT_EXPORT_METHOD(trackDidShare:(nonnull NSNumber*) reactTag) {
-    [self.bridge.uiManager addUIBlock:^(RCTUIManager *uiManager, NSDictionary<NSNumber *,UIView *> *viewRegistry) {
-        UIView *view = viewRegistry[reactTag];
-        if (!view || ![view isKindOfClass:[NativoWebContentView class]]) {
-            RCTLogError(@"Cannot find NativeView with tag #%@", reactTag);
-            return;
-        } else {
-            NativoWebContentView *webContentView = (NativoWebContentView *)view;
-            webContentView.templateProxy.trackDidShare(NtvSharePlatformOther);
-        }
-    }];
-}
 
 - (UIView *)view
 {

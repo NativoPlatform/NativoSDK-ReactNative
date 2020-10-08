@@ -37,6 +37,7 @@ RCT_EXPORT_VIEW_PROPERTY(enableDFPVersion, NSString)
 RCT_EXPORT_VIEW_PROPERTY(extraTemplateProps, NSDictionary)
 
 
+
 - (instancetype)init {
     self = [super init];
     [NativoSDK registerClass:[NativeAdTemplate class] forAdTemplateType:NtvAdTemplateTypeNative];
@@ -169,26 +170,14 @@ RCT_EXPORT_VIEW_PROPERTY(extraTemplateProps, NSDictionary)
             BOOL isNativeTemplate = adData.adType == Native || adData.adType == Display || adData.adType == Story;
             BOOL isVideoTemplate = adData.adType == ScrollToPlayVideo || adData.adType == ClickToPlayVideo;
             BOOL isStdDisplayTemplate = adData.adType == StandardDisplay;
-            NSString *authorByLine = [NSString stringWithFormat:@"By %@", adData.authorName];
+            
             if (isNativeTemplate && self.nativeAdTemplate) {
-                NSMutableDictionary *appProperties = [@{@"adTitle" : adData.title,
-                                                @"adDescription" : adData.previewText,
-                                                @"adAuthorName" : authorByLine,
-                                                @"adDate" : adData.date } mutableCopy];
-                if (self.extraTemplateProps && self.extraTemplateProps.allKeys.count > 0) {
-                    [appProperties addEntriesFromDictionary:self.extraTemplateProps];
-                }
+                NSDictionary *appProperties = [self getAppPropertiesFromAdData:adData withExtra:self.extraTemplateProps];
                 templateView = [[NativeAdTemplate alloc] initWithBridge:self.bridge
                                                              moduleName:self.nativeAdTemplate
                                                       initialProperties:appProperties];
             } else if (isVideoTemplate && self.videoAdTemplate) {
-                NSMutableDictionary *appProperties = [@{@"adTitle" : adData.title,
-                                                       @"adDescription" : adData.previewText,
-                                                       @"adAuthorName" : authorByLine,
-                                                       @"adDate" : adData.date } mutableCopy];
-                if (self.extraTemplateProps && self.extraTemplateProps.allKeys.count > 0) {
-                    [appProperties addEntriesFromDictionary:self.extraTemplateProps];
-                }
+                NSDictionary *appProperties = [self getAppPropertiesFromAdData:adData withExtra:self.extraTemplateProps];
                 templateView = [[VideoAdTemplate alloc] initWithBridge:self.bridge
                                                              moduleName:self.videoAdTemplate
                                                       initialProperties:appProperties];
@@ -210,13 +199,21 @@ RCT_EXPORT_VIEW_PROPERTY(extraTemplateProps, NSDictionary)
                 return;
             }
             
+            // Map ad data to share url, for tracking shares
+            NSString *shareUrl = nil;
+            @try {
+                shareUrl = [adData valueForKey:@"shareLink"];
+            } @catch (NSException *exception) {}
+            if (shareUrl) {
+                [NtvSharedSectionDelegate sharedInstance].shareLinkMap[shareUrl] = adData;
+            }
+            
             // Inject template
             RCTRootView *rootTemplate = (RCTRootView *)templateView;
             rootTemplate.delegate = self;
             rootTemplate.sizeFlexibility = RCTRootViewSizeFlexibilityHeight;
             templateView.frame = self.bounds;
             [self addSubview:templateView];
-            
             
         } else {
             // No fill
@@ -235,6 +232,30 @@ RCT_EXPORT_VIEW_PROPERTY(extraTemplateProps, NSDictionary)
             }
         });
     });
+}
+
+- (NSMutableDictionary *)getAppPropertiesFromAdData:(NtvAdData *)adData withExtra:(NSDictionary *)extraProps {
+    
+    // Configure properties dictionary
+    NSString *authorByLine = [NSString stringWithFormat:@"By %@", adData.authorName];
+    NSMutableDictionary *appProperties = [@{@"adTitle" : adData.title,
+                                            @"adDescription" : adData.previewText,
+                                            @"adAuthorName" : authorByLine,
+                                            @"adDate" : adData.date } mutableCopy];
+    // Get share properties
+    NSString *shareUrl = nil;
+    @try {
+        shareUrl = [adData valueForKey:@"shareLink"];
+    } @catch (NSException *exception) {}
+    if (shareUrl) {
+        appProperties[@"adShareUrl"] = shareUrl;
+    }
+    
+    // Set extra template props
+    if (self.extraTemplateProps && self.extraTemplateProps.allKeys.count > 0) {
+        [appProperties addEntriesFromDictionary:self.extraTemplateProps];
+    }
+    return appProperties;
 }
 
 - (void)collapseView {

@@ -19,6 +19,7 @@ NS_ASSUME_NONNULL_BEGIN
 + (void)clearAdViewAtLocationIdentifier:(id)locationId forSectionUrl:(NSString *)sectionUrl;
 + (void)setPrefetchCallback:(RCTResponseSenderBlock)senderBlock forSectionUrl:(NSString *)sectionUrl;
 
+@property (nonatomic) NSMutableDictionary<NSString *, NtvAdData *> *shareLinkMap;
 
 @end
 
