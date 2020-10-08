@@ -35,8 +35,7 @@
 - (void)contentWebViewDidFinishLoad {
     if (self.onFinishLoading) {
         float contentHeight = [self.webView.subviews[0] contentSize].height + 2.0f;
-        self.onFinishLoading(@{ @"contentHeight" : @(contentHeight),
-                                @"articleUrl" : self.adData.sponsoredArticleURL });
+        self.onFinishLoading(@{ @"contentHeight" : @(contentHeight) });
     }
 }
 
