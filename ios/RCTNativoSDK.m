@@ -55,7 +55,7 @@ RCT_EXPORT_METHOD(placeAdInWebView:(NSString *)section)
     }
 }
 
-RCT_EXPORT_METHOD(trackShareAction:(NSString *)shareUrl)
+RCT_EXPORT_METHOD(trackShareActionForUrl:(NSString *)shareUrl)
 {
     if (shareUrl) {
         NtvAdData *adData = [NtvSharedSectionDelegate sharedInstance].shareLinkMap[shareUrl];
