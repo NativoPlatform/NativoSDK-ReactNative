@@ -212,8 +212,9 @@ RCT_EXPORT_VIEW_PROPERTY(extraTemplateProps, NSDictionary)
             RCTRootView *rootTemplate = (RCTRootView *)templateView;
             rootTemplate.delegate = self;
             rootTemplate.sizeFlexibility = RCTRootViewSizeFlexibilityHeight;
-            templateView.frame = self.bounds;
-            [self addSubview:templateView];
+            UIView *container = self.subviews.count > 0 ? self.subviews[0] : self;
+            templateView.frame = container.bounds;
+            [container addSubview:templateView];
             
         } else {
             // No fill
@@ -277,7 +278,8 @@ RCT_EXPORT_VIEW_PROPERTY(extraTemplateProps, NSDictionary)
     CGRect newFrame = rootView.frame;
     newFrame.size = rootView.intrinsicContentSize;
     rootView.frame = newFrame;
-    [self.bridge.uiManager setSize:rootView.intrinsicContentSize forView:self];
+    UIView *container = self.subviews.count > 0 ? self.subviews[0] : self;
+    [self.bridge.uiManager setSize:rootView.intrinsicContentSize forView:container];
 }
 
 @end
