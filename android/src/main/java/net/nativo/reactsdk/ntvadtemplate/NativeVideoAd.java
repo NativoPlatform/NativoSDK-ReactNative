@@ -12,7 +12,9 @@ import android.widget.TextView;
 
 import com.facebook.react.bridge.Arguments;
 import com.facebook.react.bridge.WritableMap;
+import com.facebook.react.touch.OnInterceptTouchEventListener;
 import com.facebook.react.uimanager.util.ReactFindViewUtil;
+import com.facebook.react.views.view.ReactViewGroup;
 
 import net.nativo.reactsdk.R;
 import net.nativo.reactsdk.ntvsdkmanager.NativoAdView;
@@ -63,34 +65,9 @@ public class NativeVideoAd implements NtvVideoAdInterface {
     public void bindViews(View v) {
         adContainerView = v;
 
-        layout = (View) ReactFindViewUtil.findView(v, "nativoVideoAdView");
+        layout = (View) ReactFindViewUtil.findView(v, "nativoAdView");
         textureView = (TextureView) ReactFindViewUtil.findView(v, "videoView");
         previewImage = (ImageView) ReactFindViewUtil.findView(v, "articleImage");
-        if (previewImage != null) {
-            previewImage.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    adContainerView.callOnClick();
-                }
-            });
-            videoControlsGroup = (ViewGroup) previewImage.getParent();
-            videoControlsGroup.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    adContainerView.callOnClick();
-                }
-            });
-
-            videoControlsGroup.setOnTouchListener(new View.OnTouchListener() {
-                @Override
-                public boolean onTouch(View v, MotionEvent event) {
-                    if (event.getAction() == MotionEvent.ACTION_DOWN) {
-                        adContainerView.callOnClick();
-                    }
-                    return false;
-                }
-            });
-        }
 
         playButton = (ImageView) ReactFindViewUtil.findView(v, "videoPlay");
         playButton.setImageResource(getResourceId("ic_media_play", DRAWABLE));
@@ -110,6 +87,21 @@ public class NativeVideoAd implements NtvVideoAdInterface {
         articleAuthorImage = (ImageView) ReactFindViewUtil.findView(v, "adAuthorImage");
         dateLabel = (TextView) ReactFindViewUtil.findView(v, "adDate");
         adChoicesIndicator = (ImageView) ReactFindViewUtil.findView(v, "adChoicesImage");
+        rootViewClick((ReactViewGroup) layout);
+    }
+
+    private void rootViewClick(ReactViewGroup viewGroup) {
+        viewGroup.setOnInterceptTouchEventListener(new OnInterceptTouchEventListener() {
+            @Override
+            public boolean onInterceptTouchEvent(ViewGroup v, MotionEvent event) {
+                switch (event.getAction()) {
+                    case MotionEvent.ACTION_UP:
+                        adContainerView.performClick();
+                        break;
+                }
+                return false;
+            }
+        });
     }
 
     @Override
@@ -234,4 +226,8 @@ public class NativeVideoAd implements NtvVideoAdInterface {
         return resourceId;
     }
 
+    @Override
+    public void setShareAndTrackingUrl(String s, String s1) {
+
+    }
 }

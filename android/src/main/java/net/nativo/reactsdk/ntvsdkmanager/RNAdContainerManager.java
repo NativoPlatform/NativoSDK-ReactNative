@@ -101,6 +101,9 @@ public class RNAdContainerManager extends ViewGroupManager<NativoAdView> {
     @Override
     public void receiveCommand(@Nonnull NativoAdView root, int commandId, @Nullable ReadableArray args) {
         View nativeContainerParent = ViewFinder.getInstance().findPublisherAdContainerInUpperHierarchy(root);
+        if (nativeContainerParent == null) {
+            nativeContainerParent = ViewFinder.getInstance().findPublisherAdContainer(currentactivity);
+        }
         RNNtvSectionAdapter ntvSectionAdapter;
 
         switch (commandId) {
@@ -115,14 +118,8 @@ public class RNAdContainerManager extends ViewGroupManager<NativoAdView> {
                 LOG.debug("placeAdInView called for section: " + paivSectionUrl + " index: " + paivIndex);
                 View adView = null;
                 View nativeContainer = ReactFindViewUtil.findView(root, "nativoAdView");
-                View videoContainer = ReactFindViewUtil.findView(root, "nativoVideoAdView");
-                View sdContainer = ReactFindViewUtil.findView(root, "nativoSDAdView");
                 if (nativeContainer != null) {
                     adView = nativeContainer;
-                } else if (videoContainer != null) {
-                    adView = videoContainer;
-                } else if (sdContainer != null) {
-                    adView = sdContainer;
                 } else {
                     adView = root;
                 }
@@ -137,7 +134,10 @@ public class RNAdContainerManager extends ViewGroupManager<NativoAdView> {
                 int prefetchIndex = args.getInt(0);
                 ntvSectionAdapter = RNNtvSectionAdapterManager.getInstance().getNtvSectionAdapter(prefetchSectionUrl, prefetchIndex);
                 LOG.debug("prefetch called for section: " + prefetchSectionUrl + " index: " + prefetchIndex);
-                NativoAdType adType = NativoSDK.getInstance().getAdTypeForIndex(prefetchSectionUrl, (ViewGroup) nativeContainerParent, prefetchIndex);
+                NativoAdType adType = null;
+                if (nativeContainerParent != null) {
+                    adType = NativoSDK.getInstance().getAdTypeForIndex(prefetchSectionUrl, (ViewGroup) nativeContainerParent, prefetchIndex);
+                }
                 if (nativeContainerParent == null || (adType != null && adType.equals(NativoAdType.AD_TYPE_NONE))) {
                     NativoSDK.getInstance().prefetchAdForSection(prefetchSectionUrl, ntvSectionAdapter, null);
                 } else {

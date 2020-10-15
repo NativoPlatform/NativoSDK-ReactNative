@@ -1,6 +1,9 @@
-
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-          package="net.nativo.reactsdk">
-
+    package="net.nativo.reactsdk">
+    <application>
+        <activity
+            android:name="net.nativo.sdk.ntvadtype.stories.NtvStoryAdActivity"
+            android:theme="@android:style/Theme.NoTitleBar.Fullscreen" />
+    </application>
 </manifest>
   

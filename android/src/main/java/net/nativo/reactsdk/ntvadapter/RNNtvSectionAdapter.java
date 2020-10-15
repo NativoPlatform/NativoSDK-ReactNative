@@ -1,5 +1,6 @@
 package net.nativo.reactsdk.ntvadapter;
 
+import android.app.Activity;
 import android.view.View;
 
 import com.facebook.react.bridge.Arguments;
@@ -15,6 +16,7 @@ import net.nativo.sdk.ntvcore.NtvAdData;
 import net.nativo.sdk.ntvcore.NtvSectionAdapter;
 import net.nativo.sdk.ntvlog.Logger;
 import net.nativo.sdk.ntvlog.LoggerFactory;
+import net.nativo.sdk.ntvutils.AppUtils;
 
 import javax.annotation.Nullable;
 
@@ -61,6 +63,9 @@ public class RNNtvSectionAdapter implements NtvSectionAdapter {
     @Override
     public void hasbuiltView(View view, NtvBaseInterface ntvBaseInterface, NtvAdData ntvAdData) {
         View nativeContainerParent = ViewFinder.getInstance().findPublisherAdContainerInUpperHierarchy(view);
+        if (nativeContainerParent == null) {
+            nativeContainerParent = ViewFinder.getInstance().findPublisherAdContainer((Activity) AppUtils.getInstance().getContext());
+        }
         containerHashCode = nativeContainerParent.hashCode();
     }
 

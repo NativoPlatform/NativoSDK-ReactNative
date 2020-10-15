@@ -2,14 +2,18 @@ package net.nativo.reactsdk.ntvadtemplate;
 
 import android.content.Context;
 import android.graphics.Color;
+import android.view.MotionEvent;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.cardview.widget.CardView;
 
+import com.facebook.react.touch.OnInterceptTouchEventListener;
 import com.facebook.react.uimanager.util.ReactFindViewUtil;
+import com.facebook.react.views.view.ReactViewGroup;
 
 import net.nativo.reactsdk.R;
 import net.nativo.sdk.ntvadtype.nativead.NtvNativeAdInterface;
@@ -110,10 +114,32 @@ public class NativeAd implements NtvNativeAdInterface {
         articlePreviewLabel = (TextView) ReactFindViewUtil.findView(v, "adDescription");
         articleAuthorImage = (ImageView) ReactFindViewUtil.findView(v, "adAuthorImage");
         adChoicesIndicator = (ImageView) ReactFindViewUtil.findView(v, "adChoicesImage");
+
+        rootViewClick((ReactViewGroup) adContainerView);
+    }
+
+    //TODO find a better way to handle click on viewGroup
+    private void rootViewClick(ReactViewGroup viewGroup) {
+        viewGroup.setOnInterceptTouchEventListener(new OnInterceptTouchEventListener() {
+            @Override
+            public boolean onInterceptTouchEvent(ViewGroup v, MotionEvent event) {
+                switch (event.getAction()){
+                    case MotionEvent.ACTION_UP:
+                        adContainerView.performClick();
+                        break;
+                }
+                return false;
+            }
+        });
     }
 
     @Override
     public ImageView getAdChoicesImageView() {
         return adChoicesIndicator;
+    }
+
+    @Override
+    public void setShareAndTrackingUrl(String s, String s1) {
+
     }
 }
