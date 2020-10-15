@@ -114,7 +114,8 @@ class NativoAdComponentInternal extends Component<props> {
                     adLoaded: true
 
                 });
-            } else if (event.nativeEvent.adType === 'NtvAdtypeClickout' || event.nativeEvent.adType === 'NtvAdTypeNative') {
+            } else if (event.nativeEvent.adType === 'NtvAdtypeClickout'
+                || event.nativeEvent.adType === 'NtvAdTypeNative' || event.nativeEvent.adType === 'NtvAdTypeStory') {
                 this.setState({
                     videoFlag: false,
                     nativeFlag: true,
@@ -177,20 +178,27 @@ class NativoAdComponentInternal extends Component<props> {
                                    onAdLoaded={this.handleAdLoaded} onAdFailed={this.handleAdLoadFailed}
                                    onDisplayLandingPage={this.displayLandingPage}
                                    style={{alignItems: 'center'}}>
-                    {this.state.nativeFlag &&
-                    <NativeAdTemplate {...this.props.extraTemplateProps} adDate={this.state.adDate} adTitle={this.state.adTitle}
-                                      adDescription={this.state.adDescription}
-                                      adAuthorName={this.state.adAuthorName}
-                                      adLoaded={this.state.adLoaded}
-                                      extraTemplateProps={this.props.extraTemplateProps}/>}
-                    {this.state.videoFlag &&
-                    <NativeVideoAdTemplate {...this.props.extraTemplateProps} adDate={this.state.adDate} adTitle={this.state.adTitle}
-                                           adDescription={this.state.adDescription}
-                                           adAuthorName={this.state.adAuthorName}
-                                           adLoaded={this.state.adLoaded}
-                                           extraTemplateProps={this.props.extraTemplateProps}/>}
-                    {this.state.standardDisplayFlag && <StandardDisplayAdTemplate adLoaded={this.state.adLoaded} webViewForSD={true} displayWidth={this.state.displayWidth} displayHeight={this.state.displayHeight}/>}
-                    {!this.state.adLoaded && <View style={{width: 1, height: 1}}/>}
+                    <View nativeID={'nativoAdView'}>
+                        {this.state.nativeFlag &&
+                        <NativeAdTemplate {...this.props.extraTemplateProps} adDate={this.state.adDate}
+                                          adTitle={this.state.adTitle}
+                                          adDescription={this.state.adDescription}
+                                          adAuthorName={this.state.adAuthorName}
+                                          adLoaded={this.state.adLoaded}
+                                          extraTemplateProps={this.props.extraTemplateProps}/>}
+                        {this.state.videoFlag &&
+                        <NativeVideoAdTemplate {...this.props.extraTemplateProps} adDate={this.state.adDate}
+                                               adTitle={this.state.adTitle}
+                                               adDescription={this.state.adDescription}
+                                               adAuthorName={this.state.adAuthorName}
+                                               adLoaded={this.state.adLoaded}
+                                               extraTemplateProps={this.props.extraTemplateProps}/>}
+                        {this.state.standardDisplayFlag &&
+                        <StandardDisplayAdTemplate adLoaded={this.state.adLoaded} webViewForSD={true}
+                                                   displayWidth={this.state.displayWidth}
+                                                   displayHeight={this.state.displayHeight}/>}
+                        {!this.state.adLoaded && <View style={{width: 1, height: 1}}/>}
+                    </View>
                 </NativoAdContainer>
             </View>
         )

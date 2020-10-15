@@ -59,4 +59,9 @@ public class StandardDisplayAd implements NtvStandardDisplayInterface {
         reactContext.getJSModule(DeviceEventManagerModule.RCTDeviceEventEmitter.class)
                 .emit(eventName, params);
     }
+
+    @Override
+    public void setShareAndTrackingUrl(String s, String s1) {
+
+    }
 }

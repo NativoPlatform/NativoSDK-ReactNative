@@ -81,6 +81,8 @@ public class RNNativoSdkModule extends ReactContextBaseJavaModule implements Ntv
             NativoSDK.getInstance().enableTestAdvertisements(NtvAdData.NtvAdType.IN_FEED_AUTO_PLAY_VIDEO);
         } else if (s.equals("STANDARD_DISPLAY")) {
             NativoSDK.getInstance().enableTestAdvertisements(NtvAdData.NtvAdType.STANDARD_DISPLAY);
+        } else if (s.equals("STORY")) {
+            NativoSDK.getInstance().enableTestAdvertisements(NtvAdData.NtvAdType.STORY);
         } else if (s.equals("NO_FILL")) {
             NativoSDK.getInstance().enableTestAdvertisements(NtvAdData.NtvAdType.NO_FILL);
         } else {
@@ -124,6 +126,7 @@ public class RNNativoSdkModule extends ReactContextBaseJavaModule implements Ntv
         constants.put("SCROLL_VIDEO", "SCROLL_VIDEO");
         constants.put("NO_FILL", "NO_FILL");
         constants.put("STANDARD_DISPLAY", "STANDARD_DISPLAY");
+        constants.put("STORY", "STORY");
         final Map<String, Object> objectMap = new HashMap<>();
         objectMap.put("AdTypes", constants);
         return objectMap;
