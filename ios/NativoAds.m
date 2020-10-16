@@ -242,7 +242,7 @@ RCT_EXPORT_VIEW_PROPERTY(extraTemplateProps, NSDictionary)
     NSMutableDictionary *appProperties = [@{@"adTitle" : adData.title,
                                             @"adDescription" : adData.previewText,
                                             @"adAuthorName" : authorByLine,
-                                            @"adDate" : adData.date } mutableCopy];
+                                            @"adDate" : @(adData.date.timeIntervalSince1970 * 1000.0) } mutableCopy];
     // Get share properties
     NSString *shareUrl = nil;
     @try {
