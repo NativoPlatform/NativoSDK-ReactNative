@@ -86,6 +86,9 @@ public class RNNtvSectionAdapter implements NtvSectionAdapter {
         event.putString("adAuthorUrl", ntvAdData.getAuthorImageURL());
         event.putString("adImgUrl", ntvAdData.getPreviewImageURL());
         event.putInt("adAdID", ntvAdData.getAdID());
+        event.putString("adUUID", ntvAdData.getUuid());
+        String shareUrl = ntvAdData.getShareUrl();
+        event.putString("adShareUrl", shareUrl == null ? "" : shareUrl);
 
         if (ntvAdData.getAdType() == NtvAdData.NtvAdType.STANDARD_DISPLAY) {
             event.putInt("adDisplayWidth", ntvAdData.getStandardDisplayWidth());

@@ -226,8 +226,4 @@ public class NativeVideoAd implements NtvVideoAdInterface {
         return resourceId;
     }
 
-    @Override
-    public void setShareAndTrackingUrl(String s, String s1) {
-
-    }
 }

@@ -138,8 +138,4 @@ public class NativeAd implements NtvNativeAdInterface {
         return adChoicesIndicator;
     }
 
-    @Override
-    public void setShareAndTrackingUrl(String s, String s1) {
-
-    }
 }

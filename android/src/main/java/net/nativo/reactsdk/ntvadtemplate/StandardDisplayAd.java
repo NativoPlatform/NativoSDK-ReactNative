@@ -60,8 +60,4 @@ public class StandardDisplayAd implements NtvStandardDisplayInterface {
                 .emit(eventName, params);
     }
 
-    @Override
-    public void setShareAndTrackingUrl(String s, String s1) {
-
-    }
 }
