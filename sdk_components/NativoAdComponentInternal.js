@@ -160,16 +160,16 @@ class NativoAdComponentInternal extends Component<props> {
         }
     }
 
-    displayLandingPage(event){
+    displayLandingPage(event) {
         event.adDescription = this.state.adDescription;
         event.adTitle = this.state.adTitle
         event.adAuthorName = this.state.adAuthorName
         event.adDate = this.state.adDate
         event.adAuthorImgUrl = this.state.adAuthorUrl
         event.adImgUrl = this.state.adImgUrl
-        event.adUUID = this.state.adUUID
         event.adShareUrl = this.state.adShareUrl
         // this mapping is necessary for compatibility with iOS, which uses index for landing page
+        event.adID = this.state.adUUID
         event.index = event.nativeEvent.adId
         event.sectionUrl = event.nativeEvent.sectionUrl
         event.containerHash = event.nativeEvent.containerHash
