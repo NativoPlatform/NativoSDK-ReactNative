@@ -60,6 +60,11 @@ public class RNNativoSdkModule extends ReactContextBaseJavaModule implements Ntv
     }
 
     @ReactMethod
+    public void trackShareActionForAd(String adUUID){
+        NativoSDK.getInstance().trackShareAction(adUUID);
+    }
+
+    @ReactMethod
     public void enableDFPRequestsWithVersion(String dfpVersion) {
         NativoSDK.getInstance().enableDFPRequestsWithVersion(dfpVersion);
     }

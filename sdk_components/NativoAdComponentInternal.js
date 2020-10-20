@@ -26,6 +26,8 @@ class NativoAdComponentInternal extends Component<props> {
             adLoaded: false,
             adAuthorUrl: '',
             adImgUrl: '',
+            adUUID: '',
+            adShareUrl: '',
             adAdID: 0
         };
         this.handleAdLoaded = this.handleAdLoaded.bind(this);
@@ -90,6 +92,7 @@ class NativoAdComponentInternal extends Component<props> {
             adLoaded: false,
             adAuthorUrl:'',
             adImgUrl: '',
+            adUUID: '',
             adAdID: 0
 
         });
@@ -109,6 +112,7 @@ class NativoAdComponentInternal extends Component<props> {
                     adImgUrl: event.nativeEvent.adImgUrl,
                     adAdID: event.nativeEvent.adAdID,
                     adDate: event.nativeEvent.adDate,
+                    adUUID: event.nativeEvent.adUUID,
                     displayWidth: event.nativeEvent.adDisplayWidth,
                     displayHeight: event.nativeEvent.adDisplayHeight,
                     adLoaded: true
@@ -126,6 +130,8 @@ class NativoAdComponentInternal extends Component<props> {
                     adAuthorUrl: event.nativeEvent.adAuthorUrl,
                     adImgUrl: event.nativeEvent.adImgUrl,
                     adAdID: event.nativeEvent.adAdID,
+                    adUUID: event.nativeEvent.adUUID,
+                    adShareUrl: event.nativeEvent.adShareUrl,
                     adDate: event.nativeEvent.adDate,
                     adLoaded: true
 
@@ -141,6 +147,7 @@ class NativoAdComponentInternal extends Component<props> {
                     adAuthorUrl: event.nativeEvent.adAuthorUrl,
                     adImgUrl: event.nativeEvent.adImgUrl,
                     adAdID: event.nativeEvent.adAdID,
+                    adUUID: event.nativeEvent.adUUID,
                     adDate: event.nativeEvent.adDate,
                     adLoaded: true
                 });
@@ -153,14 +160,16 @@ class NativoAdComponentInternal extends Component<props> {
         }
     }
 
-    displayLandingPage(event){
+    displayLandingPage(event) {
         event.adDescription = this.state.adDescription;
         event.adTitle = this.state.adTitle
         event.adAuthorName = this.state.adAuthorName
         event.adDate = this.state.adDate
         event.adAuthorImgUrl = this.state.adAuthorUrl
         event.adImgUrl = this.state.adImgUrl
+        event.adShareUrl = this.state.adShareUrl
         // this mapping is necessary for compatibility with iOS, which uses index for landing page
+        event.adID = this.state.adUUID
         event.index = event.nativeEvent.adId
         event.sectionUrl = event.nativeEvent.sectionUrl
         event.containerHash = event.nativeEvent.containerHash

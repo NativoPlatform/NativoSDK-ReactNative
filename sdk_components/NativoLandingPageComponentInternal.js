@@ -43,7 +43,7 @@ export class NativoLandingPageComponentInternal extends Component<props> {
                 <NativoLandingPageContainer ref={(el) => (this._landingContainer = el)} injectLandingPage={{
                     'url': this.props.url,
                     'containerHash': this.props.containerHash,
-                    'adId': this.props.adId
+                    'adId': this.props.index
                 }} style={{width: '100%', height: '100%'}} onClickExternalLink={this.needsDisplayClickOutURL} onFinishLoading={this.onFinishLoading}>
                     <View nativeID={'nativoAdWebViewContainer'} style={this.props.style}>
                         <WebView nativeID={'nativoAdWebView'} javaScriptEnabled={true} automaticallyAdjustContentInsets={false}
