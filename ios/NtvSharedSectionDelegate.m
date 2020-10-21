@@ -145,9 +145,7 @@
             callback(@[[NSNull null], @(adData.isAdContentAvailable), sectionUrl]);
         }
         [sectionCallbacks removeObjectAtIndex:0];
-    } else if (!adView) {
-        RCTLogWarn(@"NativoSDK: Failed to map ad data to view. Check the index value used if using DFP functionality.");
-    }
+    } 
 }
 
 - (void)section:(NSString *)sectionUrl requestDidFailWithError:(nullable NSError *)error {

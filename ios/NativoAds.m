@@ -139,7 +139,15 @@ RCT_EXPORT_VIEW_PROPERTY(extraTemplateProps, NSDictionary)
 
 - (void)willMoveToSuperview:(UIView *)newSuperview {
     if (newSuperview == nil) {
+        // In order to free memory when ad is removed
         [NtvSharedSectionDelegate clearAdViewAtLocationIdentifier:self.index forSectionUrl:self.sectionUrl];
+    } else {
+        // Flatlist may remove this view, but add it back later...
+        NtvAdData *adData = [NativoSDK getCachedAdAtLocationIdentifier:self.index forSection:self.sectionUrl];
+        if (adData) {
+            [NtvSharedSectionDelegate setAdView:self forSectionUrl:self.sectionUrl atLocationIdentifier:self.index];
+            [self injectWithAdData:adData];
+        }
     }
 }
 
