@@ -139,6 +139,7 @@ RCT_EXPORT_VIEW_PROPERTY(extraTemplateProps, NSDictionary)
 
 - (void)willMoveToSuperview:(UIView *)newSuperview {
     if (newSuperview == nil) {
+        // In order to free memory when ad is removed
         [NtvSharedSectionDelegate clearAdViewAtLocationIdentifier:self.index forSectionUrl:self.sectionUrl];
     }
 }
@@ -151,6 +152,10 @@ RCT_EXPORT_VIEW_PROPERTY(extraTemplateProps, NSDictionary)
             [NtvSharedSectionDelegate setAdView:self forSectionUrl:self.sectionUrl atLocationIdentifier:self.index];
             if (self.enableDFPVersion) {
                 [NativoSDK enableDFPRequestsWithVersion:self.enableDFPVersion];
+                NtvAdData *adData = [NativoSDK getCachedAdAtLocationIdentifier:self.index forSection:self.sectionUrl];
+                if (adData) {
+                    [self injectWithAdData:adData];
+                }
             } else {
                 [NativoSDK prefetchAdForSection:self.sectionUrl atLocationIdentifier:self.index options:nil];
             }
