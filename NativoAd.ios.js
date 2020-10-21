@@ -1,5 +1,5 @@
 import PropTypes from 'prop-types';
-import {requireNativeComponent, AppRegistry } from 'react-native';
+import {requireNativeComponent, AppRegistry, View} from 'react-native';
 import React, { Component } from 'react';
 
 const _registeredTemplates = [];
@@ -58,6 +58,7 @@ class NativoAdComponent extends Component {
                 stdDisplayAdTemplate={this.props.standardDisplayAdTemplate ? this.props.standardDisplayAdTemplate.name : null}
                 enableDFPVersion={this.props.enableDFPVersion}
                 extraTemplateProps={this.props.extraTemplateProps}>
+                    <View></View>
             </NativoAd>
         );
     }   
