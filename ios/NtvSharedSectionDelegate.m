@@ -25,7 +25,7 @@
         sharedDelegate = [[NtvSharedSectionDelegate alloc] init];
         sharedDelegate.viewMap = [NSMutableDictionary dictionary];
         sharedDelegate.prefetchCallbackMap = [NSMutableDictionary dictionary];
-        sharedDelegate.shareLinkMap = [NSMutableDictionary dictionary];
+        sharedDelegate.adIDMap = [NSMutableDictionary dictionary];
     });
     return sharedDelegate;
 }
@@ -111,6 +111,7 @@
                                          @"adAuthorName" : authorByLine,
                                          @"adAuthorImgUrl" : adData.authorImageURL,
                                          @"adDate" : adData.date,
+                                         @"adID" : adData.adID.UUIDString,
                                          @"index" : adData.locationIdentifier,
                                          @"sectionUrl" : sectionUrl } mutableCopy];
         NSString *shareUrl = nil;

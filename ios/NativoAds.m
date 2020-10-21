@@ -170,6 +170,8 @@ RCT_EXPORT_VIEW_PROPERTY(extraTemplateProps, NSDictionary)
 
 - (void)injectWithAdData:(NtvAdData *)adData {
     self.adData = adData;
+    adData.adID = [NSUUID new];
+    [NtvSharedSectionDelegate sharedInstance].adIDMap[adData.adID.UUIDString] = adData;
     
     // Get main thread
     dispatch_async(dispatch_get_main_queue(), ^{
@@ -206,16 +208,7 @@ RCT_EXPORT_VIEW_PROPERTY(extraTemplateProps, NSDictionary)
                 self.onAdRemoved(@{ @"index": self.index, @"sectionUrl": self.sectionUrl });
                 return;
             }
-            
-            // Map ad data to share url, for tracking shares
-            NSString *shareUrl = nil;
-            @try {
-                shareUrl = [adData valueForKey:@"shareLink"];
-            } @catch (NSException *exception) {}
-            if (shareUrl) {
-                [NtvSharedSectionDelegate sharedInstance].shareLinkMap[shareUrl] = adData;
-            }
-            
+
             // Inject template
             RCTRootView *rootTemplate = (RCTRootView *)templateView;
             rootTemplate.delegate = self;
@@ -251,14 +244,6 @@ RCT_EXPORT_VIEW_PROPERTY(extraTemplateProps, NSDictionary)
                                             @"adDescription" : adData.previewText,
                                             @"adAuthorName" : authorByLine,
                                             @"adDate" : @(adData.date.timeIntervalSince1970 * 1000.0) } mutableCopy];
-    // Get share properties
-    NSString *shareUrl = nil;
-    @try {
-        shareUrl = [adData valueForKey:@"shareLink"];
-    } @catch (NSException *exception) {}
-    if (shareUrl) {
-        appProperties[@"adShareUrl"] = shareUrl;
-    }
     
     // Set extra template props
     if (self.extraTemplateProps && self.extraTemplateProps.allKeys.count > 0) {
