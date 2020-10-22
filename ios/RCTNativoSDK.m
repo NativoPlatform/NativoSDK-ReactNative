@@ -55,10 +55,10 @@ RCT_EXPORT_METHOD(placeAdInWebView:(NSString *)section)
     }
 }
 
-RCT_EXPORT_METHOD(trackShareActionForUrl:(NSString *)shareUrl)
+RCT_EXPORT_METHOD(trackShareActionForAd:(NSString *)adID)
 {
-    if (shareUrl) {
-        NtvAdData *adData = [NtvSharedSectionDelegate sharedInstance].shareLinkMap[shareUrl];
+    if (adID) {
+        NtvAdData *adData = [[NtvSharedSectionDelegate sharedInstance].adIDMap objectForKey:adID];
         TrackDidShareBlock trackBlock = nil;
         @try {
             trackBlock = [adData valueForKey:@"trackDidShareBlock"];

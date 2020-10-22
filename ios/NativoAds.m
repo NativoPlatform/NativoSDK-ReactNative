@@ -16,6 +16,7 @@
 #import <React/RCTRootViewDelegate.h>
 #import <React/RCTUIManager.h>
 #import <React/RCTLog.h>
+#import <objc/runtime.h>
 
 
 @interface NativoAdManager ()
@@ -203,16 +204,7 @@ RCT_EXPORT_VIEW_PROPERTY(extraTemplateProps, NSDictionary)
                 self.onAdRemoved(@{ @"index": self.index, @"sectionUrl": self.sectionUrl });
                 return;
             }
-            
-            // Map ad data to share url, for tracking shares
-            NSString *shareUrl = nil;
-            @try {
-                shareUrl = [adData valueForKey:@"shareLink"];
-            } @catch (NSException *exception) {}
-            if (shareUrl) {
-                [NtvSharedSectionDelegate sharedInstance].shareLinkMap[shareUrl] = adData;
-            }
-            
+
             // Inject template
             RCTRootView *rootTemplate = (RCTRootView *)templateView;
             rootTemplate.delegate = self;
@@ -248,14 +240,6 @@ RCT_EXPORT_VIEW_PROPERTY(extraTemplateProps, NSDictionary)
                                             @"adDescription" : adData.previewText,
                                             @"adAuthorName" : authorByLine,
                                             @"adDate" : @(adData.date.timeIntervalSince1970 * 1000.0) } mutableCopy];
-    // Get share properties
-    NSString *shareUrl = nil;
-    @try {
-        shareUrl = [adData valueForKey:@"shareLink"];
-    } @catch (NSException *exception) {}
-    if (shareUrl) {
-        appProperties[@"adShareUrl"] = shareUrl;
-    }
     
     // Set extra template props
     if (self.extraTemplateProps && self.extraTemplateProps.allKeys.count > 0) {
@@ -287,4 +271,16 @@ RCT_EXPORT_VIEW_PROPERTY(extraTemplateProps, NSDictionary)
     [self.bridge.uiManager setSize:rootView.intrinsicContentSize forView:container];
 }
 
+@end
+
+@implementation NtvAdData (NtvUUID)
+@dynamic adUUID;
+- (NSUUID *)adUUID {
+    NSUUID *_adUUID = objc_getAssociatedObject(self, @selector(adUUID));
+    if (!_adUUID) {
+        _adUUID = [NSUUID new];
+        objc_setAssociatedObject(self, @selector(adUUID), _adUUID, OBJC_ASSOCIATION_RETAIN);
+    }
+    return _adUUID;
+}
 @end

@@ -24,3 +24,7 @@
 - (void)collapseView;
 
 @end
+
+@interface NtvAdData (NtvUUID)
+@property (nonatomic, readonly) NSUUID *adUUID;
+@end
