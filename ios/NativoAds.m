@@ -16,6 +16,7 @@
 #import <React/RCTRootViewDelegate.h>
 #import <React/RCTUIManager.h>
 #import <React/RCTLog.h>
+#import <objc/runtime.h>
 
 
 @interface NativoAdManager ()
@@ -139,6 +140,7 @@ RCT_EXPORT_VIEW_PROPERTY(extraTemplateProps, NSDictionary)
 
 - (void)willMoveToSuperview:(UIView *)newSuperview {
     if (newSuperview == nil) {
+        // In order to free memory when ad is removed
         [NtvSharedSectionDelegate clearAdViewAtLocationIdentifier:self.index forSectionUrl:self.sectionUrl];
     }
 }
@@ -151,6 +153,10 @@ RCT_EXPORT_VIEW_PROPERTY(extraTemplateProps, NSDictionary)
             [NtvSharedSectionDelegate setAdView:self forSectionUrl:self.sectionUrl atLocationIdentifier:self.index];
             if (self.enableDFPVersion) {
                 [NativoSDK enableDFPRequestsWithVersion:self.enableDFPVersion];
+                NtvAdData *adData = [NativoSDK getCachedAdAtLocationIdentifier:self.index forSection:self.sectionUrl];
+                if (adData) {
+                    [self injectWithAdData:adData];
+                }
             } else {
                 [NativoSDK prefetchAdForSection:self.sectionUrl atLocationIdentifier:self.index options:nil];
             }
@@ -198,22 +204,14 @@ RCT_EXPORT_VIEW_PROPERTY(extraTemplateProps, NSDictionary)
                 self.onAdRemoved(@{ @"index": self.index, @"sectionUrl": self.sectionUrl });
                 return;
             }
-            
-            // Map ad data to share url, for tracking shares
-            NSString *shareUrl = nil;
-            @try {
-                shareUrl = [adData valueForKey:@"shareLink"];
-            } @catch (NSException *exception) {}
-            if (shareUrl) {
-                [NtvSharedSectionDelegate sharedInstance].shareLinkMap[shareUrl] = adData;
-            }
-            
+
             // Inject template
             RCTRootView *rootTemplate = (RCTRootView *)templateView;
             rootTemplate.delegate = self;
             rootTemplate.sizeFlexibility = RCTRootViewSizeFlexibilityHeight;
-            templateView.frame = self.bounds;
-            [self addSubview:templateView];
+            UIView *container = self.subviews.count > 0 ? self.subviews[0] : self;
+            templateView.frame = container.bounds;
+            [container addSubview:templateView];
             
         } else {
             // No fill
@@ -241,15 +239,7 @@ RCT_EXPORT_VIEW_PROPERTY(extraTemplateProps, NSDictionary)
     NSMutableDictionary *appProperties = [@{@"adTitle" : adData.title,
                                             @"adDescription" : adData.previewText,
                                             @"adAuthorName" : authorByLine,
-                                            @"adDate" : adData.date } mutableCopy];
-    // Get share properties
-    NSString *shareUrl = nil;
-    @try {
-        shareUrl = [adData valueForKey:@"shareLink"];
-    } @catch (NSException *exception) {}
-    if (shareUrl) {
-        appProperties[@"adShareUrl"] = shareUrl;
-    }
+                                            @"adDate" : @(adData.date.timeIntervalSince1970 * 1000.0) } mutableCopy];
     
     // Set extra template props
     if (self.extraTemplateProps && self.extraTemplateProps.allKeys.count > 0) {
@@ -277,7 +267,20 @@ RCT_EXPORT_VIEW_PROPERTY(extraTemplateProps, NSDictionary)
     CGRect newFrame = rootView.frame;
     newFrame.size = rootView.intrinsicContentSize;
     rootView.frame = newFrame;
-    [self.bridge.uiManager setSize:rootView.intrinsicContentSize forView:self];
+    UIView *container = self.subviews.count > 0 ? self.subviews[0] : self;
+    [self.bridge.uiManager setSize:rootView.intrinsicContentSize forView:container];
 }
 
+@end
+
+@implementation NtvAdData (NtvUUID)
+@dynamic adUUID;
+- (NSUUID *)adUUID {
+    NSUUID *_adUUID = objc_getAssociatedObject(self, @selector(adUUID));
+    if (!_adUUID) {
+        _adUUID = [NSUUID new];
+        objc_setAssociatedObject(self, @selector(adUUID), _adUUID, OBJC_ASSOCIATION_RETAIN);
+    }
+    return _adUUID;
+}
 @end

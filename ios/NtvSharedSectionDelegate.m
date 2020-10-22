@@ -25,7 +25,7 @@
         sharedDelegate = [[NtvSharedSectionDelegate alloc] init];
         sharedDelegate.viewMap = [NSMutableDictionary dictionary];
         sharedDelegate.prefetchCallbackMap = [NSMutableDictionary dictionary];
-        sharedDelegate.shareLinkMap = [NSMutableDictionary dictionary];
+        sharedDelegate.adIDMap = [NSMapTable mapTableWithKeyOptions:NSPointerFunctionsStrongMemory valueOptions:NSPointerFunctionsWeakMemory];
     });
     return sharedDelegate;
 }
@@ -111,6 +111,7 @@
                                          @"adAuthorName" : authorByLine,
                                          @"adAuthorImgUrl" : adData.authorImageURL,
                                          @"adDate" : adData.date,
+                                         @"adID" : adData.adUUID.UUIDString,
                                          @"index" : adData.locationIdentifier,
                                          @"sectionUrl" : sectionUrl } mutableCopy];
         NSString *shareUrl = nil;
@@ -132,6 +133,7 @@
 }
 
 - (void)section:(NSString *)sectionUrl didReceiveAd:(NtvAdData *)adData {
+    [self.adIDMap setObject:adData forKey:adData.adUUID.UUIDString];
     NativoAd *adView = [self getViewForAdData:adData inSection:sectionUrl];
     if (adView) {
         [adView injectWithAdData:adData];
@@ -145,8 +147,6 @@
             callback(@[[NSNull null], @(adData.isAdContentAvailable), sectionUrl]);
         }
         [sectionCallbacks removeObjectAtIndex:0];
-    } else if (!adView) {
-        RCTLogWarn(@"NativoSDK: Failed to map ad data to view. Check the index value used if using DFP functionality.");
     }
 }
 
