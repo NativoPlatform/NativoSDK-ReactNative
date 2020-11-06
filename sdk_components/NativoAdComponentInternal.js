@@ -100,6 +100,7 @@ class NativoAdComponentInternal extends Component<props> {
 
     handleAdLoaded(event) {
         try {
+            const date = new Date(event.nativeEvent.adDate);
             if (event.nativeEvent.adType === 'NtvStandardDisplayInterface') {
                 this.setState({
                     videoFlag: false,
@@ -111,7 +112,7 @@ class NativoAdComponentInternal extends Component<props> {
                     adAuthorUrl: event.nativeEvent.adAuthorUrl,
                     adImgUrl: event.nativeEvent.adImgUrl,
                     adAdID: event.nativeEvent.adAdID,
-                    adDate: event.nativeEvent.adDate,
+                    adDate: date.getTime(),
                     adUUID: event.nativeEvent.adUUID,
                     displayWidth: event.nativeEvent.adDisplayWidth,
                     displayHeight: event.nativeEvent.adDisplayHeight,
@@ -132,7 +133,7 @@ class NativoAdComponentInternal extends Component<props> {
                     adAdID: event.nativeEvent.adAdID,
                     adUUID: event.nativeEvent.adUUID,
                     adShareUrl: event.nativeEvent.adShareUrl,
-                    adDate: event.nativeEvent.adDate,
+                    adDate: date.getTime(),
                     adLoaded: true
 
                 });
@@ -148,7 +149,7 @@ class NativoAdComponentInternal extends Component<props> {
                     adImgUrl: event.nativeEvent.adImgUrl,
                     adAdID: event.nativeEvent.adAdID,
                     adUUID: event.nativeEvent.adUUID,
-                    adDate: event.nativeEvent.adDate,
+                    adDate: date.getTime(),
                     adLoaded: true
                 });
             }
