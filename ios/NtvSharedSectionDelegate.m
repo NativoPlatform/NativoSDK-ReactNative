@@ -25,6 +25,7 @@
         sharedDelegate = [[NtvSharedSectionDelegate alloc] init];
         sharedDelegate.viewMap = [NSMutableDictionary dictionary];
         sharedDelegate.prefetchCallbackMap = [NSMutableDictionary dictionary];
+        sharedDelegate.adIDMap = [NSMapTable mapTableWithKeyOptions:NSPointerFunctionsStrongMemory valueOptions:NSPointerFunctionsWeakMemory];
     });
     return sharedDelegate;
 }
@@ -76,6 +77,14 @@
     }
 }
 
++ (void)clearAdViewAtLocationIdentifier:(id)locationId forSectionUrl:(NSString *)sectionUrl {
+    NSMutableDictionary *sectionMap = [NtvSharedSectionDelegate sharedInstance].viewMap;
+    if (sectionUrl && locationId) {
+        NSMutableDictionary *viewMap = sectionMap[sectionUrl];
+        [viewMap removeObjectForKey:locationId];
+    }
+}
+
 - (void)section:(NSString *)sectionUrl needsReloadDatasourceAtLocationIdentifier:(id)identifier forReason:(NSString *)reason {
     if ([reason isEqualToString:NtvSectionReloadReasonRemoveView]) {
         NSMutableDictionary *sectionMap = [NtvSharedSectionDelegate sharedInstance].viewMap;
@@ -91,21 +100,28 @@
 }
 
 - (void)section:(NSString *)sectionUrl needsDisplayLandingPage:(nullable UIViewController<NtvLandingPageInterface> *)sponsoredLandingPageViewController {
-    
-    NativoAd *adView = [self getFirstViewInSection:sectionUrl];
     NativoLandingPageTemplate *template = (NativoLandingPageTemplate *)sponsoredLandingPageViewController;
     NtvAdData *adData = template.adData;
+    NativoAd *adView = [self getViewForAdData:adData inSection:sectionUrl];
     if (adView && adView.onNativeAdClick) {
         NSString *authorByLine = [NSString stringWithFormat:@"By %@", adData.authorName];
-        adView.onNativeAdClick(@{ @"adTitle" : adData.title,
-                                @"adDescription" : adData.previewText,
-                                @"adImgUrl" : adData.previewImageURL,
-                                @"adAuthorName" : authorByLine,
-                                @"adAuthorImgUrl" : adData.authorImageURL,
-                                @"adDate" : adData.date,
-                                @"index" : adData.locationIdentifier,
-                                @"sectionUrl" : sectionUrl
-        });
+        NSMutableDictionary *props = [@{ @"adTitle" : adData.title,
+                                         @"adDescription" : adData.previewText,
+                                         @"adImgUrl" : adData.previewImageURL,
+                                         @"adAuthorName" : authorByLine,
+                                         @"adAuthorImgUrl" : adData.authorImageURL,
+                                         @"adDate" : adData.date,
+                                         @"adID" : adData.adUUID.UUIDString,
+                                         @"index" : adData.locationIdentifier,
+                                         @"sectionUrl" : sectionUrl } mutableCopy];
+        NSString *shareUrl = nil;
+        @try {
+            shareUrl = [adData valueForKey:@"shareLink"];
+        } @catch (NSException *exception) {}
+        if (shareUrl) {
+            props[@"adShareUrl"] = shareUrl;
+        }
+        adView.onNativeAdClick(props);
     }
 }
 
@@ -117,6 +133,7 @@
 }
 
 - (void)section:(NSString *)sectionUrl didReceiveAd:(NtvAdData *)adData {
+    [self.adIDMap setObject:adData forKey:adData.adUUID.UUIDString];
     NativoAd *adView = [self getViewForAdData:adData inSection:sectionUrl];
     if (adView) {
         [adView injectWithAdData:adData];
@@ -130,17 +147,29 @@
             callback(@[[NSNull null], @(adData.isAdContentAvailable), sectionUrl]);
         }
         [sectionCallbacks removeObjectAtIndex:0];
-    } else if (!adView) {
-        RCTLogWarn(@"NativoSDK: Failed to map ad data to view. Check the index value used if using DFP functionality.");
     }
 }
 
 - (void)section:(NSString *)sectionUrl requestDidFailWithError:(nullable NSError *)error {
-    NativoAd *adView = [self getFirstViewInSection:sectionUrl];
+    id location = [error userInfo][@"locationId"];
+    NativoAd *adView;
+    if (location) {
+        NSMutableDictionary *sectionMap = [NtvSharedSectionDelegate sharedInstance].viewMap;
+        NSDictionary *viewMap = sectionMap[sectionUrl];
+        if (viewMap) {
+            adView = viewMap[location];
+        }
+    } else {
+        adView = [self getFirstViewInSection:sectionUrl];
+    }
     if (adView) {
         RCTLog(@"%@", error);
-        [adView collapseView];
-        adView.onAdRemoved(@{ @"index": @(-1), @"sectionUrl": sectionUrl });
+        if ([adView respondsToSelector:@selector(collapseView)]) {
+            [adView collapseView];
+        }
+        if ([adView respondsToSelector:@selector(onAdRemoved)]) {
+            adView.onAdRemoved(@{ @"index": location ? location : @(-1), @"sectionUrl": sectionUrl });
+        }
     }
 }
 

@@ -16,7 +16,10 @@ NS_ASSUME_NONNULL_BEGIN
 
 + (instancetype)sharedInstance;
 + (void)setAdView:(NativoAd *)nativoAdView forSectionUrl:(NSString *)sectionUrl atLocationIdentifier:(id)locationId;
++ (void)clearAdViewAtLocationIdentifier:(id)locationId forSectionUrl:(NSString *)sectionUrl;
 + (void)setPrefetchCallback:(RCTResponseSenderBlock)senderBlock forSectionUrl:(NSString *)sectionUrl;
+
+@property (nonatomic) NSMapTable<NSString *, NtvAdData *> *adIDMap;
 
 @end
 

@@ -1,52 +1,67 @@
 import PropTypes from 'prop-types';
-import React from 'react';
-import {requireNativeComponent, AppRegistry } from 'react-native';
+import {requireNativeComponent, AppRegistry, View} from 'react-native';
+import React, { Component } from 'react';
 
 const _registeredTemplates = [];
 
-function NativoAdComponent(props) {
-    const { nativeAdTemplate, videoAdTemplate, standardDisplayAdTemplate, ...other } = props;
+class NativoAdComponent extends Component {
+
+    constructor(props) {
+        super(props);
+
+        // Register templates with app registry root views
+        const allTemplates = [props.nativeAdTemplate, props.videoAdTemplate, props.standardDisplayAdTemplate];
+        allTemplates.forEach((template) => {
+            if (template != null) {
+                if ( !_registeredTemplates.includes(template.name) ) {
+                    AppRegistry.registerComponent(template.name, () => template);
+                    _registeredTemplates.push(template.name);
+                }
+            }
+        });
+    }
 
     _onNativeAdClick = (event) => {
-        if (!props.onNativeAdClick) {
-            console.log("Nativo ad at index "+ props.index +" was clicked but 'onNativeAdClick' not implemented");
+        if (!this.props.onNativeAdClick) {
+            console.log("Nativo ad at index "+ this.props.index +" was clicked but 'onNativeAdClick' not implemented");
             return;
         }
-        props.onNativeAdClick(event.nativeEvent);
+        this.props.onNativeAdClick(event.nativeEvent);
     }
     _onDisplayAdClick = (event) => {
-        if (!props.onDisplayAdClick) {
-            console.log("Nativo ad at index "+ props.index +" was clicked but 'onDisplayAdClick' not implemented");
+        if (!this.props.onDisplayAdClick) {
+            console.log("Nativo ad at index "+ this.props.index +" was clicked but 'onDisplayAdClick' not implemented");
             return;
         }
-        props.onDisplayAdClick(event.nativeEvent);
+        this.props.onDisplayAdClick(event.nativeEvent);
+    }
+    _onAdRendered = (event) => {
+        if (!this.props.onAdRendered) { return; }
+        this.props.onAdRendered(event.nativeEvent);
     }
     _onAdRemoved = (event) => {
-        if (!props.onAdRemoved) { return; }
-        props.onAdRemoved(event.nativeEvent);
+        if (!this.props.onAdRemoved) { return; }
+        this.props.onAdRemoved(event.nativeEvent);
     }
-    
-    // Register templates with app registry root views
-    const allTemplates = [nativeAdTemplate, videoAdTemplate, standardDisplayAdTemplate];
-    allTemplates.forEach((template) => {
-        if (template != null) {
-            if ( !_registeredTemplates.includes(template.name) ) {
-                AppRegistry.registerComponent(template.name, () => template);
-                _registeredTemplates.push(template.name);
-            }
-        }
-    });
 
-    return (
-        <NativoAd {...other} 
-            onNativeAdClick={_onNativeAdClick} 
-            onDisplayAdClick={_onDisplayAdClick} 
-            onAdRemoved={_onAdRemoved} 
-            nativeAdTemplate={nativeAdTemplate.name} 
-            videoAdTemplate={videoAdTemplate.name} 
-            stdDisplayAdTemplate={standardDisplayAdTemplate.name}>
-        </NativoAd>
-    );
+    render() {
+        return (
+            <NativoAd style={this.props.style}
+                sectionUrl={this.props.sectionUrl}
+                index={this.props.index}
+                onNativeAdClick={this._onNativeAdClick} 
+                onDisplayAdClick={this._onDisplayAdClick} 
+                onAdRendered={this._onAdRendered}
+                onAdRemoved={this._onAdRemoved} 
+                nativeAdTemplate={this.props.nativeAdTemplate ? this.props.nativeAdTemplate.name : null} 
+                videoAdTemplate={this.props.videoAdTemplate ? this.props.videoAdTemplate.name : null} 
+                stdDisplayAdTemplate={this.props.standardDisplayAdTemplate ? this.props.standardDisplayAdTemplate.name : null}
+                enableDFPVersion={this.props.enableDFPVersion}
+                extraTemplateProps={this.props.extraTemplateProps}>
+                    <View></View>
+            </NativoAd>
+        );
+    }   
 }
 
 NativoAdComponent.propTypes = {
@@ -57,8 +72,10 @@ NativoAdComponent.propTypes = {
     standardDisplayAdTemplate: PropTypes.func,
     onNativeAdClick: PropTypes.func,
     onDisplayAdClick: PropTypes.func,
+    onAdRendered: PropTypes.func, 
     onAdRemoved: PropTypes.func,
-    enableDFPVersion: PropTypes.string
+    enableDFPVersion: PropTypes.string,
+    extraTemplateProps: PropTypes.object
 };
 const NativoAd = requireNativeComponent('NativoAd', NativoAdComponent);
 

@@ -1,5 +1,6 @@
 package net.nativo.reactsdk.ntvadapter;
 
+import android.app.Activity;
 import android.view.View;
 
 import com.facebook.react.bridge.Arguments;
@@ -15,11 +16,7 @@ import net.nativo.sdk.ntvcore.NtvAdData;
 import net.nativo.sdk.ntvcore.NtvSectionAdapter;
 import net.nativo.sdk.ntvlog.Logger;
 import net.nativo.sdk.ntvlog.LoggerFactory;
-
-import java.util.HashMap;
-import java.util.LinkedList;
-import java.util.Map;
-import java.util.Queue;
+import net.nativo.sdk.ntvutils.AppUtils;
 
 import javax.annotation.Nullable;
 
@@ -28,24 +25,14 @@ import static net.nativo.reactsdk.ntvutil.RNConstants.EVENT_AD_FAILED_TO_LOAD;
 import static net.nativo.reactsdk.ntvutil.RNConstants.EVENT_AD_LOADED;
 import static net.nativo.sdk.ntvconstant.NtvConstants.NTV_BY;
 
-public class SharedNtvSectionAdapter implements NtvSectionAdapter {
+public class RNNtvSectionAdapter implements NtvSectionAdapter {
 
-    private static final String TAG = SharedNtvSectionAdapter.class.getName();
+    private static final String TAG = RNNtvSectionAdapter.class.getName();
     private static final Logger LOG = LoggerFactory.getLogger(TAG);
-    private static SharedNtvSectionAdapter instance;
-    private Map<String, Queue<View>> viewMap = new HashMap<>();
-    private Map<Integer, Integer> containerAdIdmap = new HashMap<>();
-    private Map<Integer, NativoAdView> adidAdViewMap = new HashMap<>();
 
-    private SharedNtvSectionAdapter() {
-    }
-
-    public static SharedNtvSectionAdapter getInstance() {
-        if (instance == null) {
-            instance = new SharedNtvSectionAdapter();
-        }
-        return instance;
-    }
+    private View nativoAdView;
+    private int adID;
+    private int containerHashCode;
 
     @Override
     public boolean shouldPlaceAdAtIndex(String s, int i) {
@@ -62,8 +49,8 @@ public class SharedNtvSectionAdapter implements NtvSectionAdapter {
         WritableMap params = Arguments.createMap();
         params.putString("sectionUrl", s);
         params.putInt("adId", i);
-        params.putInt("containerHash", containerAdIdmap.get(i));
-        sendEvent(EVENT_AD_DISPLAY_LANDING_PAGE, adidAdViewMap.get(i), params);
+        params.putInt("containerHash", containerHashCode);
+        sendEvent(EVENT_AD_DISPLAY_LANDING_PAGE, (NativoAdView) nativoAdView, params);
     }
 
     @Override
@@ -75,16 +62,16 @@ public class SharedNtvSectionAdapter implements NtvSectionAdapter {
 
     @Override
     public void hasbuiltView(View view, NtvBaseInterface ntvBaseInterface, NtvAdData ntvAdData) {
-        View nativeContainerParent = ViewFinder.getInstance().findPublisherAdContainer(RNAdContainerManager.currentactivity);
-        containerAdIdmap.put(ntvAdData.getAdID(), nativeContainerParent.hashCode());
+        View nativeContainerParent = ViewFinder.getInstance().findPublisherAdContainerInUpperHierarchy(view);
+        if (nativeContainerParent == null) {
+            nativeContainerParent = ViewFinder.getInstance().findPublisherAdContainer((Activity) AppUtils.getInstance().getContext());
+        }
+        containerHashCode = nativeContainerParent.hashCode();
     }
 
     @Override
     public void onReceiveAd(String s, NtvAdData ntvAdData) {
-        Queue<View> viewQueue = viewMap.get(s);
-        View view = viewQueue != null ? viewQueue.poll() : null;
-
-        if (view == null) {
+        if (nativoAdView == null) {
             LOG.error("onReceiveAd: view is null");
             return;
         }
@@ -99,25 +86,26 @@ public class SharedNtvSectionAdapter implements NtvSectionAdapter {
         event.putString("adAuthorUrl", ntvAdData.getAuthorImageURL());
         event.putString("adImgUrl", ntvAdData.getPreviewImageURL());
         event.putInt("adAdID", ntvAdData.getAdID());
+        event.putString("adUUID", ntvAdData.getUuid());
+        String shareUrl = ntvAdData.getShareUrl();
+        event.putString("adShareUrl", shareUrl == null ? "" : shareUrl);
 
         if (ntvAdData.getAdType() == NtvAdData.NtvAdType.STANDARD_DISPLAY) {
             event.putInt("adDisplayWidth", ntvAdData.getStandardDisplayWidth());
             event.putInt("adDisplayHeight", ntvAdData.getStandardDisplayHeight());
         }
 
-        sendEvent(EVENT_AD_LOADED, (NativoAdView) view, event);
+        sendEvent(EVENT_AD_LOADED, (NativoAdView) nativoAdView, event);
 
     }
 
     @Override
     public void onFail(String s) {
-        Queue<View> viewQueue = viewMap.get(s);
-        View view = viewQueue != null ? viewQueue.poll() : null;
-        if (view == null) {
+        if (nativoAdView == null) {
             return;
         }
         WritableMap event = Arguments.createMap();
-        sendEvent(EVENT_AD_FAILED_TO_LOAD, (NativoAdView) view, event);
+        sendEvent(EVENT_AD_FAILED_TO_LOAD, (NativoAdView) nativoAdView, event);
     }
 
     private void sendEvent(String name, NativoAdView adView, @Nullable WritableMap event) {
@@ -131,20 +119,27 @@ public class SharedNtvSectionAdapter implements NtvSectionAdapter {
                 .emit(eventName, params);
     }
 
-    public void addNativoAdViewToQueue(String sectionUrl, NativoAdView nativoAdView) {
-        LOG.debug("section url " + sectionUrl + " nativoAdView hash " + nativoAdView.hashCode());
-        Queue<View> viewQueue = viewMap.get(sectionUrl);
-        if (viewQueue == null) {
-            viewQueue = new LinkedList<>();
-        }
-        viewQueue.add(nativoAdView);
-        viewMap.put(sectionUrl, viewQueue);
+    public View getNativoAdView() {
+        return nativoAdView;
     }
 
-    public void addNativoAdViewToAdIdMap(Integer adId, NativoAdView nativoAdView) {
-        if (adidAdViewMap == null) {
-            adidAdViewMap = new HashMap<>();
-        }
-        adidAdViewMap.put(adId, nativoAdView);
+    public void setNativoAdView(View nativoAdView) {
+        this.nativoAdView = nativoAdView;
+    }
+
+    public int getAdID() {
+        return adID;
+    }
+
+    public void setAdID(int adID) {
+        this.adID = adID;
+    }
+
+    public int getContainerHashCode() {
+        return containerHashCode;
+    }
+
+    public void setContainerHashCode(int containerHashCode) {
+        this.containerHashCode = containerHashCode;
     }
 }

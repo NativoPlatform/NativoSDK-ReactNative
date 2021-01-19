@@ -118,4 +118,8 @@ public class NativeLandingPage implements NtvLandingPageInterface {
                 .emit(eventName, params);
     }
 
+    @Override
+    public void setShareAndTrackingUrl(String s, String s1) {
+
+    }
 }
