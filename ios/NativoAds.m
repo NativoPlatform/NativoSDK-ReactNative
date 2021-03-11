@@ -152,7 +152,7 @@ RCT_EXPORT_VIEW_PROPERTY(extraTemplateProps, NSDictionary)
             // injectWithAdData will be called in sectionDelegate method 'didReceiveAd'
             [NtvSharedSectionDelegate setAdView:self forSectionUrl:self.sectionUrl atLocationIdentifier:self.index];
             if (self.enableDFPVersion) {
-                [NativoSDK enableDFPRequestsWithVersion:self.enableDFPVersion];
+                [NativoSDK enableGAMRequestsWithVersion:self.enableDFPVersion];
                 NtvAdData *adData = [NativoSDK getCachedAdAtLocationIdentifier:self.index forSection:self.sectionUrl];
                 if (adData) {
                     [self injectWithAdData:adData];
@@ -173,9 +173,9 @@ RCT_EXPORT_VIEW_PROPERTY(extraTemplateProps, NSDictionary)
     dispatch_async(dispatch_get_main_queue(), ^{
         UIView *templateView;
         if (adData.isAdContentAvailable) {
-            BOOL isNativeTemplate = adData.adType == Native || adData.adType == Display || adData.adType == Story;
-            BOOL isVideoTemplate = adData.adType == ScrollToPlayVideo || adData.adType == ClickToPlayVideo;
-            BOOL isStdDisplayTemplate = adData.adType == StandardDisplay;
+            BOOL isNativeTemplate = adData.adType == NtvAdTypeNative || adData.adType == NtvAdTypeDisplay || adData.adType == NtvAdTypeStory;
+            BOOL isVideoTemplate = adData.adType == NtvAdTypeScrollToPlayVideo || adData.adType == NtvAdTypeClickToPlayVideo;
+            BOOL isStdDisplayTemplate = adData.adType == NtvAdTypeStandardDisplay;
             
             if (isNativeTemplate && self.nativeAdTemplate) {
                 NSDictionary *appProperties = [self getAppPropertiesFromAdData:adData withExtra:self.extraTemplateProps];
