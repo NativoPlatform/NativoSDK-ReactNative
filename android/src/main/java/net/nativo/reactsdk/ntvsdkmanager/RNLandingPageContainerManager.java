@@ -68,7 +68,7 @@ public class RNLandingPageContainerManager extends ViewGroupManager<RelativeLayo
                 int adid = args.getInt(0);
                 String sectionUrl = args.getString(1);
                 int containerHash = args.getInt(2);
-                NativoSDK.getInstance().initLandingPage(webViewContainer, sectionUrl, containerHash, adid, NativeLandingPage.class);
+                NativoSDK.initLandingPage(webViewContainer, sectionUrl, containerHash, adid, NativeLandingPage.class);
                 break;
         }
     }
