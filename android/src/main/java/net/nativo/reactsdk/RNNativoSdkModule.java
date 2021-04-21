@@ -144,11 +144,6 @@ public class RNNativoSdkModule extends ReactContextBaseJavaModule implements Ntv
     }
 
     @Override
-    public boolean shouldPlaceAdAtIndex(String s, int i) {
-        return true;
-    }
-
-    @Override
     public Class<?> registerLayoutClassForIndex(int i, NtvAdData.NtvAdTemplateType ntvAdTemplateType) {
         return null;
     }
@@ -169,18 +164,18 @@ public class RNNativoSdkModule extends ReactContextBaseJavaModule implements Ntv
     }
 
     @Override
-    public void onReceiveAd(String s, NtvAdData ntvAdData) {
+    public void onReceiveAd(String section, NtvAdData ntvAdData, Integer index) {
         Callback prefetchCallback = callbacks.poll();
         if (prefetchCallback != null) {
-            prefetchCallback.invoke(defaultError, true, s);
+            prefetchCallback.invoke(defaultError, true, section);
         }
     }
 
     @Override
-    public void onFail(String s) {
+    public void onFail(String section, Integer index) {
         Callback prefetchCallback = callbacks.poll();
         if (prefetchCallback != null) {
-            prefetchCallback.invoke(defaultError, false, s);
+            prefetchCallback.invoke(defaultError, false, section);
         }
     }
 

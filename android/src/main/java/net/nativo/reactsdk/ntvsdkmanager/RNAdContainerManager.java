@@ -144,11 +144,10 @@ public class RNAdContainerManager extends ViewGroupManager<NativoAdView> {
                     NtvSectionConfig ntvSectionConfig = NtvCache.getInstance().getSectionForUrl(prefetchSectionUrl);
                     NtvAdData adData = NtvCache.getInstance().getMappedAdData(ntvSectionConfig, (ViewGroup) nativeContainerParent, prefetchIndex);
                     if (adData.isAdContentAvailable()) {
-                        ntvSectionAdapter.onReceiveAd(prefetchSectionUrl, adData);
+                        ntvSectionAdapter.onReceiveAd(prefetchSectionUrl, adData, adData.getLocationIdentifier());
                     } else {
-                        ntvSectionAdapter.onFail(prefetchSectionUrl);
+                        ntvSectionAdapter.onFail(prefetchSectionUrl, adData != null ? adData.getLocationIdentifier() : null);
                     }
-
                 }
         }
     }
