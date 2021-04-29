@@ -218,11 +218,12 @@ RCT_EXPORT_VIEW_PROPERTY(extraTemplateProps, NSDictionary)
             templateView = self;
         }
         
+        // In tests, placeAdInView() did not work without sublte timeout before injecting
         dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.1 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
             // Place ad in view
             if (!self.superview) { return; } // View was removed by owner. Abort.
-            [NativoSDK placeAdInView:templateView atLocationIdentifier:self.index inContainer:self.superview forSection:self.sectionUrl options:@{ @"doNotClearSection" : @"1"}];
             if (adData.isAdContentAvailable) {
+                [NativoSDK placeAdInView:templateView atLocationIdentifier:self.index inContainer:self.superview forSection:self.sectionUrl options:@{ @"doNotClearSection" : @"1"}];
                 self.onAdRendered(@{ @"index": self.index, @"sectionUrl": self.sectionUrl });
             } else {
                 [self collapseView];
