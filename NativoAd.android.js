@@ -19,7 +19,7 @@ class NativoAd extends Component<props> {
                                            nativeAdTemplate={this.props.nativeAdTemplate}
                                            nativeVideoAdTemplate={this.props.videoAdTemplate}
                                            standardDisplayAdTemplate={this.props.standardDisplayAdTemplate}
-                                           enableDFPVersion={this.props.enableDFPVersion}/>
+                                           enableGAMVersion={this.props.enableGAMVersion}/>
             </ErrorBoundary>
         )
     }
@@ -36,7 +36,7 @@ NativoAd.propTypes = {
     onAdRemoved: PropTypes.func,
     onAdRendered: PropTypes.func,
     extraTemplateProps: PropTypes.object,
-    enableDFPVersion: PropTypes.string
+    enableGAMVersion: PropTypes.string
 };
 
 export default NativoAd;

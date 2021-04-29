@@ -34,7 +34,7 @@ RCT_EXPORT_VIEW_PROPERTY(onNativeAdClick, RCTBubblingEventBlock)
 RCT_EXPORT_VIEW_PROPERTY(onDisplayAdClick, RCTBubblingEventBlock)
 RCT_EXPORT_VIEW_PROPERTY(onAdRendered, RCTBubblingEventBlock)
 RCT_EXPORT_VIEW_PROPERTY(onAdRemoved, RCTBubblingEventBlock)
-RCT_EXPORT_VIEW_PROPERTY(enableDFPVersion, NSString)
+RCT_EXPORT_VIEW_PROPERTY(enableGAMVersion, NSString)
 RCT_EXPORT_VIEW_PROPERTY(extraTemplateProps, NSDictionary)
 
 
@@ -75,7 +75,7 @@ RCT_EXPORT_VIEW_PROPERTY(extraTemplateProps, NSDictionary)
 @property (nonatomic) NSString *nativeAdTemplate;
 @property (nonatomic) NSString *videoAdTemplate;
 @property (nonatomic) NSString *stdDisplayAdTemplate;
-@property (nonatomic) NSString *enableDFPVersion;
+@property (nonatomic) NSString *enableGAMVersion;
 @property (nonatomic) NSDictionary *extraTemplateProps;
 @end
 
@@ -151,8 +151,8 @@ RCT_EXPORT_VIEW_PROPERTY(extraTemplateProps, NSDictionary)
             // prefetch ad using index path to dequeue from ads array if available
             // injectWithAdData will be called in sectionDelegate method 'didReceiveAd'
             [NtvSharedSectionDelegate setAdView:self forSectionUrl:self.sectionUrl atLocationIdentifier:self.index];
-            if (self.enableDFPVersion) {
-                [NativoSDK enableGAMRequestsWithVersion:self.enableDFPVersion];
+            if (self.enableGAMVersion) {
+                [NativoSDK enableGAMRequestsWithVersion:self.enableGAMVersion];
                 NtvAdData *adData = [NativoSDK getCachedAdAtLocationIdentifier:self.index forSection:self.sectionUrl];
                 if (adData) {
                     [self injectWithAdData:adData];
