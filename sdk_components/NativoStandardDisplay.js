@@ -2,7 +2,7 @@ import React, {Component} from 'react';
 import {StyleSheet, View} from "react-native";
 import WebView from "react-native-webview";
 
-class NativoStandardDisplay extends Component<props> {
+class NativoStandardDisplay extends Component {
 
     render() {
         return (
