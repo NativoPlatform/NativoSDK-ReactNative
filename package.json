@@ -1,8 +1,8 @@
 {
     "name": "react-native-nativo-ads",
     "title": "React Native Nativo Ads",
-    "version": "0.4.0-alpha.5",
-    "description": "Monetize your app using Nativo's native, display, story, and video ads.",
+    "version": "0.4.0",
+    "description": "The Nativo SDK enables the best user experience for mobile ad content with React Native.",
     "main": "index.js",
     "repository": {
         "type": "git",
