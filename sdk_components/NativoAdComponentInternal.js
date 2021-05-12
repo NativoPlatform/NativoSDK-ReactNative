@@ -56,8 +56,8 @@ class NativoAdComponentInternal extends Component<props> {
         } catch (e) {
             this.setDefaultState()
         }
-        if (this.props.enableDFPVersion) {
-            NativeModules.NativoSDK.enableDFPRequestsWithVersion(this.props.enableDFPVersion)
+        if (this.props.enableGAMVersion) {
+            NativeModules.NativoSDK.enableGAMRequestsWithVersion(this.props.enableGAMVersion)
         } else {
             this.prefetchAd();
         }
@@ -206,7 +206,8 @@ class NativoAdComponentInternal extends Component<props> {
                         {this.state.standardDisplayFlag &&
                         <StandardDisplayAdTemplate adLoaded={this.state.adLoaded} webViewForSD={true}
                                                    displayWidth={this.state.displayWidth}
-                                                   displayHeight={this.state.displayHeight}/>}
+                                                   displayHeight={this.state.displayHeight}
+                                                   extraTemplateProps={this.props.extraTemplateProps}/>}
                         {!this.state.adLoaded && <View style={{width: 1, height: 1}}/>}
                     </View>
                 </NativoAdContainer>

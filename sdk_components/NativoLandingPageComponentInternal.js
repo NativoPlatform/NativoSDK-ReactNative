@@ -5,7 +5,7 @@ import WebView from "react-native-webview";
 const NativoLandingPageContainer = requireNativeComponent("NativoLandingPageContainer")
 const eventEmitter = new NativeEventEmitter(NativoLandingPageContainer);
 
-export class NativoLandingPageComponentInternal extends Component<props> {
+export class NativoLandingPageComponentInternal extends Component {
 
     constructor(props) {
         super(props);
@@ -47,13 +47,12 @@ export class NativoLandingPageComponentInternal extends Component<props> {
                 }} style={{width: '100%', height: '100%'}} onClickExternalLink={this.needsDisplayClickOutURL} onFinishLoading={this.onFinishLoading}>
                     <View nativeID={'nativoAdWebViewContainer'} style={this.props.style}>
                         <WebView nativeID={'nativoAdWebView'} javaScriptEnabled={true} automaticallyAdjustContentInsets={false}
-                                 domStorageEnabled={true} scalesPageToFit={false}/>
+                                 domStorageEnabled={true} scalesPageToFit={false} setSupportMultipleWindows={false} />
                     </View>
                 </NativoLandingPageContainer>
             </View>
         )
     }
-
 };
 
 const styles = StyleSheet.create({

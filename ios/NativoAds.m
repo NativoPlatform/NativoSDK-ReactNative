@@ -34,7 +34,7 @@ RCT_EXPORT_VIEW_PROPERTY(onNativeAdClick, RCTBubblingEventBlock)
 RCT_EXPORT_VIEW_PROPERTY(onDisplayAdClick, RCTBubblingEventBlock)
 RCT_EXPORT_VIEW_PROPERTY(onAdRendered, RCTBubblingEventBlock)
 RCT_EXPORT_VIEW_PROPERTY(onAdRemoved, RCTBubblingEventBlock)
-RCT_EXPORT_VIEW_PROPERTY(enableDFPVersion, NSString)
+RCT_EXPORT_VIEW_PROPERTY(enableGAMVersion, NSString)
 RCT_EXPORT_VIEW_PROPERTY(extraTemplateProps, NSDictionary)
 
 
@@ -75,7 +75,7 @@ RCT_EXPORT_VIEW_PROPERTY(extraTemplateProps, NSDictionary)
 @property (nonatomic) NSString *nativeAdTemplate;
 @property (nonatomic) NSString *videoAdTemplate;
 @property (nonatomic) NSString *stdDisplayAdTemplate;
-@property (nonatomic) NSString *enableDFPVersion;
+@property (nonatomic) NSString *enableGAMVersion;
 @property (nonatomic) NSDictionary *extraTemplateProps;
 @end
 
@@ -151,8 +151,8 @@ RCT_EXPORT_VIEW_PROPERTY(extraTemplateProps, NSDictionary)
             // prefetch ad using index path to dequeue from ads array if available
             // injectWithAdData will be called in sectionDelegate method 'didReceiveAd'
             [NtvSharedSectionDelegate setAdView:self forSectionUrl:self.sectionUrl atLocationIdentifier:self.index];
-            if (self.enableDFPVersion) {
-                [NativoSDK enableGAMRequestsWithVersion:self.enableDFPVersion];
+            if (self.enableGAMVersion) {
+                [NativoSDK enableGAMRequestsWithVersion:self.enableGAMVersion];
                 NtvAdData *adData = [NativoSDK getCachedAdAtLocationIdentifier:self.index forSection:self.sectionUrl];
                 if (adData) {
                     [self injectWithAdData:adData];
@@ -218,11 +218,12 @@ RCT_EXPORT_VIEW_PROPERTY(extraTemplateProps, NSDictionary)
             templateView = self;
         }
         
+        // In tests, placeAdInView() did not work without sublte timeout before injecting
         dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.1 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
             // Place ad in view
             if (!self.superview) { return; } // View was removed by owner. Abort.
-            [NativoSDK placeAdInView:templateView atLocationIdentifier:self.index inContainer:self.superview forSection:self.sectionUrl options:@{ @"doNotClearSection" : @"1"}];
             if (adData.isAdContentAvailable) {
+                [NativoSDK placeAdInView:templateView atLocationIdentifier:self.index inContainer:self.superview forSection:self.sectionUrl options:@{ @"doNotClearSection" : @"1"}];
                 self.onAdRendered(@{ @"index": self.index, @"sectionUrl": self.sectionUrl });
             } else {
                 [self collapseView];

@@ -56,7 +56,7 @@ class NativoAdComponent extends Component {
                 nativeAdTemplate={this.props.nativeAdTemplate ? this.props.nativeAdTemplate.name : null} 
                 videoAdTemplate={this.props.videoAdTemplate ? this.props.videoAdTemplate.name : null} 
                 stdDisplayAdTemplate={this.props.standardDisplayAdTemplate ? this.props.standardDisplayAdTemplate.name : null}
-                enableDFPVersion={this.props.enableDFPVersion}
+                enableGAMVersion={this.props.enableGAMVersion}
                 extraTemplateProps={this.props.extraTemplateProps}>
                     <View></View>
             </NativoAd>
@@ -74,7 +74,7 @@ NativoAdComponent.propTypes = {
     onDisplayAdClick: PropTypes.func,
     onAdRendered: PropTypes.func, 
     onAdRemoved: PropTypes.func,
-    enableDFPVersion: PropTypes.string,
+    enableGAMVersion: PropTypes.string,
     extraTemplateProps: PropTypes.object
 };
 const NativoAd = requireNativeComponent('NativoAd', NativoAdComponent);

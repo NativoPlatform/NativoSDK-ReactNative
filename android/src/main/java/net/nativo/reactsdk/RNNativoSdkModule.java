@@ -65,8 +65,8 @@ public class RNNativoSdkModule extends ReactContextBaseJavaModule implements Ntv
     }
 
     @ReactMethod
-    public void enableDFPRequestsWithVersion(String dfpVersion) {
-        NativoSDK.initWithGAMVersion(getReactApplicationContext(), dfpVersion);
+    public void enableGAMRequestsWithVersion(String gamVersion) {
+        NativoSDK.initWithGAMVersion(getReactApplicationContext(), gamVersion);
     }
 
     @ReactMethod
