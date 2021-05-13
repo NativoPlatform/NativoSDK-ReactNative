@@ -51,53 +51,53 @@ public class RNNativoSdkModule extends ReactContextBaseJavaModule implements Ntv
     @ReactMethod
     public void registerTemplates() {
         if (!isTemplateRegistred) {
-            NativoSDK.getInstance().registerNativeAd(new NativeAd());
-            NativoSDK.getInstance().registerVideoAd(new NativeVideoAd());
-            NativoSDK.getInstance().registerLandingPage(new NativeLandingPage());
-            NativoSDK.getInstance().registerStandardDisplayAd(new StandardDisplayAd());
+            NativoSDK.registerNativeAd(new NativeAd());
+            NativoSDK.registerVideoAd(new NativeVideoAd());
+            NativoSDK.registerLandingPage(new NativeLandingPage());
+            NativoSDK.registerStandardDisplayAd(new StandardDisplayAd());
             isTemplateRegistred = true;
         }
     }
 
     @ReactMethod
     public void trackShareActionForAd(String adUUID){
-        NativoSDK.getInstance().trackShareAction(adUUID);
+        NativoSDK.trackShareAction(adUUID);
     }
 
     @ReactMethod
-    public void enableDFPRequestsWithVersion(String dfpVersion) {
-        NativoSDK.getInstance().enableDFPRequestsWithVersion(dfpVersion);
+    public void enableGAMRequestsWithVersion(String gamVersion) {
+        NativoSDK.initWithGAMVersion(getReactApplicationContext(), gamVersion);
     }
 
     @ReactMethod
     public void enableDevLogs() {
-        NativoSDK.getInstance().enableDevLogs();
+        NativoSDK.enableDevLogs();
     }
 
     @ReactMethod
     public void enableTestAdvertisementsWithType(String s) {
         if (s.equals("NATIVE")) {
-            NativoSDK.getInstance().enableTestAdvertisements(NtvAdData.NtvAdType.NATIVE);
+            NativoSDK.enableTestAdvertisements(NtvAdData.NtvAdType.NATIVE);
         } else if (s.equals("DISPLAY")) {
-            NativoSDK.getInstance().enableTestAdvertisements(NtvAdData.NtvAdType.CLICK_OUT);
+            NativoSDK.enableTestAdvertisements(NtvAdData.NtvAdType.CLICK_OUT);
         } else if (s.equals("CLICK_VIDEO")) {
-            NativoSDK.getInstance().enableTestAdvertisements(NtvAdData.NtvAdType.IN_FEED_VIDEO);
+            NativoSDK.enableTestAdvertisements(NtvAdData.NtvAdType.IN_FEED_VIDEO);
         } else if (s.equals("SCROLL_VIDEO")) {
-            NativoSDK.getInstance().enableTestAdvertisements(NtvAdData.NtvAdType.IN_FEED_AUTO_PLAY_VIDEO);
+            NativoSDK.enableTestAdvertisements(NtvAdData.NtvAdType.IN_FEED_AUTO_PLAY_VIDEO);
         } else if (s.equals("STANDARD_DISPLAY")) {
-            NativoSDK.getInstance().enableTestAdvertisements(NtvAdData.NtvAdType.STANDARD_DISPLAY);
+            NativoSDK.enableTestAdvertisements(NtvAdData.NtvAdType.STANDARD_DISPLAY);
         } else if (s.equals("STORY")) {
-            NativoSDK.getInstance().enableTestAdvertisements(NtvAdData.NtvAdType.STORY);
+            NativoSDK.enableTestAdvertisements(NtvAdData.NtvAdType.STORY);
         } else if (s.equals("NO_FILL")) {
-            NativoSDK.getInstance().enableTestAdvertisements(NtvAdData.NtvAdType.NO_FILL);
+            NativoSDK.enableTestAdvertisements(NtvAdData.NtvAdType.NO_FILL);
         } else {
-            NativoSDK.getInstance().enableTestAdvertisements();
+            NativoSDK.enableTestAdvertisements();
         }
     }
 
     @ReactMethod
     public void enableTestAdvertisements(){
-        NativoSDK.getInstance().enableTestAdvertisements();
+        NativoSDK.enableTestAdvertisements();
     }
 
     @ReactMethod
@@ -111,7 +111,7 @@ public class RNNativoSdkModule extends ReactContextBaseJavaModule implements Ntv
                 webView.getSettings().setJavaScriptEnabled(true);
                 webView.setWebViewClient(new WebViewClient());
                 webView.setWebChromeClient(new NativoChromeClient(getCurrentActivity()));
-                NativoSDK.getInstance().placeAdInWebView(webView, sectionUrl);
+                NativoSDK.placeAdInWebView(webView, sectionUrl);
             }
         });
     }
@@ -140,12 +140,7 @@ public class RNNativoSdkModule extends ReactContextBaseJavaModule implements Ntv
     @ReactMethod
     public void prefetchAdForSection(String sectionUrl, Callback cb) {
         callbacks.add(cb);
-        NativoSDK.getInstance().prefetchAdForSection(sectionUrl, this, null);
-    }
-
-    @Override
-    public boolean shouldPlaceAdAtIndex(String s, int i) {
-        return true;
+        NativoSDK.prefetchAdForSection(sectionUrl, this, null);
     }
 
     @Override
@@ -169,18 +164,18 @@ public class RNNativoSdkModule extends ReactContextBaseJavaModule implements Ntv
     }
 
     @Override
-    public void onReceiveAd(String s, NtvAdData ntvAdData) {
+    public void onReceiveAd(String section, NtvAdData ntvAdData, Integer index) {
         Callback prefetchCallback = callbacks.poll();
         if (prefetchCallback != null) {
-            prefetchCallback.invoke(defaultError, true, s);
+            prefetchCallback.invoke(defaultError, true, section);
         }
     }
 
     @Override
-    public void onFail(String s) {
+    public void onFail(String section, Integer index) {
         Callback prefetchCallback = callbacks.poll();
         if (prefetchCallback != null) {
-            prefetchCallback.invoke(defaultError, false, s);
+            prefetchCallback.invoke(defaultError, false, section);
         }
     }
 
@@ -224,13 +219,13 @@ public class RNNativoSdkModule extends ReactContextBaseJavaModule implements Ntv
     @Override
     public void onHostResume() {
         LOG.debug("onHostResume() called");
-        NativoSDK.getInstance().onResume();
+        NativoSDK.onResume();
     }
 
     @Override
     public void onHostPause() {
         LOG.debug("onHostPause() called");
-        NativoSDK.getInstance().onPause();
+        NativoSDK.onPause();
     }
 
     @Override

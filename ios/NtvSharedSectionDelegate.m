@@ -85,16 +85,18 @@
     }
 }
 
-- (void)section:(NSString *)sectionUrl needsReloadDatasourceAtLocationIdentifier:(id)identifier forReason:(NSString *)reason {
-    if ([reason isEqualToString:NtvSectionReloadReasonRemoveView]) {
-        NSMutableDictionary *sectionMap = [NtvSharedSectionDelegate sharedInstance].viewMap;
-        NSDictionary *viewMap = sectionMap[sectionUrl];
-        if (viewMap) {
-            NativoAd *adView = viewMap[identifier];
-            if (adView) {
-                [adView collapseView];
-                adView.onAdRemoved(@{ @"index": identifier, @"sectionUrl": sectionUrl });
-            }
+- (void)section:(NSString *)sectionUrl needsPlaceAdInViewAtLocation:(id)identifier {
+    
+}
+
+- (void)section:(NSString *)sectionUrl needsRemoveAdViewAtLocation:(id)identifier {
+    NSMutableDictionary *sectionMap = [NtvSharedSectionDelegate sharedInstance].viewMap;
+    NSDictionary *viewMap = sectionMap[sectionUrl];
+    if (viewMap) {
+        NativoAd *adView = viewMap[identifier];
+        if (adView) {
+            [adView collapseView];
+            adView.onAdRemoved(@{ @"index": identifier, @"sectionUrl": sectionUrl });
         }
     }
 }

@@ -1,8 +1,8 @@
 {
     "name": "react-native-nativo-ads",
     "title": "React Native Nativo Ads",
-    "version": "0.3.0",
-    "description": "Monetize your app using Nativo's native, display, and video ads.",
+    "version": "0.4.0",
+    "description": "The Nativo SDK enables the best user experience for mobile ad content with React Native.",
     "main": "index.js",
     "repository": {
         "type": "git",
@@ -27,7 +27,7 @@
         "react": "16.8.6",
         "react-native": "0.60.5",
         "react-native-video": "5.0.2",
-        "react-native-webview": "8.0.6"
+        "react-native-webview": "11.2.4"
     },
     "peerDependencies": {
         "react": ">=16.8.6",

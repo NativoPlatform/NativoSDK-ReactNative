@@ -35,11 +35,6 @@ public class RNNtvSectionAdapter implements NtvSectionAdapter {
     private int containerHashCode;
 
     @Override
-    public boolean shouldPlaceAdAtIndex(String s, int i) {
-        return true;
-    }
-
-    @Override
     public Class<?> registerLayoutClassForIndex(int i, NtvAdData.NtvAdTemplateType ntvAdTemplateType) {
         return null;
     }
@@ -70,7 +65,7 @@ public class RNNtvSectionAdapter implements NtvSectionAdapter {
     }
 
     @Override
-    public void onReceiveAd(String s, NtvAdData ntvAdData) {
+    public void onReceiveAd(String s, NtvAdData ntvAdData, Integer integer) {
         if (nativoAdView == null) {
             LOG.error("onReceiveAd: view is null");
             return;
@@ -96,11 +91,10 @@ public class RNNtvSectionAdapter implements NtvSectionAdapter {
         }
 
         sendEvent(EVENT_AD_LOADED, (NativoAdView) nativoAdView, event);
-
     }
 
     @Override
-    public void onFail(String s) {
+    public void onFail(String s, Integer integer) {
         if (nativoAdView == null) {
             return;
         }

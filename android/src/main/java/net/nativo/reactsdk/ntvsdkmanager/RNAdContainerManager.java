@@ -126,7 +126,7 @@ public class RNAdContainerManager extends ViewGroupManager<NativoAdView> {
                 ntvSectionAdapter = RNNtvSectionAdapterManager.getInstance()
                         .getNtvSectionAdapter(paivSectionUrl, paivIndex);
                 ntvSectionAdapter.setAdID(adId);
-                NativoSDK.getInstance().placeAdInView(adView, (ViewGroup) nativeContainerParent, paivSectionUrl, paivIndex, ntvSectionAdapter, null);
+                NativoSDK.placeAdInView(adView, (ViewGroup) nativeContainerParent, paivSectionUrl, paivIndex, ntvSectionAdapter, null);
                 forceAdTracking(nativeContainerParent);
                 break;
             case COMMAND_PREFETCH_AD:
@@ -136,19 +136,18 @@ public class RNAdContainerManager extends ViewGroupManager<NativoAdView> {
                 LOG.debug("prefetch called for section: " + prefetchSectionUrl + " index: " + prefetchIndex);
                 NativoAdType adType = null;
                 if (nativeContainerParent != null) {
-                    adType = NativoSDK.getInstance().getAdTypeForIndex(prefetchSectionUrl, (ViewGroup) nativeContainerParent, prefetchIndex);
+                    adType = NativoSDK.getAdTypeForIndex(prefetchSectionUrl, (ViewGroup) nativeContainerParent, prefetchIndex);
                 }
                 if (nativeContainerParent == null || (adType != null && adType.equals(NativoAdType.AD_TYPE_NONE))) {
-                    NativoSDK.getInstance().prefetchAdForSection(prefetchSectionUrl, ntvSectionAdapter, null);
+                    NativoSDK.prefetchAdForSection(prefetchSectionUrl, ntvSectionAdapter, null);
                 } else {
                     NtvSectionConfig ntvSectionConfig = NtvCache.getInstance().getSectionForUrl(prefetchSectionUrl);
                     NtvAdData adData = NtvCache.getInstance().getMappedAdData(ntvSectionConfig, (ViewGroup) nativeContainerParent, prefetchIndex);
                     if (adData.isAdContentAvailable()) {
-                        ntvSectionAdapter.onReceiveAd(prefetchSectionUrl, adData);
+                        ntvSectionAdapter.onReceiveAd(prefetchSectionUrl, adData, adData.getLocationIdentifier());
                     } else {
-                        ntvSectionAdapter.onFail(prefetchSectionUrl);
+                        ntvSectionAdapter.onFail(prefetchSectionUrl, adData != null ? adData.getLocationIdentifier() : null);
                     }
-
                 }
         }
     }
