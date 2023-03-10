@@ -1,7 +1,7 @@
 {
     "name": "react-native-nativo-ads",
     "title": "React Native Nativo Ads",
-    "version": "0.4.1",
+    "version": "0.4.2",
     "description": "The Nativo SDK enables the best user experience for mobile ad content with React Native.",
     "main": "index.js",
     "repository": {
