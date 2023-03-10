@@ -99,57 +99,72 @@ public class RNAdContainerManager extends ViewGroupManager<NativoAdView> {
     }
 
     @Override
-    public void receiveCommand(@Nonnull NativoAdView root, int commandId, @Nullable ReadableArray args) {
-        View nativeContainerParent = ViewFinder.getInstance().findPublisherAdContainerInUpperHierarchy(root);
-        if (nativeContainerParent == null) {
-            nativeContainerParent = ViewFinder.getInstance().findPublisherAdContainer(currentactivity);
-        }
-        RNNtvSectionAdapter ntvSectionAdapter;
+    public void receiveCommand(@Nonnull final NativoAdView adView, int commandId, @Nullable final ReadableArray args) {
 
         switch (commandId) {
             case COMMAND_PLACE_AD_IN_VIEW:
-                if (nativeContainerParent == null) {
-                    LOG.error("publisherNativoAdContainer view not found. Looked upto 7 parents");
-                    return;
-                }
-                String paivSectionUrl = args != null ? args.getString(1) : "";
-                int paivIndex = args.getInt(0);
-                int adId = args.getInt(2);
-                LOG.debug("placeAdInView called for section: " + paivSectionUrl + " index: " + paivIndex);
-                View adView = null;
-                View nativeContainer = ReactFindViewUtil.findView(root, "nativoAdView");
-                if (nativeContainer != null) {
-                    adView = nativeContainer;
-                } else {
-                    adView = root;
-                }
-                ntvSectionAdapter = RNNtvSectionAdapterManager.getInstance()
-                        .getNtvSectionAdapter(paivSectionUrl, paivIndex);
-                ntvSectionAdapter.setAdID(adId);
-                NativoSDK.placeAdInView(adView, (ViewGroup) nativeContainerParent, paivSectionUrl, paivIndex, ntvSectionAdapter, null);
-                forceAdTracking(nativeContainerParent);
+                ViewFinder.getInstance().findPublisherAdContainer(adView, currentactivity, new ViewFinder.OnViewFoundListener() {
+                    @Override
+                    public void onViewFound(View pubContainer) {
+                        if (args != null && args.size() > 2) {
+                            String paivSectionUrl = args.getString(1);
+                            int paivIndex = args.getInt(0);
+                            int adId = args.getInt(2);
+                            placeAdInView(adView, pubContainer, args, paivSectionUrl, adId, paivIndex);
+                        } else {
+                            LOG.debug("Invalid args for placeAdInView");
+                        }
+                    }
+                });
+
                 break;
             case COMMAND_PREFETCH_AD:
-                String prefetchSectionUrl = args != null ? args.getString(1) : "";
-                int prefetchIndex = args.getInt(0);
-                ntvSectionAdapter = RNNtvSectionAdapterManager.getInstance().getNtvSectionAdapter(prefetchSectionUrl, prefetchIndex);
-                LOG.debug("prefetch called for section: " + prefetchSectionUrl + " index: " + prefetchIndex);
-                NativoAdType adType = null;
-                if (nativeContainerParent != null) {
-                    adType = NativoSDK.getAdTypeForIndex(prefetchSectionUrl, (ViewGroup) nativeContainerParent, prefetchIndex);
-                }
-                if (nativeContainerParent == null || (adType != null && adType.equals(NativoAdType.AD_TYPE_NONE))) {
-                    NativoSDK.prefetchAdForSection(prefetchSectionUrl, ntvSectionAdapter, null);
-                } else {
-                    NtvSectionConfig ntvSectionConfig = NtvCache.getInstance().getSectionForUrl(prefetchSectionUrl);
-                    NtvAdData adData = NtvCache.getInstance().getMappedAdData(ntvSectionConfig, (ViewGroup) nativeContainerParent, prefetchIndex);
-                    if (adData.isAdContentAvailable()) {
-                        ntvSectionAdapter.onReceiveAd(prefetchSectionUrl, adData, adData.getLocationIdentifier());
-                    } else {
-                        ntvSectionAdapter.onFail(prefetchSectionUrl, adData != null ? adData.getLocationIdentifier() : null);
+                ViewFinder.getInstance().findPublisherAdContainer(adView, currentactivity, new ViewFinder.OnViewFoundListener() {
+                    @Override
+                    public void onViewFound(View nativeContainerParent) {
+                        if (args != null && args.size() > 1) {
+                            String prefetchSectionUrl = args.getString(1);
+                            int prefetchIndex = args.getInt(0);
+                            prefetch(adView, nativeContainerParent, prefetchSectionUrl, prefetchIndex);
+                        } else {
+                            LOG.debug("Invalid args for prefetch");
+                        }
                     }
-                }
+                });
         }
+    }
+
+    private void prefetch(@Nonnull NativoAdView adView, View nativeContainerParent, String prefetchSectionUrl, int prefetchIndex) {
+        RNNtvSectionAdapter ntvSectionAdapter = RNNtvSectionAdapterManager.getInstance().getNtvSectionAdapter(prefetchSectionUrl, prefetchIndex);
+        LOG.debug("prefetch called for section: " + prefetchSectionUrl + " index: " + prefetchIndex);
+        NativoAdType adType = null;
+        if (nativeContainerParent != null) {
+            adType = NativoSDK.getAdTypeForIndex(prefetchSectionUrl, (ViewGroup) nativeContainerParent, prefetchIndex);
+        }
+        if (nativeContainerParent == null || (adType != null && adType.equals(NativoAdType.AD_TYPE_NONE))) {
+            NativoSDK.prefetchAdForSection(prefetchSectionUrl, ntvSectionAdapter, null);
+        } else {
+            NtvSectionConfig ntvSectionConfig = NtvCache.getInstance().getSectionForUrl(prefetchSectionUrl);
+            NtvAdData adData = NtvCache.getInstance().getMappedAdData(ntvSectionConfig, (ViewGroup) nativeContainerParent, prefetchIndex);
+            if (adData != null && adData.isAdContentAvailable()) {
+                ntvSectionAdapter.onReceiveAd(prefetchSectionUrl, adData, adData.getLocationIdentifier());
+            } else {
+                ntvSectionAdapter.onFail(prefetchSectionUrl, adData != null ? adData.getLocationIdentifier() : null);
+            }
+        }
+    }
+
+    private void placeAdInView(@Nonnull NativoAdView adView, View nativeContainerParent, @Nullable ReadableArray args, String paivSectionUrl, int adId, int paivIndex) {
+        LOG.debug("placeAdInView called for section: " + paivSectionUrl + " index: " + paivIndex);
+        View nativeAdView = adView;
+        View nativeContainer = ReactFindViewUtil.findView(adView, "nativoAdView");
+        if (nativeContainer != null) {
+            nativeAdView = nativeContainer;
+        }
+        RNNtvSectionAdapter ntvSectionAdapter = RNNtvSectionAdapterManager.getInstance().getNtvSectionAdapter(paivSectionUrl, paivIndex);
+        ntvSectionAdapter.setAdID(adId);
+        NativoSDK.placeAdInView(nativeAdView, (ViewGroup) nativeContainerParent, paivSectionUrl, paivIndex, ntvSectionAdapter, null);
+        forceAdTracking(nativeContainerParent);
     }
 
     private void forceAdTracking(final View nativeContainerParent) {
