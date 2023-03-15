@@ -65,11 +65,6 @@ public class RNNativoSdkModule extends ReactContextBaseJavaModule implements Ntv
     }
 
     @ReactMethod
-    public void enableGAMRequestsWithVersion(String gamVersion) {
-        NativoSDK.initWithGAMVersion(getReactApplicationContext(), gamVersion);
-    }
-
-    @ReactMethod
     public void enableDevLogs() {
         NativoSDK.enableDevLogs();
     }
