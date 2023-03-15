@@ -49,7 +49,7 @@ class NativoAdComponentInternal extends Component {
 
     componentDidMount() {
         try {
-            const eventEmitter = new NativeEventEmitter(NativoAdContainer);
+            const eventEmitter = new NativeEventEmitter();
             this.clickoutListener = eventEmitter.addListener('needsDisplayClickOutURL', (event) => {
                 this.props.onDisplayAdClick(event);
             });
