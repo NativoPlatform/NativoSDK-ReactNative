@@ -55,6 +55,7 @@ public class RNAdContainerManager extends ViewGroupManager<NativoAdView> {
     @Nonnull
     @Override
     protected NativoAdView createViewInstance(@Nonnull ThemedReactContext reactContext) {
+        LOG.debug("NativoSDK: createViewInstance NativoAdView");
         currentactivity = reactContext.getCurrentActivity();
         containerReactContext = reactContext;
         return new NativoAdView(reactContext);
@@ -100,12 +101,14 @@ public class RNAdContainerManager extends ViewGroupManager<NativoAdView> {
 
     @Override
     public void receiveCommand(@Nonnull final NativoAdView adView, int commandId, @Nullable final ReadableArray args) {
-
+        LOG.debug("NativoSDK: Received command");
         switch (commandId) {
             case COMMAND_PLACE_AD_IN_VIEW:
+                LOG.debug("NativoSDK: Receive command place ad in view");
                 ViewFinder.getInstance().findPublisherAdContainer(adView, currentactivity, new ViewFinder.OnViewFoundListener() {
                     @Override
                     public void onViewFound(View pubContainer) {
+                        LOG.debug("NativoSDK: found pub container view");
                         if (args != null && args.size() > 2) {
                             String paivSectionUrl = args.getString(1);
                             int paivIndex = args.getInt(0);
@@ -119,6 +122,7 @@ public class RNAdContainerManager extends ViewGroupManager<NativoAdView> {
 
                 break;
             case COMMAND_PREFETCH_AD:
+                LOG.debug("NativoSDK: Receive command prefetch");
                 if (args != null && args.size() > 1) {
                     View nativeContainerParent = ViewFinder.getInstance().findPublisherAdContainer(adView, currentactivity);
                     String prefetchSectionUrl = args.getString(1);
@@ -152,15 +156,24 @@ public class RNAdContainerManager extends ViewGroupManager<NativoAdView> {
 
     private void placeAdInView(@Nonnull NativoAdView adView, View nativeContainerParent, @Nullable ReadableArray args, String paivSectionUrl, int adId, int paivIndex) {
         LOG.debug("placeAdInView called for section: " + paivSectionUrl + " index: " + paivIndex);
-        View nativeAdView = adView;
-        View nativeContainer = ReactFindViewUtil.findView(adView, "nativoAdView");
-        if (nativeContainer != null) {
-            nativeAdView = nativeContainer;
-        }
-        RNNtvSectionAdapter ntvSectionAdapter = RNNtvSectionAdapterManager.getInstance().getNtvSectionAdapter(paivSectionUrl, paivIndex);
-        ntvSectionAdapter.setAdID(adId);
-        NativoSDK.placeAdInView(nativeAdView, (ViewGroup) nativeContainerParent, paivSectionUrl, paivIndex, ntvSectionAdapter, null);
-        forceAdTracking(nativeContainerParent);
+
+        // Add delay before placeAdInView so that RN components have time to render
+        // Without this, Image elements will be null at time of binding
+        final Handler handler = new Handler(Looper.getMainLooper());
+        handler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                RNNtvSectionAdapter ntvSectionAdapter = RNNtvSectionAdapterManager.getInstance().getNtvSectionAdapter(paivSectionUrl, paivIndex);
+                ntvSectionAdapter.setAdID(adId);
+                View nativeAdView = adView;
+                View nativeContainer = ReactFindViewUtil.findView(adView, "nativoAdView");
+                if (nativeContainer != null) {
+                    nativeAdView = nativeContainer;
+                }
+                NativoSDK.placeAdInView(nativeAdView, (ViewGroup) nativeContainerParent, paivSectionUrl, paivIndex, ntvSectionAdapter, null);
+                forceAdTracking(nativeContainerParent);
+            }
+        }, 100);
     }
 
     private void forceAdTracking(final View nativeContainerParent) {
