@@ -119,22 +119,18 @@ public class RNAdContainerManager extends ViewGroupManager<NativoAdView> {
 
                 break;
             case COMMAND_PREFETCH_AD:
-                ViewFinder.getInstance().findPublisherAdContainer(adView, currentactivity, new ViewFinder.OnViewFoundListener() {
-                    @Override
-                    public void onViewFound(View nativeContainerParent) {
-                        if (args != null && args.size() > 1) {
-                            String prefetchSectionUrl = args.getString(1);
-                            int prefetchIndex = args.getInt(0);
-                            prefetch(adView, nativeContainerParent, prefetchSectionUrl, prefetchIndex);
-                        } else {
-                            LOG.debug("Invalid args for prefetch");
-                        }
-                    }
-                });
+                if (args != null && args.size() > 1) {
+                    View nativeContainerParent = ViewFinder.getInstance().findPublisherAdContainer(adView, currentactivity);
+                    String prefetchSectionUrl = args.getString(1);
+                    int prefetchIndex = args.getInt(0);
+                    prefetch(nativeContainerParent, prefetchSectionUrl, prefetchIndex);
+                } else {
+                    LOG.debug("Invalid args for prefetch");
+                }
         }
     }
 
-    private void prefetch(@Nonnull NativoAdView adView, View nativeContainerParent, String prefetchSectionUrl, int prefetchIndex) {
+    private void prefetch(View nativeContainerParent, String prefetchSectionUrl, int prefetchIndex) {
         RNNtvSectionAdapter ntvSectionAdapter = RNNtvSectionAdapterManager.getInstance().getNtvSectionAdapter(prefetchSectionUrl, prefetchIndex);
         LOG.debug("prefetch called for section: " + prefetchSectionUrl + " index: " + prefetchIndex);
         NativoAdType adType = null;

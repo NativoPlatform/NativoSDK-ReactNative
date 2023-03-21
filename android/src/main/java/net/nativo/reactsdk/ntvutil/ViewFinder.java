@@ -42,6 +42,19 @@ public class ViewFinder {
         return null;
     }
 
+    public View findPublisherAdContainer(View root, Activity currentactivity) {
+        View pubContainer = findPublisherAdContainerInUpperHierarchy(root);
+        if (pubContainer != null) {
+            return pubContainer;
+        }
+        if (currentactivity == null) {
+            Log.d("NativoSDK", "Failed findPublisherAdContainer. CurrentActivity is null");
+            return null;
+        }
+        root = currentactivity.getWindow().getDecorView().findViewById(android.R.id.content);
+        return ReactFindViewUtil.findView(root, PUB_CONTAINER_TAG);
+    }
+
     public void findPublisherAdContainer(View root, Activity currentactivity, final OnViewFoundListener listener) {
         View pubContainer = findPublisherAdContainerInUpperHierarchy(root);
         if (pubContainer != null) {
@@ -49,7 +62,7 @@ public class ViewFinder {
             return;
         }
         if (currentactivity == null) {
-            Log.d("NativoRNSDK", "Failed findPublisherAdContainer. CurrentActivity is null");
+            Log.d("NativoSDK", "Failed findPublisherAdContainer. CurrentActivity is null");
             return;
         }
         root = currentactivity.getWindow().getDecorView().findViewById(android.R.id.content);
