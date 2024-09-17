@@ -1,9 +1,9 @@
 import React, {Component} from 'react';
 import ErrorBoundary from "./ErrorBoundary";
-import NativoAdComponentInternal from "./sdk_components/NativoAdComponentInternal";
+import NativoAdComponentInternal from "../android_components/NativoAdComponentInternal";
 import PropTypes from 'prop-types';
 
-class NativoAd extends Component<props> {
+class NativoAd extends Component {
 
     constructor(props) {
         super(props);

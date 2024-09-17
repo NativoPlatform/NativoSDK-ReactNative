@@ -1,6 +1,6 @@
 import React from 'react';
 import {View, StyleSheet} from 'react-native';
-import NativoVideoControls from "./view_components/NativoVideoControls";
+import NativoVideoControls from "./NativoVideoControls";
 import Video from "react-native-video";
 
 function NativoVideo(props) {

@@ -1,10 +1,10 @@
 import PropTypes from 'prop-types';
 import React, {Component} from 'react';
 import ErrorBoundary from "./ErrorBoundary";
-import NativoLandingPageComponentInternal from "./sdk_components/NativoLandingPageComponentInternal";
-import NativoStandardDisplay from "./sdk_components/NativoStandardDisplay";
+import NativoLandingPageComponentInternal from "../android_components/NativoLandingPageComponentInternal";
+import NativoStandardDisplay from "../android_components/NativoStandardDisplay";
 
-class NativoWebContent extends Component<props> {
+class NativoWebContent extends Component {
 
     constructor(props) {
         super(props);
