@@ -1,32 +1,29 @@
-import React, { type Node, type ComponentType } from 'react'
+import React from 'react'
 import {View} from 'react-native';
 
-type Props = {
-    children: Node,
-    onError?: Function
-}
-
-type State = { error: Error | null, hasError: boolean }
-
-class ErrorBoundary extends React.Component<Props, State> {
-    state = { error: null, hasError: false }
-
-    static getDerivedStateFromError (error: Error) {
-        return { error, hasError: true }
+class ErrorBoundary extends React.Component {
+    constructor(props) {
+        super(props);
+        this.state = { error: null, hasError: false };
+        this.resetError = this.resetError.bind(this);
     }
 
-    componentDidCatch (error: Error, info: { componentStack: string }) {
+    static getDerivedStateFromError(error) {
+        return { error, hasError: true };
+    }
+
+    componentDidCatch(error, info) {
         if (typeof this.props.onError === 'function') {
-            this.props.onError.call(this, error, info.componentStack)
+            this.props.onError.call(this, error, info.componentStack);
         }
     }
 
-    resetError: Function = () => {
-        this.setState({ error: null, hasError: false })
+    resetError() {
+        this.setState({ error: null, hasError: false });
     }
 
-    render () {
-        return this.state.hasError ?  <View/> : this.props.children
+    render() {
+        return this.state.hasError ? <View /> : this.props.children;
     }
 }
 
