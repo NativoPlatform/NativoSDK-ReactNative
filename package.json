@@ -21,7 +21,7 @@
         "name": "Nativo",
         "email": "sdksupport@nativo.com"
     },
-    "license": "APACHE 2.0",
+    "license": "Apache-2.0",
     "readmeFilename": "README.md",
     "devDependencies": {
         "react": "16.8.6",
