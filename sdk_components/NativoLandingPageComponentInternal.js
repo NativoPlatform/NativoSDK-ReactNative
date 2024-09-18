@@ -3,7 +3,7 @@ import {findNodeHandle, NativeEventEmitter, requireNativeComponent, StyleSheet, 
 import WebView from "react-native-webview";
 
 const NativoLandingPageContainer = requireNativeComponent("NativoLandingPageContainer")
-const eventEmitter = new NativeEventEmitter(NativoLandingPageContainer);
+const eventEmitter = new NativeEventEmitter();
 
 export class NativoLandingPageComponentInternal extends Component {
 

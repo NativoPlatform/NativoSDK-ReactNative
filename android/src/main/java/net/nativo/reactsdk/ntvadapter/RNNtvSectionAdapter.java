@@ -57,11 +57,12 @@ public class RNNtvSectionAdapter implements NtvSectionAdapter {
 
     @Override
     public void hasbuiltView(View view, NtvBaseInterface ntvBaseInterface, NtvAdData ntvAdData) {
-        View nativeContainerParent = ViewFinder.getInstance().findPublisherAdContainerInUpperHierarchy(view);
-        if (nativeContainerParent == null) {
-            nativeContainerParent = ViewFinder.getInstance().findPublisherAdContainer((Activity) AppUtils.getInstance().getContext());
-        }
-        containerHashCode = nativeContainerParent.hashCode();
+        ViewFinder.getInstance().findPublisherAdContainer(view, (Activity) AppUtils.getInstance().getContext(), new ViewFinder.OnViewFoundListener() {
+            @Override
+            public void onViewFound(View view) {
+                containerHashCode = view.hashCode();
+            }
+        });
     }
 
     @Override

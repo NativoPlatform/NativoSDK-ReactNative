@@ -11,7 +11,7 @@ import {
 
 const NativoAdContainer = requireNativeComponent("NativoContainer");
 
-class NativoAdComponentInternal extends Component<props> {
+class NativoAdComponentInternal extends Component {
 
     constructor(props) {
         super(props);
@@ -47,23 +47,28 @@ class NativoAdComponentInternal extends Component<props> {
     }
 
 
-    componentDidMount(): void {
+    componentDidMount() {
         try {
-            const eventEmitter = new NativeEventEmitter(NativoAdContainer);
-            eventEmitter.addListener('needsDisplayClickOutURL', (event) => {
+            const eventEmitter = new NativeEventEmitter();
+            this.clickoutListener = eventEmitter.addListener('needsDisplayClickOutURL', (event) => {
                 this.props.onDisplayAdClick(event);
             });
+            
         } catch (e) {
             this.setDefaultState()
         }
-        if (this.props.enableGAMVersion) {
-            NativeModules.NativoSDK.enableGAMRequestsWithVersion(this.props.enableGAMVersion)
-        } else {
+        if (!this.props.enableGAMVersion) {
             this.prefetchAd();
         }
     }
 
-    componentDidUpdate(prevProps: Readonly<P>, prevState: Readonly<S>, snapshot: SS): void {
+    componentWillUnmount() {
+        try {
+            this.clickoutListener.remove();
+        } catch (e) {}
+    }
+
+    componentDidUpdate(prevProps, prevState, snapshot) {
         try {
             UIManager.dispatchViewManagerCommand(
                 findNodeHandle(this._adContainer),
