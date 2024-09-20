@@ -1,7 +1,12 @@
 
 # react-native-nativo-ads
+A React Native wrapper around the [Nativo SDK](https://sdk.nativo.com/v6.0/docs/nativo-for-developers) v6 for iOS and Android.
 
-Monetize your app with Nativo for React Native. Requires React Native `0.60.5` or greater. 
+This project is no longer directly supported or maintained by Nativo, however publishers are encouraged to adapt this source code as they see fit to suite their app.
+
+## License
+
+This project is licensed under the Apache License 2.0 - see the [LICENSE](LICENSE)
 
 ## Getting started
 ```bash
@@ -55,7 +60,3 @@ const NativeAdTemplate = (props) => {
     onDisplayAdClick={ this.needsDisplayClickOutURL }
      />
 ```
-
-## License
-
-This project is licensed under the Apache License 2.0 - see the [LICENSE](LICENSE)
