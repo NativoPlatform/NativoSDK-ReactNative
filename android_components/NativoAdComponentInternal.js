@@ -1,3 +1,19 @@
+/**
+ * Copyright 2024 Nativo
+ * 
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ * 
+ *     https://www.apache.org/licenses/LICENSE-2.0
+ * 
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
 import React, {Component} from 'react';
 import {
     findNodeHandle,
@@ -11,7 +27,7 @@ import {
 
 const NativoAdContainer = requireNativeComponent("NativoContainer");
 
-class NativoAdComponentInternal extends Component<props> {
+class NativoAdComponentInternal extends Component {
 
     constructor(props) {
         super(props);
@@ -47,23 +63,28 @@ class NativoAdComponentInternal extends Component<props> {
     }
 
 
-    componentDidMount(): void {
+    componentDidMount() {
         try {
-            const eventEmitter = new NativeEventEmitter(NativoAdContainer);
-            eventEmitter.addListener('needsDisplayClickOutURL', (event) => {
+            const eventEmitter = new NativeEventEmitter();
+            this.clickoutListener = eventEmitter.addListener('needsDisplayClickOutURL', (event) => {
                 this.props.onDisplayAdClick(event);
             });
+            
         } catch (e) {
             this.setDefaultState()
         }
-        if (this.props.enableGAMVersion) {
-            NativeModules.NativoSDK.enableGAMRequestsWithVersion(this.props.enableGAMVersion)
-        } else {
+        if (!this.props.enableGAMVersion) {
             this.prefetchAd();
         }
     }
 
-    componentDidUpdate(prevProps: Readonly<P>, prevState: Readonly<S>, snapshot: SS): void {
+    componentWillUnmount() {
+        try {
+            this.clickoutListener.remove();
+        } catch (e) {}
+    }
+
+    componentDidUpdate(prevProps, prevState, snapshot) {
         try {
             UIManager.dispatchViewManagerCommand(
                 findNodeHandle(this._adContainer),

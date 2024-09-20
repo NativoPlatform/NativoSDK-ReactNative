@@ -14,10 +14,11 @@
  * limitations under the License.
  */
 
-import { NativeModules } from 'react-native';
-import NativoAd from './view_components/NativoAd';
-import NativoWebContent from './view_components/NativoWebContent';
-import NativoVideo from './view_components/NativoVideo';
+import React from 'react';
+import { View } from 'react-native';
 
-const NativoSDK = NativeModules.NativoSDK;
-module.exports = { NativoSDK, NativoAd, NativoWebContent, NativoVideo }
+function NativoVideo(props) {
+    return (<View {...props} nativeID={'videoView'} />);
+}
+
+export default NativoVideo;

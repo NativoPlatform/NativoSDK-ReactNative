@@ -1,7 +1,7 @@
 {
     "name": "react-native-nativo-ads",
     "title": "React Native Nativo Ads",
-    "version": "0.4.1",
+    "version": "0.4.3",
     "description": "The Nativo SDK enables the best user experience for mobile ad content with React Native.",
     "main": "index.js",
     "repository": {
@@ -9,7 +9,7 @@
         "url": "git+https://github.com/NativoPlatform/NativoSDK-ReactNative.git",
         "baseUrl": "https://github.com/NativoPlatform/NativoSDK-ReactNative"
     },
-    "homepage": "https://sdk.nativo.com/docs/getting-started-with-react-native",
+    "homepage": "https://sdk.nativo.com/v6.0/docs/getting-started-with-react-native",
     "keywords": [
         "react-native",
         "nativo",
@@ -21,7 +21,7 @@
         "name": "Nativo",
         "email": "sdksupport@nativo.com"
     },
-    "license": "MIT",
+    "license": "Apache-2.0",
     "readmeFilename": "README.md",
     "devDependencies": {
         "react": "16.8.6",

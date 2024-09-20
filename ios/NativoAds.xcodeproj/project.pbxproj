@@ -7,12 +7,13 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		4231DBD82C9A51A3002CEC42 /* NtvSharedSectionDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 4231DBD72C9A51A3002CEC42 /* NtvSharedSectionDelegate.m */; };
+		4231DBDB2C9A547A002CEC42 /* NativoWebContent.m in Sources */ = {isa = PBXBuildFile; fileRef = 4231DBD92C9A547A002CEC42 /* NativoWebContent.m */; };
 		4295C5EA24219FFA008BC9A7 /* StandardDisplayAdTemplate.m in Sources */ = {isa = PBXBuildFile; fileRef = 4295C5E224219FFA008BC9A7 /* StandardDisplayAdTemplate.m */; };
 		4295C5EB24219FFA008BC9A7 /* NativeAdTemplate.m in Sources */ = {isa = PBXBuildFile; fileRef = 4295C5E524219FFA008BC9A7 /* NativeAdTemplate.m */; };
 		4295C5EC24219FFA008BC9A7 /* NativoLandingPageTemplate.m in Sources */ = {isa = PBXBuildFile; fileRef = 4295C5E624219FFA008BC9A7 /* NativoLandingPageTemplate.m */; };
 		4295C5ED24219FFA008BC9A7 /* VideoAdTemplate.m in Sources */ = {isa = PBXBuildFile; fileRef = 4295C5E824219FFA008BC9A7 /* VideoAdTemplate.m */; };
 		A75D69A3235FDEC200E557C5 /* RCTNativoSDK.m in Sources */ = {isa = PBXBuildFile; fileRef = A75D69A2235FDEC200E557C5 /* RCTNativoSDK.m */; };
-		A75D69A72360F4E000E557C5 /* RCTNtvSectionDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = A75D69A62360F4E000E557C5 /* RCTNtvSectionDelegate.m */; };
 		A77E8C90234565E700D29F05 /* NativoAdsUtils.m in Sources */ = {isa = PBXBuildFile; fileRef = A77E8C8F234565E700D29F05 /* NativoAdsUtils.m */; };
 		B3E7B58A1CC2AC0600A0062D /* NativoAds.m in Sources */ = {isa = PBXBuildFile; fileRef = B3E7B5891CC2AC0600A0062D /* NativoAds.m */; };
 /* End PBXBuildFile section */
@@ -31,6 +32,10 @@
 
 /* Begin PBXFileReference section */
 		134814201AA4EA6300B7C361 /* libNativoAds.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libNativoAds.a; sourceTree = BUILT_PRODUCTS_DIR; };
+		4231DBD62C9A51A3002CEC42 /* NtvSharedSectionDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NtvSharedSectionDelegate.h; sourceTree = "<group>"; };
+		4231DBD72C9A51A3002CEC42 /* NtvSharedSectionDelegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NtvSharedSectionDelegate.m; sourceTree = "<group>"; };
+		4231DBD92C9A547A002CEC42 /* NativoWebContent.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NativoWebContent.m; sourceTree = "<group>"; };
+		4231DBDA2C9A547A002CEC42 /* NativoWebContent.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NativoWebContent.h; sourceTree = "<group>"; };
 		4295C5E224219FFA008BC9A7 /* StandardDisplayAdTemplate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = StandardDisplayAdTemplate.m; sourceTree = "<group>"; };
 		4295C5E324219FFA008BC9A7 /* NativoLandingPageTemplate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NativoLandingPageTemplate.h; sourceTree = "<group>"; };
 		4295C5E424219FFA008BC9A7 /* VideoAdTemplate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VideoAdTemplate.h; sourceTree = "<group>"; };
@@ -41,9 +46,6 @@
 		4295C5E924219FFA008BC9A7 /* NativeAdTemplate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NativeAdTemplate.h; sourceTree = "<group>"; };
 		A75D69A1235FDEC200E557C5 /* RCTNativoSDK.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = RCTNativoSDK.h; sourceTree = "<group>"; };
 		A75D69A2235FDEC200E557C5 /* RCTNativoSDK.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = RCTNativoSDK.m; sourceTree = "<group>"; };
-		A75D69A52360F4E000E557C5 /* RCTNtvSectionDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = RCTNtvSectionDelegate.h; sourceTree = "<group>"; };
-		A75D69A62360F4E000E557C5 /* RCTNtvSectionDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = RCTNtvSectionDelegate.m; sourceTree = "<group>"; };
-		A77E8C782345550D00D29F05 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		A77E8C8E234565E700D29F05 /* NativoAdsUtils.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = NativoAdsUtils.h; sourceTree = "<group>"; };
 		A77E8C8F234565E700D29F05 /* NativoAdsUtils.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = NativoAdsUtils.m; sourceTree = "<group>"; };
 		A77E8D17234583F600D29F05 /* NativoSDK.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = NativoSDK.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -90,25 +92,18 @@
 			children = (
 				A75D69A1235FDEC200E557C5 /* RCTNativoSDK.h */,
 				A75D69A2235FDEC200E557C5 /* RCTNativoSDK.m */,
-				A75D69A52360F4E000E557C5 /* RCTNtvSectionDelegate.h */,
-				A75D69A62360F4E000E557C5 /* RCTNtvSectionDelegate.m */,
+				4231DBD62C9A51A3002CEC42 /* NtvSharedSectionDelegate.h */,
+				4231DBD72C9A51A3002CEC42 /* NtvSharedSectionDelegate.m */,
 				B3E7B5881CC2AC0600A0062D /* NativoAds.h */,
 				B3E7B5891CC2AC0600A0062D /* NativoAds.m */,
+				4231DBDA2C9A547A002CEC42 /* NativoWebContent.h */,
+				4231DBD92C9A547A002CEC42 /* NativoWebContent.m */,
 				4295C5E124219FFA008BC9A7 /* Templates */,
 				A77E8C8E234565E700D29F05 /* NativoAdsUtils.h */,
 				A77E8C8F234565E700D29F05 /* NativoAdsUtils.m */,
-				A77E8C772345550D00D29F05 /* Resources */,
 				134814211AA4EA7D00B7C361 /* Products */,
 				A77E8CDE234575DE00D29F05 /* Frameworks */,
 			);
-			sourceTree = "<group>";
-		};
-		A77E8C772345550D00D29F05 /* Resources */ = {
-			isa = PBXGroup;
-			children = (
-				A77E8C782345550D00D29F05 /* Info.plist */,
-			);
-			path = Resources;
 			sourceTree = "<group>";
 		};
 		A77E8CDE234575DE00D29F05 /* Frameworks */ = {
@@ -189,10 +184,11 @@
 			files = (
 				4295C5ED24219FFA008BC9A7 /* VideoAdTemplate.m in Sources */,
 				4295C5EA24219FFA008BC9A7 /* StandardDisplayAdTemplate.m in Sources */,
-				A75D69A72360F4E000E557C5 /* RCTNtvSectionDelegate.m in Sources */,
 				B3E7B58A1CC2AC0600A0062D /* NativoAds.m in Sources */,
 				A75D69A3235FDEC200E557C5 /* RCTNativoSDK.m in Sources */,
+				4231DBD82C9A51A3002CEC42 /* NtvSharedSectionDelegate.m in Sources */,
 				4295C5EB24219FFA008BC9A7 /* NativeAdTemplate.m in Sources */,
+				4231DBDB2C9A547A002CEC42 /* NativoWebContent.m in Sources */,
 				4295C5EC24219FFA008BC9A7 /* NativoLandingPageTemplate.m in Sources */,
 				A77E8C90234565E700D29F05 /* NativoAdsUtils.m in Sources */,
 			);
